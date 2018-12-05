@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Image, Platform, ActivityIndicator } from 'react-native'
+import { Image, Platform } from 'react-native'
 import { CachedImage } from '../CachedImage'
 
 const createTestProps = props => ({
@@ -18,11 +18,8 @@ describe('CachedImage', () => {
     })
     it('has proper initial state', () => {
       expect(wrapper).toHaveState({
-        source: false
+        source: 'some.url.png'
       })
-    })
-    it('shows ActivityIndicator while loading state', () => {
-      expect(wrapper.find(ActivityIndicator)).toHaveLength(1)
     })
   })
   describe('after net check', () => {
@@ -41,7 +38,8 @@ describe('CachedImage', () => {
         Platform.OS === 'android' ? 'file://some.url.png' : 'some.url.png'
       )
       expect(wrapper.find(Image)).toHaveProp('source', {
-        uri: Platform.OS === 'android' ? 'file://some.url.png' : 'some.url.png'
+        uri:
+          Platform.OS === 'android' ? 'file://some.url.png' : 'foo/some.url.png'
       })
     })
 
