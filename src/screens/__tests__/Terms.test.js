@@ -33,8 +33,8 @@ describe('Terms/Privacy view', () => {
   })
   it('renders an agree and disagree button', () => {
     expect(wrapper.find(Button)).toHaveLength(2)
-    expect(wrapper.find(Button).first()).toHaveProp('text', 'Disagree')
-    expect(wrapper.find(Button).last()).toHaveProp('text', 'Agree')
+    expect(wrapper.find(Button).first()).toHaveProp('text', 'general.disagree')
+    expect(wrapper.find(Button).last()).toHaveProp('text', 'general.agree')
   })
   it('agreeing navigates to next view', () => {
     wrapper

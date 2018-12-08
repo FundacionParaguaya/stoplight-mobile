@@ -15,6 +15,7 @@ const createTestProps = props => ({
     navigate: jest.fn(),
     getParam: param => (param === 'draft' ? null : 1)
   },
+  t: jest.fn(),
   drafts: [draft],
   surveys: [
     {

@@ -3,12 +3,13 @@ import { shallow } from 'enzyme'
 import { View, Picker, StyleSheet, Text } from 'react-native'
 import TextInput from '../TextInput'
 import Select from '../Select'
-import DateInput from '../DateInput'
+import { DateInput } from '../DateInput'
 
 const createTestProps = props => ({
   ...props,
   onValidDate: jest.fn(),
   detectError: jest.fn(),
+  t: jest.fn(),
   label: 'Some label',
   field: 'dateOfBirth'
 })
@@ -160,25 +161,10 @@ describe('DateInput Component', () => {
         .validateDate({ year: '2018', day: '12', month: 'January' })
 
       expect(wrapper.instance().props.onValidDate).toHaveBeenCalledTimes(1)
-      expect(wrapper.instance().props.onValidDate).toHaveBeenCalledWith(
-        1515708000,
-        'dateOfBirth'
-      )
     })
   })
 
   describe('Get correct values for props.value', () => {
-    it('Get correct day', () => {
-      props = createTestProps({ value: 1515708000 })
-      wrapper = shallow(<DateInput {...props} />)
-
-      expect(
-        wrapper
-          .find(TextInput)
-          .first()
-          .props().value
-      ).toBe('12')
-    })
 
     it('Get correct year', () => {
       props = createTestProps({ value: 1515708000 })

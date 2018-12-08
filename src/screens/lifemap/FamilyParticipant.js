@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import uuid from 'uuid/v1'
 import { createDraft, addSurveyFamilyMemberData } from '../../redux/actions'
 
+import { withNamespaces } from 'react-i18next'
 import Select from '../../components/Select'
 import Button from '../../components/Button'
 import TextInput from '../../components/TextInput'
@@ -104,6 +105,7 @@ export class FamilyParticipant extends Component {
   documentType = this.survey.surveyConfig.documentType
 
   render() {
+    const { t } = this.props
     const draft = this.props.drafts.filter(
       draft => draft.draftId === this.draftId
     )[0]
@@ -135,7 +137,7 @@ export class FamilyParticipant extends Component {
             validation="string"
             field="firstName"
             onChangeText={this.addSurveyData}
-            placeholder="First name"
+            placeholder={t('views.family.firstName')}
             value={this.getFieldValue(draft, 'firstName') || ''}
             required
             detectError={this.detectError}
@@ -144,7 +146,7 @@ export class FamilyParticipant extends Component {
             field="lastName"
             validation="string"
             onChangeText={this.addSurveyData}
-            placeholder="Last name"
+            placeholder={t('views.family.lastName')}
             value={this.getFieldValue(draft, 'lastName') || ''}
             required
             detectError={this.detectError}
@@ -153,8 +155,8 @@ export class FamilyParticipant extends Component {
             id="gender"
             required
             onChange={this.addSurveyData}
-            label="Gender"
-            placeholder="Select gender"
+            label={t('views.family.gender')}
+            placeholder={t('views.family.selectGender')}
             field="gender"
             value={this.getFieldValue(draft, 'gender') || ''}
             detectError={this.detectError}
@@ -162,7 +164,7 @@ export class FamilyParticipant extends Component {
           />
 
           <DateInput
-            label="Date of birth *"
+            label={t('views.family.dateOfBirth')}
             field="dateOfBirth"
             detectError={this.detectError}
             onValidDate={this.addSurveyData}
@@ -172,8 +174,8 @@ export class FamilyParticipant extends Component {
           <Select
             required
             onChange={this.addSurveyData}
-            label="Document type"
-            placeholder="Document type"
+            label={t('views.family.documentType')}
+            placeholder={t('views.family.documentType')}
             field="document"
             value={this.getFieldValue(draft, 'document') || ''}
             detectError={this.detectError}
@@ -184,15 +186,15 @@ export class FamilyParticipant extends Component {
             field="documentNumber"
             required
             value={this.getFieldValue(draft, 'documentNumber')}
-            placeholder="Document number"
+            placeholder={t('views.family.documentNumber')}
             detectError={this.detectError}
           />
           <Select
             required
             onChange={this.addSurveyData}
-            label="Country of birth"
+            label={t('views.family.countryOfBirth')}
             countrySelect
-            placeholder="Select a country"
+            placeholder={t('views.family.selectACountry')}
             field="countryOfBirth"
             value={this.getFieldValue(draft, 'countryOfBirth') || ''}
             detectError={this.detectError}
@@ -201,7 +203,7 @@ export class FamilyParticipant extends Component {
             onChangeText={this.addSurveyData}
             field="email"
             value={this.getFieldValue(draft, 'email')}
-            placeholder="Email"
+            placeholder={t('views.family.email')}
             validation="email"
             detectError={this.detectError}
           />
@@ -209,7 +211,7 @@ export class FamilyParticipant extends Component {
             onChangeText={this.addSurveyData}
             field="phone"
             value={this.getFieldValue(draft, 'phone')}
-            placeholder="Phone"
+            placeholder={t('views.family.phone')}
             validation="phone"
             detectError={this.detectError}
           />
@@ -218,7 +220,7 @@ export class FamilyParticipant extends Component {
           <Button
             disabled={!isButtonEnabled}
             colored
-            text="Continue"
+            text={t('general.continue')}
             handleClick={() => this.handleClick()}
           />
         </View>
@@ -238,6 +240,7 @@ const styles = StyleSheet.create({
 })
 
 FamilyParticipant.propTypes = {
+  t: PropTypes.func.isRequired,
   surveys: PropTypes.array.isRequired,
   drafts: PropTypes.array.isRequired,
   navigation: PropTypes.object.isRequired,
@@ -255,7 +258,9 @@ const mapStateToProps = ({ surveys, drafts }) => ({
   drafts
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FamilyParticipant)
+export default withNamespaces()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FamilyParticipant)
+)

@@ -27,20 +27,20 @@ export class Terms extends Component {
       >
         <RoundImage source="check" />
         <Text style={[globalStyles.h2Bold, styles.heading]}>
-          Please read carefully before creating the Life Map
+          {t('views.readCarefully')}
         </Text>
         <Text id="content" style={[globalStyles.subline, styles.content]}>
           {t(`views.${navigation.getParam('page')}`)}
         </Text>
         <View style={styles.buttonsBar}>
           <Button
-            text="Disagree"
+            text={t('general.disagree')}
             underlined
             handleClick={() => navigation.goBack()}
           />
           <Button
             colored
-            text="Agree"
+            text={t('general.agree')}
             handleClick={() =>
               navigation.navigate(
                 navigationRules[navigation.getParam('page')].nextPage,

@@ -42,7 +42,7 @@ export default createDrawerNavigator(
     Surveys: {
       screen: LifemapStack,
       navigationOptions: {
-        drawerLabel: 'Create a Life Map',
+        drawerLabel: i18n.t('views.createLifemap'),
         drawerIcon: <DrawerIcon name="swap-calls" rotate={true} />
       }
     },

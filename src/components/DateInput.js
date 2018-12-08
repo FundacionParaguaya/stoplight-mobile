@@ -2,26 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { View, StyleSheet, Text } from 'react-native'
+import { withNamespaces } from 'react-i18next'
 import colors from '../theme.json'
 import TextInput from './TextInput'
 import Select from './Select'
 
-const months = [
-  { text: 'January', value: 'January' },
-  { text: 'February', value: 'February' },
-  { text: 'March', value: 'March' },
-  { text: 'April', value: 'April' },
-  { text: 'May', value: 'May' },
-  { text: 'June', value: 'June' },
-  { text: 'July', value: 'July' },
-  { text: 'August', value: 'August' },
-  { text: 'September', value: 'September' },
-  { text: 'October', value: 'October' },
-  { text: 'November', value: 'November' },
-  { text: 'December', value: 'December' }
-]
-
-class DateInput extends React.Component {
+export class DateInput extends React.Component {
   state = {
     day: '',
     month: '',
@@ -84,6 +70,7 @@ class DateInput extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     const validDate =
       moment.unix(this.props.value).format('YYYY MMMM D') !== 'Invalid date'
     const month =
@@ -97,6 +84,21 @@ class DateInput extends React.Component {
       this.state.day ||
       (validDate ? moment.unix(this.props.value).format('D') : '')
 
+    const months = [
+      { text: t('months.january'), value: 'January' },
+      { text: t('months.february'), value: 'February' },
+      { text: t('months.march'), value: 'March' },
+      { text: t('months.april'), value: 'April' },
+      { text: t('months.may'), value: 'May' },
+      { text: t('months.june'), value: 'June' },
+      { text: t('months.july'), value: 'July' },
+      { text: t('months.august'), value: 'August' },
+      { text: t('months.september'), value: 'September' },
+      { text: t('months.october'), value: 'October' },
+      { text: t('months.november'), value: 'November' },
+      { text: t('months.december'), value: 'December' }
+    ]
+
     return (
       <View>
         <Text style={styles.text}>{this.props.label}</Text>
@@ -104,8 +106,8 @@ class DateInput extends React.Component {
           <View style={styles.month}>
             <Select
               onChange={month => this.setMonth(month)}
-              label="Month"
-              placeholder="Select month"
+              label={t('general.month')}
+              placeholder={t('views.family.selectMonth')}
               field=""
               value={month}
               data={months}
@@ -115,20 +117,20 @@ class DateInput extends React.Component {
             <TextInput
               onChangeText={day => this.setDay(day)}
               value={day}
-              placeholder="Day"
+              placeholder={t('general.day')}
             />
           </View>
           <View style={styles.year}>
             <TextInput
               onChangeText={year => this.setYear(year)}
               value={year}
-              placeholder="Year"
+              placeholder={t('general.year')}
             />
           </View>
         </View>
         {this.state.error && (
           <Text style={{ ...styles.text, color: colors.red }}>
-            Please enter a valid date e.g. May 03 1977
+            {t('views.family.selectValidDate')}
           </Text>
         )}
       </View>
@@ -153,10 +155,11 @@ const styles = StyleSheet.create({
 DateInput.propTypes = {
   label: PropTypes.string,
   value: PropTypes.number,
+  t: PropTypes.func.isRequired,
   field: PropTypes.string,
   required: PropTypes.bool,
   detectError: PropTypes.func,
   onValidDate: PropTypes.func
 }
 
-export default DateInput
+export default withNamespaces()(DateInput)

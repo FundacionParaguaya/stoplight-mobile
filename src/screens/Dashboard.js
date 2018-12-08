@@ -93,14 +93,14 @@ export class Dashboard extends Component {
               </View>
               <RoundImage source="family" />
               <Button
-                text="Create a lifemap"
+                text={t('views.createLifemap')}
                 colored
                 handleClick={() => navigation.navigate('Surveys')}
               />
             </View>
             <View style={styles.borderBottom}>
               <Text style={{ ...globalStyles.subline, ...styles.listTitle }}>
-                Latest drafts
+                {t('views.latestDrafts')}
               </Text>
             </View>
             <FlatList
@@ -127,7 +127,7 @@ export class Dashboard extends Component {
                   marginTop: 10
                 }}
               >
-                No drafts to display
+                {t('views.noDrafts')}
               </Text>
             )}
           </View>

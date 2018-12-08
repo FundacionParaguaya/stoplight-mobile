@@ -11,6 +11,7 @@ import LocationView from '../../screens/lifemap/Location'
 import OverviewView from '../../screens/lifemap/Overview'
 import AddPriorityView from '../../screens/lifemap/AddPriority'
 import AddAchievementView from '../../screens/lifemap/AddAchievement'
+import i18n from '../../i18n'
 import { generateNavOptions } from './helpers'
 
 // Reusable object for all screens related to a draft
@@ -18,98 +19,98 @@ export default {
   Terms: {
     screen: TermsView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Terms & Conditions',
+      title: i18n.t('views.termsConditions'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   Privacy: {
     screen: TermsView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Privacy Policy',
+      title: i18n.t('views.privacyPolicy'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   Location: {
     screen: LocationView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Location',
+      title: i18n.t('views.location'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   SocioEconomicQuestion: {
     screen: SocioEconomicQuestionView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Socio Economic',
+      title: i18n.t('views.socioEconomic'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   BeginLifemap: {
     screen: BeginLifemapView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Your Life Map',
+      title: i18n.t('views.yourLifeMap'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   Question: {
     screen: QuestionView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Your Life Map',
+      title: i18n.t('views.yourLifeMap'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   Overview: {
     screen: OverviewView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Your Life Map',
+      title: i18n.t('views.yourLifeMap'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   AddPriority: {
     screen: AddPriorityView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Your Life Map',
+      title: i18n.t('views.yourLifeMap'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   AddAchievement: {
     screen: AddAchievementView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Your Life Map',
+      title: i18n.t('views.yourLifeMap'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   Final: {
     screen: FinalView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Thank you!',
+      title: i18n.t('general.thankYou'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   FamilyParticipant: {
     screen: FamilyParticipantView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Primary participant',
+      title: i18n.t('views.primaryParticipant'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   FamilyMembersNames: {
     screen: FamilyMembersNamesView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Family members',
+      title: i18n.t('views.familyMembers'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   FamilyMembersGender: {
     screen: FamilyMembersGenderView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Gender',
+      title: i18n.t('views.gender'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   },
   FamilyMembersBirthdates: {
     screen: FamilyMembersBirthdatesView,
     navigationOptions: ({ navigation }) => ({
-      title: 'Birth dates',
+      title: i18n.t('views.birthDates'),
       ...generateNavOptions({ navigation, burgerMenu: false })
     })
   }

@@ -1,10 +1,60 @@
 {
   "general": {
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "thankYou": "Thank you!",
+    "disagree": "Disagree",
+    "agree": "Agree",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "continue": "Continue"
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
   },
   "views": {
     "dashboard": "Dashboard",
-    "terms": "This app is provided by the Poverty Stoplight and its use is subject to the following Terms and Conditions. \n\n 1 .Your access of the app constitutes acceptance of these Terms and Conditions. \n\n 2. The Poverty Stoplight reserves the rights to modify, add or delete any point of these Terms and Conditions at any time. Your use of this app constitutes your acceptance of these Terms and Conditions. \n\n 3. The Poverty Stoplight does not warrant that the functions and materials contained in the app will be uninterrupted or error free; that the website, or the server that makes it available are free of viruses or bugs; or represent the full functionality, accuracy and reliability of the materials. We will try to the best of our ability to correct any error presented within a determined timeframe. \n\n 4. All intellectual property of the app and the material or information it contains (including without limitation copyright, designs, database rights and trade marks (registered or unregistered) is and shall remain the property of The Poverty Stoplight and Fundación Paraguaya or its third party licensors. \n\n 5. Commercial use or publication of all or any item displayed is strictly prohibited without authorization from Fundación Paraguaya (The Poverty Stoplight Team) and its third party licensor. Nothing contained in these Terms and Conditions shall be construed as conferring any licence by Fundación Paraguaya to use any item displayed. \n\n 6. Information in the survey cannot be copied, shared or posted on any mean of communication. \n\n If these Terms and Conditions are not accepted in full, the use of the Poverty Stoplight survey must be terminated immediately.",
+    "createLifemap": "Create a Life Map",
+    "latestDrafts": "Latest drafts",
+    "noDrafts": "No drafts to display",
+    "termsConditions": "Terms & Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "location": "Location",
+    "socioEconomic": "Socio Economic",
+    "yourLifeMap": "Your Life Map",
+    "primaryParticipant": "Primary participant",
+    "familyMembers": "Family members",
+    "gender": "Gender",
+    "birthDates": "Birth dates",
+    "readCarefully": "Please read carefully before creating the Life Map",
+    "family": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "selectGender": "Select gender",
+      "documentType": "Document type",
+      "documentNumber": "Document number",
+      "selectACountry": "Select a country",
+      "email": "Email",
+      "phone": "Phone",
+      "gender": "Gender",
+      "dateOfBirth": "Date of birth *",
+      "documentType": "Document type",
+      "countryOfBirth": "Country of birth",
+      "selectMonth": "Select month",
+      "selectValidDate": "Please enter a valid date e.g. May 03 1977"
+    },
+    "terms": "This app is provided by the Poverty Stoplight and its use is subject to the following Terms and Conditions. \n\n 1. Your access of the app constitutes acceptance of these Terms and Conditions. \n\n 2. The Poverty Stoplight reserves the rights to modify, add or delete any point of these Terms and Conditions at any time. Your use of this app constitutes your acceptance of these Terms and Conditions. \n\n 3. The Poverty Stoplight does not warrant that the functions and materials contained in the app will be uninterrupted or error free; that the website, or the server that makes it available are free of viruses or bugs; or represent the full functionality, accuracy and reliability of the materials. We will try to the best of our ability to correct any error presented within a determined timeframe. \n\n 4. All intellectual property of the app and the material or information it contains (including without limitation copyright, designs, database rights and trade marks (registered or unregistered) is and shall remain the property of The Poverty Stoplight and Fundación Paraguaya or its third party licensors. \n\n 5. Commercial use or publication of all or any item displayed is strictly prohibited without authorization from Fundación Paraguaya (The Poverty Stoplight Team) and its third party licensor. Nothing contained in these Terms and Conditions shall be construed as conferring any licence by Fundación Paraguaya to use any item displayed. \n\n 6. Information in the survey cannot be copied, shared or posted on any mean of communication. \n\n If these Terms and Conditions are not accepted in full, the use of the Poverty Stoplight survey must be terminated immediately.",
     "privacy": "1. What information do we collect? \n We collect personal information as volunteered by you when filling out the Poverty Stoplight Survey contained in this app. The personal information data includes name, contact information, demographics, socio-economic conditions and current overall status of the quality of life according to the indicators of the Poverty Stoplight methodology. It is optional to fill out all the fields shown in the survey. In case you wish to delete your response, you will have the option to do so or skip a question you do not want to respond to. In case you want to delete all the information you provided, and if you have finished the survey, you also have the option to delete all your previous answers. \n\n 2. How is your information used? \n The Poverty Stoplight uses the information to inform the organization that administers the survey on the multidimensional life conditions of the people the organization works with, so that it can better address its programs to help improve life-quality indicators that need more attention. The information collected from the survey is also helpful for organizations to monitor and evaluate their impact on the communities where they operate. Your information can be used as aggregated data not linked to any personal identification information for academic and demonstrative purposes. \n\n 3. Does the Poverty Stoplight share your information? \n The information you provide will not be sold or rented nor will it be shared with third parties unless we have your permission or are required to disclose the information by law. We may share generic aggregated demographic information not linked to any personal identification information with trusted affiliates for academic purposes. \n\n 4. How secure is the information you give us? \n The Poverty Stoplight Team uses industry standard efforts to safeguard the confidentiality of your personally identifiable information. However, no data transmission over the Internet can be guaranteed to be 100 percent secure, therefore it is not immune to possible attacks by crackers or malicious users who engage in cyber-crime. \n\n 5. How can you access, correct or delete your data? \n You can request the deletion of your information to the representative of the organization that administered the survey to you by email or in person, once you have completed the survey and are not in the presence of that representative. If you are still in the process of filling out the survey, you have the option of deleting the information you have completed or to skip it."
   }
 }
