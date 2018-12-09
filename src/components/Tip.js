@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Button from './Button'
 import colors from '../theme.json'
 import globalStyles from '../globalStyles'
+import i18n from '../i18n'
 
 class Tip extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class Tip extends Component {
               }}
             >
               <Button
-                text="Got it!"
+                text={i18n.t('general.gotIt')}
                 icon="done"
                 handleClick={() => this.hideTip()}
               />

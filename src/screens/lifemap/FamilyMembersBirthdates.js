@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 
 import { addSurveyFamilyMemberData } from '../../redux/actions'
 
@@ -50,6 +51,7 @@ export class FamilyMembersBirthdates extends Component {
   }
 
   render() {
+    const { t } = this.props
     const draft = this.props.drafts.filter(
       draft => draft.draftId === this.draftId
     )[0]
@@ -88,7 +90,7 @@ export class FamilyMembersBirthdates extends Component {
         <View style={{ height: 50, marginTop: 30 }}>
           <Button
             colored
-            text="Continue"
+            text={t('general.continue')}
             disabled={!!this.state.errorsDetected.length}
             handleClick={() => this.handleClick()}
           />
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
 })
 
 FamilyMembersBirthdates.propTypes = {
+  t: PropTypes.func.isRequired,
   drafts: PropTypes.array,
   navigation: PropTypes.object.isRequired,
   addSurveyFamilyMemberData: PropTypes.func.isRequired
@@ -119,7 +122,9 @@ const mapStateToProps = ({ drafts }) => ({
   drafts
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FamilyMembersBirthdates)
+export default withNamespaces()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FamilyMembersBirthdates)
+)

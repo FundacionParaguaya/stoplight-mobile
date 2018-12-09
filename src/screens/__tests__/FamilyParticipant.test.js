@@ -9,13 +9,13 @@ import TextInput from '../../components/TextInput'
 import draft from '../__mocks__/draftMock.json'
 
 const createTestProps = props => ({
+  t: value => value,
   createDraft: jest.fn(),
   addSurveyFamilyMemberData: jest.fn(),
   navigation: {
     navigate: jest.fn(),
     getParam: param => (param === 'draft' ? null : 1)
   },
-  t: jest.fn(),
   drafts: [draft],
   surveys: [
     {

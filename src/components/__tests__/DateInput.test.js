@@ -9,7 +9,7 @@ const createTestProps = props => ({
   ...props,
   onValidDate: jest.fn(),
   detectError: jest.fn(),
-  t: jest.fn(),
+  t: value => value,
   label: 'Some label',
   field: 'dateOfBirth'
 })
@@ -165,7 +165,6 @@ describe('DateInput Component', () => {
   })
 
   describe('Get correct values for props.value', () => {
-
     it('Get correct year', () => {
       props = createTestProps({ value: 1515708000 })
       wrapper = shallow(<DateInput {...props} />)

@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Picker, StyleSheet, View, Text } from 'react-native'
 import { FormValidationMessage } from 'react-native-elements'
+import countries from 'localized-countries'
+
 import colors from '../theme.json'
 import globalStyles from '../globalStyles'
-import countries from 'localized-countries'
+import i18n from '../i18n'
 
 const countryList = countries(require('localized-countries/data/en'))
 
@@ -23,7 +25,7 @@ class Select extends Component {
 
   validateInput = value => {
     if (this.props.required && !value) {
-      this.handleError('This field is required')
+      this.handleError(i18n.t('validation.fieldIsRequired'))
     } else {
       this.props.onChange(value, this.props.field)
       this.setState({

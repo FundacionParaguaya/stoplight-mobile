@@ -7,10 +7,12 @@ import {
   Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
 import colors from '../../theme.json'
 import Popup from '../Popup'
 import Button from '../Button'
 import globalStyles from '../../globalStyles'
+import i18n from '../../i18n'
 
 // Each of the major views has a stack that needs the same nav options.
 // These options handle the header styles and menu icon.
@@ -51,21 +53,21 @@ export const generateNavOptions = ({ navigation, burgerMenu = true }) => ({
         onClose={() => navigation.setParams({ modalOpen: false })}
       >
         <Text style={[globalStyles.centerText, globalStyles.h3]}>
-          Your lifemap is not complete Are you sure you want to exit?
+          {i18n.t('views.modals.yourLifemapIsNotComplete')}
         </Text>
         <Text style={[globalStyles.centerText, styles.subline]}>
-          This will be saved as a draft.
+          {i18n.t('views.modals.thisWillBeSavedAsADraft')}
         </Text>
         <View style={styles.buttonBar}>
           <Button
             outlined
-            text="Yes"
+            text={i18n.t('general.yes')}
             style={styles.button}
             handleClick={() => navigation.navigate('Dashboard')}
           />
           <Button
             outlined
-            text="No"
+            text={i18n.t('general.no')}
             style={styles.button}
             handleClick={() => navigation.setParams({ modalOpen: false })}
           />

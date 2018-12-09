@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import { withNamespaces } from 'react-i18next'
+
 import globalStyles from '../../globalStyles'
 import colors from '../../theme.json'
 import RoundImage from '../../components/RoundImage'

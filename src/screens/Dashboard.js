@@ -39,8 +39,8 @@ export class Dashboard extends Component {
       title: this.props.t('views.dashboard')
     })
   componentDidMount() {
-    AsyncStorage.getItem('userVisitedDashboard').then(
-      value => (value === 'false' ? this.loadData() : null)
+    AsyncStorage.getItem('userVisitedDashboard').then(value =>
+      value === 'false' ? this.loadData() : null
     )
     AsyncStorage.setItem('userVisitedDashboard', 'true')
     this.detectSlowLoading()

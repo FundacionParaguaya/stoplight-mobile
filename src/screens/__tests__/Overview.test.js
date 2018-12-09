@@ -9,6 +9,7 @@ import LifemapVisual from '../../components/LifemapVisual'
 import LifemapOverview from '../../components/LifemapOverview'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     navigate: jest.fn(),
     getParam: jest.fn(param => {

@@ -9,11 +9,13 @@ import {
   TouchableOpacity
 } from 'react-native'
 import { connect } from 'react-redux'
-import { addSurveyData } from '../../redux/actions'
 import PropTypes from 'prop-types'
+import MapView from 'react-native-maps'
+import { withNamespaces } from 'react-i18next'
+
+import { addSurveyData } from '../../redux/actions'
 import Button from '../../components/Button'
 import TextInput from '../../components/TextInput'
-import MapView from 'react-native-maps'
 import globalStyles from '../../globalStyles'
 import colors from '../../theme.json'
 import SearchBar from '../../components/SearchBar'
@@ -155,6 +157,7 @@ export class Location extends Component {
     })
   }
   render() {
+    const { t } = this.props
     const {
       mapsError,
       latitude,
@@ -180,7 +183,7 @@ export class Location extends Component {
             <SearchBar
               id="searchAddress"
               style={styles.search}
-              placeholder="Search by street or postal code"
+              placeholder={t('views.family.searchByStreetOrPostalCode')}
               onChangeText={searchAddress => this.setState({ searchAddress })}
               onSubmit={this.searcForAddress}
               value={searchAddress}
@@ -219,19 +222,21 @@ export class Location extends Component {
               color={colors.palered}
             />
             {!mapsError ? (
-              <Text style={globalStyles.h2}>Getting your location...</Text>
+              <Text style={globalStyles.h2}>
+                {t('views.family.gettingYourLocation')}
+              </Text>
             ) : (
               <View>
                 <Text style={[globalStyles.h2, styles.centerText]}>Hmmm!</Text>
                 <Text style={[styles.errorMsg, styles.centerText]}>
                   {mapsError === 2
-                    ? 'Something is not working…'
-                    : 'Maps cannot find the current location…'}
+                    ? t('views.family.somethingIsNotWorking')
+                    : t('views.family.cannotFindLocation')}
                 </Text>
                 <Text style={[styles.errorSubMsg, styles.centerText]}>
                   {mapsError === 2
-                    ? 'Check that location services are turned on in your device settings!'
-                    : 'Alternatively give as much detail as you can regarding the location in the form below!'}
+                    ? t('views.family.checkLocationServicesTurnedOn')
+                    : t('views.family.giveDetailInTheFormBelow')}
                 </Text>
               </View>
             )}
@@ -240,15 +245,20 @@ export class Location extends Component {
 
         <View>
           <Text id="accuracy" style={styles.container}>
-            {accuracy ? `GPS: Accurate to ${Math.round(accuracy)}m` : ' '}
+            {accuracy
+              ? `${t('views.family.gpsAccurate').replace(
+                  '%n',
+                  Math.round(accuracy)
+                )}`
+              : ' '}
           </Text>
           <Select
             id="countrySelect"
             required
             onChange={this.addSurveyData}
-            label="Country"
+            label={t('views.family.country')}
             countrySelect
-            placeholder="Select a country"
+            placeholder={t('views.family.selectACountry')}
             field="country"
             value={
               this.getFieldValue(draft, 'country') ||
@@ -261,7 +271,7 @@ export class Location extends Component {
             onChangeText={this.addSurveyData}
             field="postalCode"
             value={this.getFieldValue(draft, 'postalCode') || ''}
-            placeholder="Postcode"
+            placeholder={t('views.family.postcode')}
             detectError={this.detectError}
           />
           <TextInput
@@ -269,7 +279,7 @@ export class Location extends Component {
             onChangeText={this.addSurveyData}
             field="houseDescription"
             value={this.getFieldValue(draft, 'houseDescription') || ''}
-            placeholder="Street or house description"
+            placeholder={t('views.family.streetOrHouseDescription')}
             validation="long-string"
             detectError={this.detectError}
             multiline
@@ -280,7 +290,7 @@ export class Location extends Component {
             id="continue"
             disabled={!!errorsDetected.length}
             colored
-            text="Continue"
+            text={t('general.continue')}
             handleClick={this.handleClick}
           />
         </View>
@@ -290,6 +300,7 @@ export class Location extends Component {
 }
 
 Location.propTypes = {
+  t: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   addSurveyData: PropTypes.func.isRequired,
   drafts: PropTypes.array
@@ -303,10 +314,12 @@ const mapStateToProps = ({ drafts }) => ({
   drafts
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Location)
+export default withNamespaces()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Location)
+)
 
 const styles = StyleSheet.create({
   map: {

@@ -7,6 +7,7 @@ import Button from '../../components/Button'
 import DateInput from '../../components/DateInput'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     getParam: jest.fn(param => (param === 'draftId' ? 4 : null)),
     navigate: jest.fn()

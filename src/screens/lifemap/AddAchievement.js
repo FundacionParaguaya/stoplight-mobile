@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { withNamespaces } from 'react-i18next'
 
 import { addSurveyPriorityAcheivementData } from '../../redux/actions'
 
@@ -45,6 +46,7 @@ export class AddAchievement extends Component {
   }
 
   render() {
+    const { t } = this.props
     const draft = this.getDraft()
     const achievement = this.getAchievementValue(draft)
 
@@ -66,20 +68,26 @@ export class AddAchievement extends Component {
               size={17}
               style={{ marginRight: 10, marginLeft: -10 }}
             />
-            <Text style={globalStyles.h3}>Achievement</Text>
+            <Text style={globalStyles.h3}>
+              {t('views.lifemap.achievement')}
+            </Text>
           </View>
           <TextInput
             field=""
             onChangeText={text => this.setState({ reason: text })}
-            placeholder={this.state.reason ? '' : 'Write your answer here...'}
-            label="How did you get it?"
+            placeholder={
+              this.state.reason ? '' : t('views.lifemap.writeYourAnswerHere')
+            }
+            label={t('views.lifemap.howDidYouGetIt')}
             value={achievement ? achievement.reason : ''}
             multiline
           />
           <TextInput
-            label="What did it take to achieve this?"
+            label={t('views.lifemap.whatDidItTakeToAchieveThis')}
             onChangeText={text => this.setState({ roadmap: text })}
-            placeholder={this.state.roadmap ? '' : 'Write your answer here...'}
+            placeholder={
+              this.state.roadmap ? '' : t('views.lifemap.writeYourAnswerHere')
+            }
             value={achievement ? achievement.roadmap : ''}
             multiline
           />
@@ -87,7 +95,7 @@ export class AddAchievement extends Component {
         <View style={{ height: 50 }}>
           <Button
             colored
-            text="Save"
+            text={t('general.save')}
             handleClick={() => this.addAchievement()}
           />
         </View>
@@ -104,6 +112,7 @@ const styles = StyleSheet.create({
 })
 
 AddAchievement.propTypes = {
+  t: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   addSurveyPriorityAcheivementData: PropTypes.func.isRequired,
   drafts: PropTypes.array.isRequired
@@ -117,7 +126,9 @@ const mapStateToProps = ({ drafts }) => ({
   drafts
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddAchievement)
+export default withNamespaces()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AddAchievement)
+)

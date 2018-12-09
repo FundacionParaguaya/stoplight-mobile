@@ -24,6 +24,7 @@ global.fetch = () => new Promise(() => {})
 /* eslint-enable no-undef */
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     navigate: jest.fn(),
     getParam: param => (param === 'draftId' ? 2 : { surveyId: 100 })
@@ -101,7 +102,7 @@ describe('Family Location component', () => {
   })
   it('shows GPS accuracy range', () => {
     expect(wrapper.find('#accuracy')).toHaveHTML(
-      '<react-native-mock>GPS: Accurate to 15m</react-native-mock>'
+      '<react-native-mock>views.family.gpsAccurate</react-native-mock>'
     )
     expect(wrapper).toHaveState({
       accuracy: 15
@@ -204,7 +205,7 @@ describe('Family Location component', () => {
       })
     })
 
-    it('doesn\'t look for device location if there is one from draft', () => {
+    it("doesn't look for device location if there is one from draft", () => {
       const spy = jest.spyOn(wrapper.instance(), 'getDeviceLocation')
 
       expect(spy).toHaveBeenCalledTimes(0)

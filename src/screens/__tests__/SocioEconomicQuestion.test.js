@@ -7,6 +7,7 @@ import TextInput from '../../components/TextInput'
 import data from '../__mocks__/fake-socio-economic-data.json'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     navigate: jest.fn(),
     push: jest.fn(),
@@ -134,7 +135,7 @@ describe('SocioEconomicQuestion screens', () => {
 
       expect(wrapper.find(Button).last()).toHaveProp({
         colored: true,
-        text: 'Continue'
+        text: 'general.continue'
       })
     })
 

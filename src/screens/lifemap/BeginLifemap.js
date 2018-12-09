@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 
 import globalStyles from '../../globalStyles'
 import RoundImage from '../../components/RoundImage'
@@ -12,6 +13,7 @@ export class BeginLifemap extends Component {
   numberOfQuestions = this.survey.surveyStoplightQuestions.length
   survey = this.props.navigation.getParam('survey')
   render() {
+    const { t } = this.props
     return (
       <ScrollView
         style={globalStyles.background}
@@ -24,15 +26,17 @@ export class BeginLifemap extends Component {
           }}
         >
           <Text style={{ ...globalStyles.h3, ...styles.text }}>
-            This life map has {this.numberOfQuestions} questions. It will take
-            apporximately 35 minutes to complete!
+            {t('views.lifemap.thisLifeMapHas').replace(
+              '%n',
+              this.numberOfQuestions
+            )}
           </Text>
           <RoundImage source="stoplight" />
         </View>
         <View style={{ height: 50 }}>
           <Button
             colored
-            text="Continue"
+            text={t('general.continue')}
             handleClick={() =>
               this.props.navigation.navigate('Question', {
                 draftId: this.props.navigation.getParam('draftId'),
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
 })
 
 BeginLifemap.propTypes = {
+  t: PropTypes.func.isRequired,
   surveys: PropTypes.array,
   navigation: PropTypes.object.isRequired
 }
@@ -70,4 +75,4 @@ const mapStateToProps = ({ surveys }) => ({
   surveys
 })
 
-export default connect(mapStateToProps)(BeginLifemap)
+export default withNamespaces()(connect(mapStateToProps)(BeginLifemap))

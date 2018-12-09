@@ -3,14 +3,15 @@ import { StyleSheet, ScrollView, View } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v1'
+import { withNamespaces } from 'react-i18next'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
 import { createDraft, addSurveyFamilyMemberData } from '../../redux/actions'
 
-import { withNamespaces } from 'react-i18next'
 import Select from '../../components/Select'
 import Button from '../../components/Button'
 import TextInput from '../../components/TextInput'
 import DateInput from '../../components/DateInput'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import globalStyles from '../../globalStyles'
 import colors from '../../theme.json'
 

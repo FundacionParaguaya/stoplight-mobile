@@ -10,6 +10,7 @@ import { Question } from '../lifemap/Question'
 import Slider from '../../components/Slider'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     navigate: jest.fn(),
     getParam: jest.fn(param => {

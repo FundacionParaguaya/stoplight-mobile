@@ -7,6 +7,7 @@ import Button from '../../components/Button'
 import Select from '../../components/Select'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     getParam: jest.fn(param =>
       param === 'draftId'

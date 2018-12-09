@@ -10,6 +10,7 @@ import Button from '../../components/Button'
 import Counter from '../../components/Counter'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     navigate: jest.fn(),
     getParam: jest.fn(param => (param === 'indicator' ? 'income' : 2))

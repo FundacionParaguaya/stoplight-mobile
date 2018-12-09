@@ -5,6 +5,7 @@ import { FormInput, FormValidationMessage } from 'react-native-elements'
 import colors from '../theme.json'
 import validator from 'validator'
 import globalStyles from '../globalStyles'
+import i18n from '../i18n'
 class TextInput extends Component {
   state = {
     status: this.props.value ? 'filled' : 'blur',
@@ -47,20 +48,20 @@ class TextInput extends Component {
 
   validateInput(text) {
     if (this.props.required && !text) {
-      return this.handleError('This field is required')
+      return this.handleError(i18n.t('validation.fieldIsRequired'))
     }
     if (this.props.validation === 'long-string' && text.length > 250) {
-      return this.handleError('Value must be less than 250 characters')
+      return this.handleError(i18n.t('validation.lessThan250Characters'))
     }
     if (this.props.validation !== 'long-string' && text.length > 50) {
-      return this.handleError('Value must be less than 50 characters')
+      return this.handleError(i18n.t('validation.lessThan50Characters'))
     }
     if (
       this.props.validation === 'email' &&
       !validator.isEmail(text) &&
       !validator.isEmpty(text)
     ) {
-      return this.handleError('Please enter a valid email address')
+      return this.handleError(i18n.t('validation.validEmailAddress'))
     }
 
     if (
@@ -68,21 +69,21 @@ class TextInput extends Component {
       !/^[a-zA-Z\u0080-\uFFFF]([\w -]*[a-zA-Z\u0080-\uFFFF])?$/.test(text) &&
       !validator.isEmpty(text)
     ) {
-      return this.handleError('Please enter alphabetic characters')
+      return this.handleError(i18n.t('validation.alphabeticCharacters'))
     }
     if (
       this.props.validation === 'phone' &&
       !/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/.test(text) &&
       !validator.isEmpty(text)
     ) {
-      return this.handleError('Please enter a valid phone number')
+      return this.handleError(i18n.t('validation.validPhoneNumber'))
     }
     if (
       this.props.validation === 'number' &&
       !validator.isNumeric(text) &&
       !validator.isEmpty(text)
     ) {
-      return this.handleError('Please enter a valid number')
+      return this.handleError(i18n.t('validation.validNumber'))
     }
 
     this.props.detectError(false, this.props.field)
@@ -142,12 +143,11 @@ class TextInput extends Component {
             <Text style={{ fontSize: 14, margin: 10 }}>{text}</Text>
           </FormInput>
         </View>
-        {status === 'error' &&
-          errorMsg && (
-            <FormValidationMessage style={{ color: colors.red }}>
-              {errorMsg}
-            </FormValidationMessage>
-          )}
+        {status === 'error' && errorMsg && (
+          <FormValidationMessage style={{ color: colors.red }}>
+            {errorMsg}
+          </FormValidationMessage>
+        )}
       </View>
     )
   }

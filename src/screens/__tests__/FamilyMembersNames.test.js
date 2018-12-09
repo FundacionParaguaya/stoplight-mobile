@@ -8,6 +8,7 @@ import TextInput from '../../components/TextInput'
 import Select from '../../components/Select'
 
 const createTestProps = props => ({
+  t: value => value,
   navigation: {
     getParam: jest.fn(param => (param === 'draftId' ? 4 : null)),
     navigate: jest.fn()

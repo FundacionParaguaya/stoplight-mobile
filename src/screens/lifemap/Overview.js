@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 
 import Tip from '../../components/Tip'
 import SkippedListItem from '../../components/SkippedListItem'
@@ -44,6 +45,7 @@ export class Overview extends Component {
     })
 
   render() {
+    const { t } = this.props
     const draft = this.props.drafts.filter(
       item => item.draftId === this.draftId
     )[0]
@@ -94,13 +96,13 @@ export class Overview extends Component {
             <View style={{ height: 50, marginTop: 20 }}>
               <Button
                 colored
-                text="Continue"
+                text={t('general.continue')}
                 handleClick={() => this.clickContinue()}
               />
             </View>
             <Tip
-              title={'You skipped these indicators'}
-              description={'Why not try again to answer these now!'}
+              title={t('views.lifemap.youSkipped')}
+              description={t('views.lifemap.whyNotTryAgain')}
             />
           </ScrollView>
         ) : (
@@ -119,7 +121,7 @@ export class Overview extends Component {
               </View>
               <View>
                 <Text style={{ ...globalStyles.subline, ...styles.listTitle }}>
-                  All indicators
+                  {t('views.lifemap.allIndicators')}
                 </Text>
                 <LifemapOverview
                   surveyData={this.survey.surveyStoplightQuestions}
@@ -131,7 +133,7 @@ export class Overview extends Component {
             <View style={{ height: 50 }}>
               <Button
                 colored
-                text="Continue"
+                text={t('general.continue')}
                 handleClick={() => this.navigateToScreen('Final')}
               />
             </View>
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
 })
 
 Overview.propTypes = {
+  t: PropTypes.func.isRequired,
   drafts: PropTypes.array.isRequired,
   navigation: PropTypes.object.isRequired
 }
@@ -169,4 +172,4 @@ const mapStateToProps = ({ drafts }) => ({
   drafts
 })
 
-export default connect(mapStateToProps)(Overview)
+export default withNamespaces()(connect(mapStateToProps)(Overview))
