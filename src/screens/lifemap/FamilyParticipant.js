@@ -2,11 +2,15 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { NavigationActions } from 'react-navigation'
 import uuid from 'uuid/v1'
 import { withNamespaces } from 'react-i18next'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-
-import { createDraft, addSurveyFamilyMemberData } from '../../redux/actions'
+import {
+  createDraft,
+  deleteDraft,
+  addSurveyFamilyMemberData
+} from '../../redux/actions'
 
 import Select from '../../components/Select'
 import Button from '../../components/Button'
@@ -27,18 +31,21 @@ export class FamilyParticipant extends Component {
   //Get survey by id
   survey = this.props.surveys.filter(survey => survey.id === this.surveyId)[0]
 
-  //Required fields
-  requiredFields = [
-    'firstName',
-    'lastName',
-    'document',
-    'documentNumber',
-    'gender',
-    'countryOfBirth',
-    'dateOfBirth'
-  ]
+  errorsDetected = []
 
   state = { errorsDetected: [] }
+
+  detectError = (error, field) => {
+    if (error && !this.errorsDetected.includes(field)) {
+      this.errorsDetected.push(field)
+    } else if (!error) {
+      this.errorsDetected = this.errorsDetected.filter(item => item !== field)
+    }
+
+    this.setState({
+      errorsDetected: this.errorsDetected
+    })
+  }
 
   getDraftFromRedux() {
     //Get draft  from Redux store if it exists else create new draft
@@ -55,7 +62,8 @@ export class FamilyParticipant extends Component {
         familyData: {
           familyMembersList: [
             {
-              primary: true
+              firstParticipant: true,
+              socioEconomicAnswers: []
             }
           ]
         }
@@ -81,16 +89,6 @@ export class FamilyParticipant extends Component {
     return draft.familyData.familyMembersList[0][field]
   }
 
-  detectError = (error, field) => {
-    if (error && !this.state.errorsDetected.includes(field)) {
-      this.setState({ errorsDetected: [...this.state.errorsDetected, field] })
-    } else if (!error) {
-      this.setState({
-        errorsDetected: this.state.errorsDetected.filter(item => item !== field)
-      })
-    }
-  }
-
   addSurveyData = (text, field) => {
     this.props.addSurveyFamilyMemberData({
       id: this.draftId,
@@ -99,6 +97,17 @@ export class FamilyParticipant extends Component {
         [field]: text
       }
     })
+  }
+
+  componentDidUpdate(nextProps) {
+    const { navigation } = nextProps
+
+    // delete the draft if participant details not saved the first time
+    if (navigation.getParam('deleteDraft')) {
+      this.props.deleteDraft(this.draftId)
+      navigation.setParams({ deleteDraft: false })
+      navigation.reset([NavigationActions.navigate({ routeName: 'Dashboard' })])
+    }
   }
 
   gender = this.survey.surveyConfig.gender
@@ -110,18 +119,6 @@ export class FamilyParticipant extends Component {
     const draft = this.props.drafts.filter(
       draft => draft.draftId === this.draftId
     )[0]
-
-    const emptyRequiredFields = draft
-      ? this.requiredFields.filter(
-          item =>
-            !draft.familyData.familyMembersList[0][item] ||
-            draft.familyData.familyMembersList[0][item].length === 0
-        )
-      : []
-
-    const isButtonEnabled =
-      !emptyRequiredFields.length && !this.state.errorsDetected.length
-
     return (
       <ScrollView
         style={globalStyles.background}
@@ -165,11 +162,12 @@ export class FamilyParticipant extends Component {
           />
 
           <DateInput
+            required
             label={t('views.family.dateOfBirth')}
-            field="dateOfBirth"
+            field="birthDate"
             detectError={this.detectError}
             onValidDate={this.addSurveyData}
-            value={this.getFieldValue(draft, 'dateOfBirth')}
+            value={this.getFieldValue(draft, 'birthDate')}
           />
 
           <Select
@@ -177,8 +175,8 @@ export class FamilyParticipant extends Component {
             onChange={this.addSurveyData}
             label={t('views.family.documentType')}
             placeholder={t('views.family.documentType')}
-            field="document"
-            value={this.getFieldValue(draft, 'document') || ''}
+            field="documentType"
+            value={this.getFieldValue(draft, 'documentType') || ''}
             detectError={this.detectError}
             data={this.documentType}
           />
@@ -196,8 +194,8 @@ export class FamilyParticipant extends Component {
             label={t('views.family.countryOfBirth')}
             countrySelect
             placeholder={t('views.family.selectACountry')}
-            field="countryOfBirth"
-            value={this.getFieldValue(draft, 'countryOfBirth') || ''}
+            field="birthCountry"
+            value={this.getFieldValue(draft, 'birthCountry') || ''}
             detectError={this.detectError}
           />
           <TextInput
@@ -210,16 +208,16 @@ export class FamilyParticipant extends Component {
           />
           <TextInput
             onChangeText={this.addSurveyData}
-            field="phone"
-            value={this.getFieldValue(draft, 'phone')}
+            field="phoneNumber"
+            value={this.getFieldValue(draft, 'phoneNumber')}
             placeholder={t('views.family.phone')}
-            validation="phone"
+            validation="phoneNumber"
             detectError={this.detectError}
           />
         </View>
         <View style={{ height: 50, marginTop: 50 }}>
           <Button
-            disabled={!isButtonEnabled}
+            disabled={!!this.errorsDetected.length}
             colored
             text={t('general.continue')}
             handleClick={() => this.handleClick()}
@@ -246,11 +244,13 @@ FamilyParticipant.propTypes = {
   drafts: PropTypes.array.isRequired,
   navigation: PropTypes.object.isRequired,
   createDraft: PropTypes.func.isRequired,
+  deleteDraft: PropTypes.func.isRequired,
   addSurveyFamilyMemberData: PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = {
   createDraft,
+  deleteDraft,
   addSurveyFamilyMemberData
 }
 

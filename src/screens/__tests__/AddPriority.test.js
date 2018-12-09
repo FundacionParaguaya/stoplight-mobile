@@ -13,6 +13,7 @@ const createTestProps = props => ({
   t: value => value,
   navigation: {
     navigate: jest.fn(),
+    goBack: jest.fn(),
     getParam: jest.fn(param => (param === 'indicator' ? 'income' : 2))
   },
   addSurveyPriorityAcheivementData: jest.fn(),
@@ -40,7 +41,7 @@ describe('AddPriority View', () => {
       expect(wrapper.find(Icon)).toHaveLength(1)
     })
     it('renders Text', () => {
-      expect(wrapper.find(Text)).toHaveLength(1)
+      expect(wrapper.find(Text)).toHaveLength(2)
     })
     it('renders Counter', () => {
       expect(wrapper.find(Counter)).toHaveLength(1)

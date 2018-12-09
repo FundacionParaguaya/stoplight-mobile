@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { AsyncStorage as storage, ScrollView, FlatList } from 'react-native'
-import MockAsyncStorage from 'mock-async-storage'
 import { Dashboard } from '../Dashboard'
 import Button from '../../components/Button'
 import Loading from '../../components/Loading'
@@ -78,31 +77,6 @@ describe('Dashboard View', () => {
       wrapper = shallow(<Dashboard {...props} />)
       expect(wrapper.find(Loading)).toHaveLength(1)
     })
-  })
-})
-
-//Mock Async Storage
-const mock = () => {
-  const mockImpl = new MockAsyncStorage()
-  jest.mock('AsyncStorage', () => mockImpl)
-}
-mock()
-
-describe('Dashboard not yet visited by user', () => {
-  let wrapper
-  beforeEach(async () => {
-    const props = createTestProps()
-    await storage.setItem('userVisitedDashboard', 'false')
-    wrapper = shallow(<Dashboard {...props} />)
-  })
-  it('calls action loadSnapshots when user first visits dashboard', () => {
-    expect(wrapper.instance().props.loadSnapshots).toHaveBeenCalledTimes(1)
-  })
-  it('calls action loadSurveys when user first visits dashboard', () => {
-    expect(wrapper.instance().props.loadSurveys).toHaveBeenCalledTimes(1)
-  })
-  it('calls action loadFamilies when user first visits dashboard', () => {
-    expect(wrapper.instance().props.loadFamilies).toHaveBeenCalledTimes(1)
   })
 })
 

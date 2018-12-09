@@ -39,10 +39,12 @@ export class Dashboard extends Component {
       title: this.props.t('views.dashboard')
     })
   componentDidMount() {
-    AsyncStorage.getItem('userVisitedDashboard').then(value =>
-      value === 'false' ? this.loadData() : null
-    )
-    AsyncStorage.setItem('userVisitedDashboard', 'true')
+    AsyncStorage.getItem('userVisitedDashboard').then(value => {
+      if (!value || value === 'false') {
+        this.loadData()
+      }
+    })
+
     this.detectSlowLoading()
     this.updateTitle()
   }
@@ -61,6 +63,7 @@ export class Dashboard extends Component {
     this.props.loadSnapshots(url[this.props.env], this.props.user.token)
     this.props.loadSurveys(url[this.props.env], this.props.user.token)
     this.props.loadFamilies(url[this.props.env], this.props.user.token)
+    AsyncStorage.setItem('userVisitedDashboard', 'true')
   }
 
   detectSlowLoading = () => {
@@ -95,7 +98,7 @@ export class Dashboard extends Component {
               <Button
                 text={t('views.createLifemap')}
                 colored
-                handleClick={() => navigation.navigate('Surveys')}
+                handleClick={() => this.props.navigation.navigate('Surveys')}
               />
             </View>
             <View style={styles.borderBottom}>

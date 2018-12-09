@@ -19,7 +19,7 @@
     "latitude": -22.2521,
     "familyIdentifier": "ASD323",
     "address": "SOME ADDRESS",
-    "postalCode": "1000",
+    "code": "1000",
     "accuracy": 100,
     "familyMembersList": [
       {
@@ -30,7 +30,7 @@
         "birthCountry": "Paraguay",
         "gender": "F",
         "birthDate": 12345,
-        "primary": true,
+        "firstParticipant": true,
         "socioEconomicAnswers": [
           { "key": "educationPersonMostStudied", "value": "SCHOOL-COMPLETE" },
           { "key": "receiveStateIncome", "value": "NO" }
@@ -44,7 +44,7 @@
         "birthCountry": "Paraguay",
         "gender": "F",
         "birthDate": 12345,
-        "primary": false,
+        "firstParticipant": false,
         "socioEconomicAnswers": [
           {
             "key": "familyUbication",

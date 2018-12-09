@@ -1,9 +1,11 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { StatusBar } from 'react-native'
 import { NavWrapper } from '../NavWrapper'
 import { LoginStack, AppStack } from '../navigation'
 import Loading from '../Loading'
 import * as store from '../../redux/store'
+import colors from '../../theme.json'
 
 jest.useFakeTimers()
 
@@ -25,6 +27,12 @@ describe('Navigation Wrapper', () => {
   })
 
   describe('before rehydration', () => {
+    it('displaye status bar with contrasting colors', () => {
+      expect(wrapper.find(StatusBar)).toHaveProp({
+        backgroundColor: colors.palebeige,
+        barStyle: 'dark-content'
+      })
+    })
     it('checks for store hydration on mount', () => {
       expect(wrapper).toHaveState({
         rehydrated: false

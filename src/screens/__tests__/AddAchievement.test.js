@@ -7,12 +7,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { AddAchievement } from '../lifemap/AddAchievement'
 import TextInput from '../../components/TextInput'
 import Button from '../../components/Button'
-import Counter from '../../components/Counter'
 
 const createTestProps = props => ({
   t: value => value,
   navigation: {
     navigate: jest.fn(),
+    goBack: jest.fn(),
     getParam: jest.fn(param => (param === 'indicator' ? 'income' : 2))
   },
   addSurveyPriorityAcheivementData: jest.fn(),
@@ -40,7 +40,7 @@ describe('AddAchievement View', () => {
       expect(wrapper.find(Icon)).toHaveLength(1)
     })
     it('renders Text', () => {
-      expect(wrapper.find(Text)).toHaveLength(1)
+      expect(wrapper.find(Text)).toHaveLength(2)
     })
     it('renders Button', () => {
       expect(wrapper.find(Button)).toHaveLength(1)
@@ -50,19 +50,19 @@ describe('AddAchievement View', () => {
   describe('functionality', () => {
     it('has correct initial state', () => {
       expect(wrapper.instance().state).toEqual({
-        reason: '',
+        action: '',
         roadmap: '',
         indicator: 'income'
       })
     })
 
-    it('records reason to state', () => {
+    it('records action to state', () => {
       wrapper
         .find(TextInput)
         .first()
         .props()
-        .onChangeText('Some reason')
-      expect(wrapper.instance().state.reason).toEqual('Some reason')
+        .onChangeText('Some action')
+      expect(wrapper.instance().state.action).toEqual('Some action')
     })
     it('records roadmap to state', () => {
       wrapper

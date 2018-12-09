@@ -116,6 +116,7 @@ describe('FamilyMembersGender View', () => {
     ).toBe(false)
   })
   it('disables Button when an error occurs', () => {
+    wrapper.instance().errorsDetected = ['error']
     wrapper.setState({ errorsDetected: ['error'] })
 
     expect(

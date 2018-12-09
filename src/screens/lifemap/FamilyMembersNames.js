@@ -4,7 +4,11 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withNamespaces } from 'react-i18next'
 
-import { addSurveyData, addSurveyFamilyMemberData } from '../../redux/actions'
+import {
+  addSurveyData,
+  addSurveyFamilyMemberData,
+  removeFamilyMembers
+} from '../../redux/actions'
 
 import globalStyles from '../../globalStyles'
 import Button from '../../components/Button'
@@ -15,10 +19,24 @@ export class FamilyMembersNames extends Component {
   draftId = this.props.navigation.getParam('draftId')
   survey = this.props.navigation.getParam('survey')
 
+  errorsDetected = []
+
   state = { errorsDetected: [] }
 
-  handleClick(draft) {
-    this.getFieldValue(draft, 'countFamilyMembers') > 1
+  detectError = (error, field) => {
+    if (error && !this.errorsDetected.includes(field)) {
+      this.errorsDetected.push(field)
+    } else if (!error) {
+      this.errorsDetected = this.errorsDetected.filter(item => item !== field)
+    }
+
+    this.setState({
+      errorsDetected: this.errorsDetected
+    })
+  }
+
+  handleClick() {
+    this.getFieldValue('countFamilyMembers') > 1
       ? this.props.navigation.navigate('FamilyMembersGender', {
           draftId: this.draftId,
           survey: this.survey
@@ -28,24 +46,39 @@ export class FamilyMembersNames extends Component {
           survey: this.survey
         })
   }
-  getFieldValue = (draft, field) => {
+  getDraft = () =>
+    this.props.drafts.filter(draft => draft.draftId === this.draftId)[0]
+
+  getFieldValue = field => {
+    const draft = this.getDraft()
     if (!draft) {
       return
     }
 
     return draft.familyData[field]
   }
-  detectError = (error, field) => {
-    if (error && !this.state.errorsDetected.includes(field)) {
-      this.setState({ errorsDetected: [...this.state.errorsDetected, field] })
-    } else if (!error) {
-      this.setState({
-        errorsDetected: this.state.errorsDetected.filter(item => item !== field)
-      })
-    }
-  }
 
   addFamilyCount = (text, field) => {
+    // if reducing the number of family members remove the rest
+    if (text !== '' && this.getFieldValue('countFamilyMembers') > text) {
+      this.props.removeFamilyMembers(this.draftId, text)
+
+      // also remove these from the errors array
+      for (
+        var i = text - 1;
+        i < this.getFieldValue('countFamilyMembers') - 1;
+        i++
+      ) {
+        this.errorsDetected = this.errorsDetected.filter(
+          item => item !== `${i}`
+        )
+      }
+
+      this.setState({
+        errorsDetected: this.errorsDetected
+      })
+    }
+
     this.props.addSurveyData(this.draftId, 'familyData', {
       [field]: text
     })
@@ -56,26 +89,15 @@ export class FamilyMembersNames extends Component {
       id: this.draftId,
       index,
       payload: {
-        firstName: name
+        firstName: name,
+        firstParticipant: false
       }
     })
   }
 
   render() {
     const { t } = this.props
-    const draft = this.props.drafts.filter(
-      draft => draft.draftId === this.draftId
-    )[0]
-
-    const emptyRequiredFields =
-      draft.familyData.familyMembersList.filter(item => item.firstName === '')
-        .length !== 0 ||
-      !draft.familyData.countFamilyMembers ||
-      draft.familyData.countFamilyMembers >
-        draft.familyData.familyMembersList.length
-
-    const isButtonEnabled =
-      !emptyRequiredFields && !this.state.errorsDetected.length
+    const draft = this.getDraft()
 
     const familyMembersCount = draft.familyData.countFamilyMembers
       ? Array(draft.familyData.countFamilyMembers - 1)
@@ -90,12 +112,13 @@ export class FamilyMembersNames extends Component {
       >
         <View style={{ ...globalStyles.container, padding: 0 }}>
           <Select
+            id="familyMembersCount"
             required
             onChange={this.addFamilyCount}
             label={t('views.family.peopleLivingInThisHousehold')}
             placeholder={t('views.family.peopleLivingInThisHousehold')}
             field="countFamilyMembers"
-            value={this.getFieldValue(draft, 'countFamilyMembers') || ''}
+            value={this.getFieldValue('countFamilyMembers') || ''}
             detectError={this.detectError}
             data={Array(10)
               .fill()
@@ -122,7 +145,7 @@ export class FamilyMembersNames extends Component {
               onChangeText={text => this.addFamilyMemberName(text, i + 1)}
               placeholder={t('views.family.name')}
               value={
-                (this.getFieldValue(draft, 'familyMembersList')[i + 1] || {})
+                (this.getFieldValue('familyMembersList')[i + 1] || {})
                   .firstName || ''
               }
               required
@@ -135,7 +158,7 @@ export class FamilyMembersNames extends Component {
           <Button
             colored
             text={t('general.continue')}
-            disabled={!isButtonEnabled}
+            disabled={!!this.errorsDetected.length}
             handleClick={() => this.handleClick(draft)}
           />
         </View>
@@ -156,12 +179,14 @@ FamilyMembersNames.propTypes = {
   t: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   addSurveyData: PropTypes.func.isRequired,
-  addSurveyFamilyMemberData: PropTypes.func.isRequired
+  addSurveyFamilyMemberData: PropTypes.func.isRequired,
+  removeFamilyMembers: PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = {
   addSurveyData,
-  addSurveyFamilyMemberData
+  addSurveyFamilyMemberData,
+  removeFamilyMembers
 }
 
 const mapStateToProps = ({ drafts }) => ({

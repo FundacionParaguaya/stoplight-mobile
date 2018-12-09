@@ -6,6 +6,7 @@ import {
   Text,
   Platform
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import colors from '../../theme.json'
@@ -39,10 +40,15 @@ export const generateNavOptions = ({ navigation, burgerMenu = true }) => ({
       <TouchableOpacity
         style={styles.touchable}
         onPress={() => {
-          if (navigation.state.routeName === 'Terms') {
-            navigation.navigate('Dashboard')
-          } else {
-            navigation.setParams({ modalOpen: true })
+          navigation.setParams({ modalOpen: true })
+
+          // delete draft if first time visiting FamilyParticipant for
+          // this life map
+          if (
+            navigation.state.routeName === 'FamilyParticipant' &&
+            !navigation.getParam('draft')
+          ) {
+            navigation.setParams({ deleteDraft: true })
           }
         }}
       >
@@ -52,23 +58,53 @@ export const generateNavOptions = ({ navigation, burgerMenu = true }) => ({
         isOpen={navigation.getParam('modalOpen')}
         onClose={() => navigation.setParams({ modalOpen: false })}
       >
-        <Text style={[globalStyles.centerText, globalStyles.h3]}>
-          {i18n.t('views.modals.yourLifemapIsNotComplete')}
-        </Text>
-        <Text style={[globalStyles.centerText, styles.subline]}>
-          {i18n.t('views.modals.thisWillBeSavedAsADraft')}
-        </Text>
+        {navigation.state.routeName === 'Terms' ||
+        navigation.state.routeName === 'Privacy' ||
+        (navigation.state.routeName === 'FamilyParticipant' &&
+          !navigation.getParam('draft')) ? (
+          <View>
+            <Text style={[globalStyles.centerText, globalStyles.h3]}>
+              {navigation.state.routeName === 'FamilyParticipant'
+                ? i18n.t('views.modals.lifeMapWillNotBeSaved')
+                : i18n.t('views.modals.weCannotContinueToCreateTheLifeMap')}
+            </Text>
+            <Text style={[globalStyles.centerText, styles.subline]}>
+              {i18n.t('views.modals.areYouSureYouWantToExit')}
+            </Text>
+          </View>
+        ) : (
+          <View>
+            <Text style={[globalStyles.centerText, globalStyles.h3]}>
+              {i18n.t('views.modals.yourLifemapIsNotComplete')}
+            </Text>
+            <Text style={[globalStyles.centerText, styles.subline]}>
+              {i18n.t('views.modals.thisWillBeSavedAsADraft')}
+            </Text>
+          </View>
+        )}
+
         <View style={styles.buttonBar}>
           <Button
             outlined
             text={i18n.t('general.yes')}
-            style={styles.button}
-            handleClick={() => navigation.navigate('Dashboard')}
+            style={{ width: 107 }}
+            handleClick={() => {
+              if (
+                navigation.state.routeName === 'FamilyParticipant' &&
+                !navigation.getParam('draft')
+              ) {
+                navigation.setParams({ deleteDraft: true })
+              } else {
+                navigation.reset([
+                  NavigationActions.navigate({ routeName: 'Dashboard' })
+                ])
+              }
+            }}
           />
           <Button
             outlined
             text={i18n.t('general.no')}
-            style={styles.button}
+            style={{ width: 107 }}
             handleClick={() => navigation.setParams({ modalOpen: false })}
           />
         </View>
@@ -119,8 +155,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 33,
     justifyContent: 'space-between'
-  },
-  button: {
-    width: 107
   }
 })

@@ -16,13 +16,15 @@ import { url } from '../config'
 import globalStyles from '../globalStyles'
 import colors from '../theme.json'
 import Button from '../components/Button'
+import Loading from '../components/Loading'
 
 export class Login extends Component {
   state = {
     username: '',
     password: '',
     error: false,
-    connection: false
+    connection: false,
+    loading: false
   }
   componentDidMount() {
     this.checkConnectivity().then(isConnected =>
@@ -55,7 +57,11 @@ export class Login extends Component {
     } else this.props.setEnv('production')
   }
 
-  onLogin = () =>
+  onLogin = () => {
+    this.setState({
+      loading: true
+    })
+
     this.props
       .login(this.state.username, this.state.password, url[this.props.env])
       .then(() => {
@@ -65,12 +71,20 @@ export class Login extends Component {
             firstTimeVisitor: true
           })
         } else if (this.props.user.status === 401) {
+          this.setState({
+            loading: false
+          })
           this.setState({ error: 'Wrong username or password' })
         }
       })
+  }
 
   render() {
-    return (
+    return this.state.loading ? (
+      <View style={globalStyles.container}>
+        <Loading />
+      </View>
+    ) : (
       <View style={globalStyles.container}>
         <ScrollView style={globalStyles.content}>
           <Image style={styles.logo} source={logo} />

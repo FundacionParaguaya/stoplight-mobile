@@ -34,6 +34,20 @@ export class Location extends Component {
     mapReady: false,
     centeringMap: false
   }
+  errorsDetected = []
+
+  detectError = (error, field) => {
+    if (error && !this.errorsDetected.includes(field)) {
+      this.errorsDetected.push(field)
+    } else if (!error) {
+      this.errorsDetected = this.errorsDetected.filter(item => item !== field)
+    }
+
+    this.setState({
+      errorsDetected: this.errorsDetected
+    })
+  }
+
   addSurveyData = (text, field) => {
     this.props.addSurveyData(
       this.props.navigation.getParam('draftId'),
@@ -84,15 +98,6 @@ export class Location extends Component {
         distanceFilter: 1000
       }
     )
-  }
-  detectError = (error, field) => {
-    if (error && !this.state.errorsDetected.includes(field)) {
-      this.setState({ errorsDetected: [...this.state.errorsDetected, field] })
-    } else if (!error) {
-      this.setState({
-        errorsDetected: this.state.errorsDetected.filter(item => item !== field)
-      })
-    }
   }
 
   searcForAddress = () => {
@@ -145,6 +150,19 @@ export class Location extends Component {
         longitude: this.getFieldValue(draft, 'longitude')
       })
     }
+
+    // if the draft value of country is empty set the primary member's
+    // country of birth
+    if (!this.getFieldValue(draft, 'country')) {
+      this.addSurveyData(
+        draft.familyData.familyMembersList[0].birthCountry,
+        'country'
+      )
+
+      // also make sure to remove the empty field error set in
+      // the Select's componentDidMount
+      this.detectError(false, 'country')
+    }
   }
   handleClick = () => {
     this.addSurveyData(this.state.latitude, 'latitude')
@@ -164,7 +182,6 @@ export class Location extends Component {
       longitude,
       accuracy,
       searchAddress,
-      errorsDetected,
       centeringMap
     } = this.state
 
@@ -260,25 +277,22 @@ export class Location extends Component {
             countrySelect
             placeholder={t('views.family.selectACountry')}
             field="country"
-            value={
-              this.getFieldValue(draft, 'country') ||
-              draft.familyData.familyMembersList[0].countryOfBirth
-            }
+            value={this.getFieldValue(draft, 'country') || ''}
             detectError={this.detectError}
           />
           <TextInput
-            id="postalCode"
+            id="postCode"
             onChangeText={this.addSurveyData}
-            field="postalCode"
-            value={this.getFieldValue(draft, 'postalCode') || ''}
+            field="postCode"
+            value={this.getFieldValue(draft, 'postCode') || ''}
             placeholder={t('views.family.postcode')}
             detectError={this.detectError}
           />
           <TextInput
-            id="houseDescription"
+            id="address"
             onChangeText={this.addSurveyData}
-            field="houseDescription"
-            value={this.getFieldValue(draft, 'houseDescription') || ''}
+            field="address"
+            value={this.getFieldValue(draft, 'address') || ''}
             placeholder={t('views.family.streetOrHouseDescription')}
             validation="long-string"
             detectError={this.detectError}
@@ -288,7 +302,7 @@ export class Location extends Component {
         <View style={{ marginTop: 15 }}>
           <Button
             id="continue"
-            disabled={!!errorsDetected.length}
+            disabled={!!this.errorsDetected.length}
             colored
             text={t('general.continue')}
             handleClick={this.handleClick}

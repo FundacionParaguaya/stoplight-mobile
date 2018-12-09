@@ -31,20 +31,39 @@ export class Question extends Component {
       [this.indicator.codeName]: answer
     })
 
+    const draft = this.props.drafts.filter(
+      item => item.draftId === this.draftId
+    )[0]
+
+    const skippedQuestions = draft.indicatorSurveyDataList.filter(
+      question => question.value === 0
+    )
+
     if (
       this.step + 1 < this.indicators.length &&
       !this.props.navigation.getParam('skipped')
     ) {
-      this.props.navigation.push('Question', {
+      return this.props.navigation.push('Question', {
         draftId: this.draftId,
         survey: this.survey,
         step: this.step + 1
       })
-    } else
-      this.props.navigation.navigate('Overview', {
+    } else if (
+      (this.props.navigation.getParam('skipped') &&
+        skippedQuestions.length === 1 &&
+        answer !== 0) ||
+      skippedQuestions.length === 0
+    ) {
+      return this.props.navigation.navigate('Overview', {
         draftId: this.draftId,
         survey: this.survey
       })
+    } else {
+      return this.props.navigation.navigate('Skipped', {
+        draftId: this.draftId,
+        survey: this.survey
+      })
+    }
   }
 
   render() {
@@ -100,10 +119,13 @@ const styles = StyleSheet.create({
 Question.propTypes = {
   t: PropTypes.func.isRequired,
   addSurveyData: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  drafts: PropTypes.array.isRequired
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ drafts }) => ({
+  drafts
+})
 
 const mapDispatchToProps = {
   addSurveyData

@@ -19,13 +19,22 @@ class Button extends Component {
   }
 
   render() {
+    const { style, borderColor, disabled, colored, outlined } = this.props
     return (
       <TouchableOpacity
-        style={{
-          ...styles.buttonStyle,
-          ...this.defineButtonStyle(),
-          ...this.props.style
-        }}
+        style={[
+          styles.buttonStyle,
+          colored && styles.colored,
+          disabled && styles.disabled,
+          outlined && styles.outlined,
+          !colored && !disabled && !outlined && styles.transparent,
+          style,
+          outlined && borderColor
+            ? {
+                borderColor
+              }
+            : { borderColor: colors.palegreen }
+        ]}
         onPress={this.props.handleClick}
         disabled={this.props.disabled}
       >
@@ -38,11 +47,18 @@ class Button extends Component {
           />
         )}
         <Text
-          style={{
-            ...styles.buttonText,
-            ...(this.props.colored ? styles.whiteText : styles.greenText),
-            ...(this.props.underlined ? styles.underlined : {})
-          }}
+          style={[
+            styles.buttonText,
+            outlined && borderColor
+              ? {
+                  color: borderColor
+                }
+              : this.props.colored
+              ? styles.whiteText
+              : styles.greenText,
+
+            this.props.underlined ? styles.underlined : {}
+          ]}
         >
           {this.props.text}
         </Text>
@@ -53,6 +69,7 @@ class Button extends Component {
 
 Button.propTypes = {
   text: PropTypes.string.isRequired,
+  borderColor: PropTypes.string,
   handleClick: PropTypes.func.isRequired,
   colored: PropTypes.bool,
   underlined: PropTypes.bool,
@@ -92,9 +109,7 @@ const styles = StyleSheet.create({
   },
   outlined: {
     flex: 0,
-    color: colors.palegreen,
     fontSize: 14,
-    borderColor: colors.palegreen,
     borderRadius: 4,
     borderWidth: 1.5,
     padding: 15

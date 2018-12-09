@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { ScrollView, Image, FlatList, Text } from 'react-native'
+import { ScrollView, Text } from 'react-native'
 import { Final } from '../lifemap/Final'
 import RoundImage from '../../components/RoundImage'
 import Button from '../../components/Button'
@@ -10,6 +10,8 @@ const createTestProps = props => ({
   t: value => value,
   navigation: {
     navigate: jest.fn(),
+    popToTop: jest.fn(),
+    reset: jest.fn(),
     getParam: jest.fn(param => {
       if (param === 'draftId') {
         return 1
@@ -27,7 +29,7 @@ describe('Final Lifemap View when no questions are skipped', () => {
         {
           draftId: 1,
           indicatorSurveyDataList: [
-            { key: 'phone', value: 3 },
+            { key: 'phoneNumber', value: 3 },
             { key: 'education', value: 1 }
           ]
         }
@@ -59,12 +61,7 @@ describe('Final Lifemap View when no questions are skipped', () => {
         .find(Button)
         .props()
         .handleClick()
-      expect(
-        wrapper.instance().props.navigation.navigate
-      ).toHaveBeenCalledTimes(1)
-      expect(wrapper.instance().props.navigation.navigate).toHaveBeenCalledWith(
-        'Dashboard'
-      )
+      expect(wrapper.instance().props.navigation.reset).toHaveBeenCalledTimes(1)
     })
   })
 })

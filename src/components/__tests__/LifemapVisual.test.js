@@ -6,24 +6,26 @@ import LifemapVisual from '../LifemapVisual'
 
 const createTestProps = props => ({
   ...props,
-  data: [
-    { key: 'phone', value: 1 },
+  questions: [
+    { key: 'phoneNumber', value: 0 },
     { key: 'income', value: 3 },
     { key: 'electricity', value: 2 },
-    { key: 'water', value: 0 }
-  ]
+    { key: 'water', value: 1 }
+  ],
+  priorities: [{ indicator: 'water' }],
+  achievements: [{ indicator: 'income' }]
 })
 
 describe('LifemapVisual Component', () => {
   let wrapper
-  let props
+
   beforeEach(() => {
-    props = createTestProps()
+    const props = createTestProps()
     wrapper = shallow(<LifemapVisual {...props} />)
   })
   describe('rendering', () => {
     it('renders the appropriate number of icons', () => {
-      expect(wrapper.find(Icon)).toHaveLength(4)
+      expect(wrapper.find(Icon)).toHaveLength(6)
     })
     it('renders red color', () => {
       expect(
@@ -31,13 +33,13 @@ describe('LifemapVisual Component', () => {
           .find(Icon)
           .at(0)
           .props().color
-      ).toEqual(colors.red)
+      ).toEqual(colors.palegrey)
     })
     it('renders green color', () => {
       expect(
         wrapper
           .find(Icon)
-          .at(1)
+          .at(2)
           .props().color
       ).toEqual(colors.green)
     })
@@ -46,7 +48,7 @@ describe('LifemapVisual Component', () => {
       expect(
         wrapper
           .find(Icon)
-          .at(2)
+          .at(3)
           .props().color
       ).toEqual(colors.gold)
     })
@@ -55,9 +57,9 @@ describe('LifemapVisual Component', () => {
       expect(
         wrapper
           .find(Icon)
-          .at(3)
+          .at(5)
           .props().color
-      ).toEqual(colors.palegrey)
+      ).toEqual(colors.red)
     })
   })
 })

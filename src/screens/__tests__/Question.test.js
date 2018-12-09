@@ -24,6 +24,15 @@ const createTestProps = props => ({
     })
   },
   addSurveyData: jest.fn(),
+  drafts: [
+    {
+      draftId: 1,
+      indicatorSurveyDataList: [
+        { key: 'phoneNumber', value: 3 },
+        { key: 'education', value: 1 }
+      ]
+    }
+  ],
   ...props
 })
 
@@ -60,7 +69,7 @@ describe('Question View', () => {
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('calls selectAnswer with argument 0 when checkbox is checked', () => {
+    it('calls selectAnswer with argument 0 when link is clicked', () => {
       const spy = jest.spyOn(wrapper.instance(), 'selectAnswer')
       wrapper
         .find(TouchableOpacity)

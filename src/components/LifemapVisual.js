@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import colors from '../theme.json'
 class LifemapVisual extends Component {
   getColors = () =>
-    this.props.data.map(item => {
+    this.props.questions.map(item => {
       switch (item.value) {
         case 1:
           return colors.red
@@ -22,16 +22,39 @@ class LifemapVisual extends Component {
     })
 
   render() {
+    const prioritiesAndAchievements = [
+      ...this.props.priorities.map(priority => priority.indicator),
+      ...this.props.achievements.map(priority => priority.indicator)
+    ]
     return (
       <View style={styles.container}>
         {this.getColors().map((item, i) => (
-          <Icon
-            name="brightness-1"
-            color={item}
-            key={i}
-            size={17}
-            style={{ margin: this.props.bigMargin ? 7 : 4 }}
-          />
+          <View key={i}>
+            {prioritiesAndAchievements.includes(this.props.questions[i].key) &&
+            this.props.questions[i].value ? (
+              <Icon
+                name="brightness-1"
+                color={colors.blue}
+                size={10}
+                style={{
+                  ...styles.iconBlue,
+                  top: this.props.bigMargin ? 2 : 0,
+                  right: this.props.bigMargin ? 6 : 3
+                }}
+              />
+            ) : (
+              <View />
+            )}
+            <Icon
+              name="brightness-1"
+              color={item}
+              size={17}
+              style={{
+                marginHorizontal: this.props.bigMargin ? 8 : 4,
+                marginVertical: this.props.bigMargin ? 4 : 2
+              }}
+            />
+          </View>
         ))}
       </View>
     )
@@ -39,12 +62,24 @@ class LifemapVisual extends Component {
 }
 
 LifemapVisual.propTypes = {
-  data: PropTypes.array.isRequired,
+  questions: PropTypes.array.isRequired,
+  achievements: PropTypes.array.isRequired,
+  priorities: PropTypes.array.isRequired,
   bigMargin: PropTypes.bool
 }
 
 const styles = StyleSheet.create({
-  container: { flexDirection: 'row', flexWrap: 'wrap' }
+  container: { flexDirection: 'row', flexWrap: 'wrap' },
+  iconBlue: {
+    right: 3,
+    position: 'absolute',
+    width: 10,
+    height: 10,
+    zIndex: 10,
+    borderColor: '#FFFFFF',
+    borderWidth: 2,
+    borderRadius: 5
+  }
 })
 
 export default LifemapVisual

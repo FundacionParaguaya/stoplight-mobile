@@ -9,7 +9,7 @@ const createTestProps = props => ({
   navigation: {
     getParam: () => 'privacy',
     navigate: jest.fn(),
-    goBack: jest.fn()
+    setParams: jest.fn()
   },
   t: page => page,
   ...props
@@ -47,13 +47,18 @@ describe('Terms/Privacy view', () => {
       1
     )
   })
-  it('disagreeing goes back', () => {
+  it('disagreeing opens modal', () => {
     wrapper
       .find(Button)
       .first()
       .props()
       .handleClick()
 
-    expect(wrapper.instance().props.navigation.goBack).toHaveBeenCalledTimes(1)
+    expect(wrapper.instance().props.navigation.setParams).toHaveBeenCalledTimes(
+      1
+    )
+    expect(wrapper.instance().props.navigation.setParams).toHaveBeenCalledWith({
+      modalOpen: true
+    })
   })
 })

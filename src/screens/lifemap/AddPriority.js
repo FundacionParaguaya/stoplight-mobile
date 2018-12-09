@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { withNamespaces } from 'react-i18next'
+import { Divider } from 'react-native-elements'
 
 import { addSurveyPriorityAcheivementData } from '../../redux/actions'
 
@@ -32,7 +33,7 @@ export class AddPriority extends Component {
   componentDidMount() {
     const draft = this.getDraft()
     const priority = this.getPriorityValue(draft)
-    console.log(priority)
+
     this.setState(priority)
   }
 
@@ -41,12 +42,14 @@ export class AddPriority extends Component {
       draft => draft.draftId === this.props.navigation.getParam('draftId')
     )[0]
 
-  addPriority = () =>
+  addPriority = () => {
     this.props.addSurveyPriorityAcheivementData({
       id: this.props.navigation.getParam('draftId'),
       category: 'priorities',
       payload: this.state
     })
+    this.props.navigation.goBack()
+  }
 
   getPriorityValue = draft => {
     const priority = draft.priorities.filter(
@@ -60,26 +63,33 @@ export class AddPriority extends Component {
     const { t } = this.props
     const draft = this.getDraft()
     const priority = this.getPriorityValue(draft)
-    console.log(this.state)
+
     return (
       <ScrollView
         style={globalStyles.background}
         contentContainerStyle={styles.contentContainer}
       >
         <View>
-          <View
-            style={{
-              ...globalStyles.container,
-              flexDirection: 'row'
-            }}
-          >
-            <Icon
-              name="pin"
-              color={colors.blue}
-              size={17}
-              style={{ marginRight: 10, marginLeft: -10 }}
+          <View style={globalStyles.container}>
+            <Text style={globalStyles.h2}>
+              {this.props.navigation.getParam('indicatorText')}
+            </Text>
+            <Divider
+              style={{ backgroundColor: colors.palegrey, marginVertical: 10 }}
             />
-            <Text style={globalStyles.h3}>{t('views.lifemap.priority')}</Text>
+            <View
+              style={{
+                flexDirection: 'row'
+              }}
+            >
+              <Icon
+                name="pin"
+                color={colors.blue}
+                size={17}
+                style={{ marginRight: 10, marginLeft: -10 }}
+              />
+              <Text style={globalStyles.h3}>{t('views.lifemap.priority')}</Text>
+            </View>
           </View>
           <TextInput
             onChangeText={text => this.setState({ reason: text })}

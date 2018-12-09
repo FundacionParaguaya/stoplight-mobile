@@ -11,9 +11,10 @@ import globalStyles from '../../globalStyles'
 import { addSurveyData, addSurveyFamilyMemberData } from '../../redux/actions'
 
 export class SocioEconomicQuestion extends Component {
-  state = {
-    errorsDetected: []
-  }
+  errorsDetected = []
+
+  state = { errorsDetected: [] }
+
   constructor(props) {
     super(props)
 
@@ -105,13 +106,15 @@ export class SocioEconomicQuestion extends Component {
     ].socioEconomicAnswers.filter(item => item.key === field)[0].value
   }
   detectError = (error, field) => {
-    if (error && !this.state.errorsDetected.includes(field)) {
-      this.setState({ errorsDetected: [...this.state.errorsDetected, field] })
+    if (error && !this.errorsDetected.includes(field)) {
+      this.errorsDetected.push(field)
     } else if (!error) {
-      this.setState({
-        errorsDetected: this.state.errorsDetected.filter(item => item !== field)
-      })
+      this.errorsDetected = this.errorsDetected.filter(item => item !== field)
     }
+
+    this.setState({
+      errorsDetected: this.errorsDetected
+    })
   }
 
   render() {
@@ -217,7 +220,7 @@ export class SocioEconomicQuestion extends Component {
           <View style={{ marginTop: 15 }}>
             <Button
               id="continue"
-              disabled={!!this.state.errorsDetected.length}
+              disabled={!!this.errorsDetected.length}
               colored
               text={t('general.continue')}
               handleClick={() =>

@@ -11,7 +11,7 @@ const createTestProps = props => ({
   detectError: jest.fn(),
   t: value => value,
   label: 'Some label',
-  field: 'dateOfBirth'
+  field: 'birthDate'
 })
 
 describe('DateInput Component', () => {
@@ -141,7 +141,7 @@ describe('DateInput Component', () => {
       expect(wrapper.instance().props.detectError).toHaveBeenCalledTimes(1)
       expect(wrapper.instance().props.detectError).toHaveBeenCalledWith(
         true,
-        'dateOfBirth'
+        'birthDate'
       )
     })
     it('calls detectError with first argument false if date is invalid', () => {
@@ -152,7 +152,7 @@ describe('DateInput Component', () => {
       expect(wrapper.instance().props.detectError).toHaveBeenCalledTimes(1)
       expect(wrapper.instance().props.detectError).toHaveBeenCalledWith(
         false,
-        'dateOfBirth'
+        'birthDate'
       )
     })
     it('calls onValidDate with a first argument unix value for the date if date is valid', () => {

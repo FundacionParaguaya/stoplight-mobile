@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import {
   SET_LOGIN_STATE,
+  USER_LOGOUT,
   SET_ENV,
   LOAD_SURVEYS,
   LOAD_FAMILIES,
@@ -8,6 +9,7 @@ import {
   ADD_SURVEY_DATA,
   ADD_SURVEY_PRIORITY_ACHEIVEMENT_DATA,
   ADD_SURVEY_FAMILY_MEMBER_DATA,
+  REMOVE_FAMILY_MEMBERS,
   DELETE_DRAFT,
   LOAD_SNAPSHOTS,
   SUBMIT_DRAFT,
@@ -28,6 +30,12 @@ export const user = (
         status: action.status,
         token: action.token,
         username: action.username
+      }
+    case USER_LOGOUT:
+      return {
+        status: null,
+        token: null,
+        username: null
       }
     default:
       return state
@@ -298,13 +306,29 @@ export const drafts = (state = [], action) => {
         }
       })
 
+    case REMOVE_FAMILY_MEMBERS:
+      return state.map(
+        draft =>
+          draft.draftId === action.id
+            ? {
+                ...draft,
+                familyData: {
+                  ...draft.familyData,
+                  familyMembersList: draft.familyData.familyMembersList.filter(
+                    (item, index) => index < action.afterIndex
+                  )
+                }
+              }
+            : draft
+      )
+
     case SUBMIT_DRAFT:
       return state.map(
         draft =>
           draft.draftId === action.id
             ? {
                 ...draft,
-                status: 'Pending'
+                status: 'Pending sync'
               }
             : draft
       )
@@ -314,7 +338,7 @@ export const drafts = (state = [], action) => {
           draft.draftId === action.meta.id
             ? {
                 ...draft,
-                status: 'Success'
+                status: 'Synced'
               }
             : draft
       )
@@ -324,7 +348,7 @@ export const drafts = (state = [], action) => {
           draft.draftId === action.meta.id
             ? {
                 ...draft,
-                status: 'Error'
+                status: 'Sync error'
               }
             : draft
       )
@@ -356,7 +380,7 @@ export const language = (state = false, action) => {
   }
 }
 
-export const rootReducer = combineReducers({
+const appReducer = combineReducers({
   env,
   user,
   surveys,
@@ -365,3 +389,11 @@ export const rootReducer = combineReducers({
   snapshots,
   language
 })
+
+export const rootReducer = (state, action) => {
+  if (action.type === USER_LOGOUT) {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}

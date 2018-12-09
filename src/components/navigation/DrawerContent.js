@@ -5,37 +5,39 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
+  AsyncStorage
 } from 'react-native'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { DrawerItems } from 'react-navigation'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { url } from '../../config'
 import globalStyles from '../../globalStyles'
 import i18n from '../../i18n'
 import colors from '../../theme.json'
 import { switchLanguage, logout } from '../../redux/actions'
+import Popup from '../Popup'
+import Button from '../Button'
 
 // Component that renders the drawer menu content. DrawerItems are the links to
 // the given views.
 export class DrawerContent extends Component {
   changeLanguage = lng => {
-    i18n.changeLanguage(lng)
-    this.props.switchLanguage(lng)
-    this.props.navigation.toggleDrawer()
+    i18n.changeLanguage(lng) // change the currently uses i18n language
+    this.props.switchLanguage(lng) // set the redux language for next app use
+    this.props.navigation.toggleDrawer() // close drawer
   }
 
-  logout = () => {
-    this.props.logout(url[this.props.env], this.props.user.token).then(() => {
-      this.setState({ error: false })
-      this.props.navigation.navigate('Login')
-    })
+  logUserOut = () => {
+    AsyncStorage.clear()
+    this.props.logout(url[this.props.env], this.props.user.token)
   }
 
   render() {
-    const { lng, user } = this.props
+    const { lng, user, navigation } = this.props
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
@@ -43,6 +45,8 @@ export class DrawerContent extends Component {
             style={{ height: 172, width: 304 }}
             source={require('../../../assets/images/navigation_image.png')}
           />
+
+          {/* Language Switcher */}
           <View style={styles.languageSwitch}>
             <TouchableOpacity id="en" onPress={() => this.changeLanguage('en')}>
               <Text
@@ -74,12 +78,16 @@ export class DrawerContent extends Component {
           >
             {user.username}
           </Text>
+
+          {/* Links */}
           <DrawerItems {...this.props} />
         </View>
+
+        {/* Logout button */}
         <TouchableOpacity
           id="logout"
           style={styles.logout}
-          onPress={this.logout}
+          onPress={() => navigation.setParams({ logoutModalOpen: true })}
         >
           <CommunityIcon
             name="login-variant"
@@ -88,6 +96,65 @@ export class DrawerContent extends Component {
           />
           <Text style={styles.logoutLabel}>Logout</Text>
         </TouchableOpacity>
+
+        {/* Logout popup */}
+        <Popup
+          isOpen={navigation.getParam('logoutModalOpen')}
+          onClose={() => navigation.setParams({ logoutModalOpen: false })}
+        >
+          <View style={{ alignItems: 'flex-end' }}>
+            <Icon name="close" size={20} />
+          </View>
+
+          <View style={styles.modalContainer}>
+            <View style={{ alignItems: 'center' }}>
+              <Icon
+                name="sentiment-dissatisfied"
+                color={colors.lightdark}
+                size={44}
+              />
+              <Text style={styles.title}>Logout</Text>
+            </View>
+            {this.props.drafts.length ? (
+              <View style={{ alignItems: 'center' }}>
+                <Text style={globalStyles.h3}>You have unsynched data</Text>
+                <Text style={[globalStyles.h3, { color: colors.palered }]}>
+                  This data will be lost.
+                </Text>
+              </View>
+            ) : (
+              <View style={{ alignItems: 'center' }}>
+                <Text style={globalStyles.h3}>We will miss you.</Text>
+                <Text style={[globalStyles.h3, { color: colors.palegreen }]}>
+                  Come back soon!
+                </Text>
+              </View>
+            )}
+            <Text style={[styles.confirm, globalStyles.h3]}>
+              Are you sure you want to log out?
+            </Text>
+            <View style={styles.buttonBar}>
+              <Button
+                outlined
+                text="Yes"
+                borderColor={
+                  this.props.drafts.length ? colors.palered : colors.palegreen
+                }
+                style={{ width: 107, alignSelf: 'flex-start' }}
+                handleClick={this.logUserOut}
+              />
+              <Button
+                outlined
+                borderColor={colors.grey}
+                text="No"
+                style={{ width: 107, alignSelf: 'flex-end' }}
+                handleClick={() =>
+                  navigation.setParams({ logoutModalOpen: false })
+                }
+              />
+            </View>
+          </View>
+        </Popup>
       </ScrollView>
     )
   }
@@ -97,12 +164,14 @@ DrawerContent.propTypes = {
   lng: PropTypes.string,
   switchLanguage: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  drafts: PropTypes.array.isRequired
 }
 
-const mapStateToProps = ({ env, user }) => ({
+const mapStateToProps = ({ env, user, drafts }) => ({
   env,
-  user
+  user,
+  drafts
 })
 
 const mapDispatchToProps = {
@@ -151,5 +220,26 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     color: colors.palegreen
+  },
+  modalContainer: {
+    marginTop: 60
+  },
+  title: {
+    fontFamily: 'Poppins',
+    fontWeight: 'normal',
+    color: colors.lightdark,
+    fontSize: 24,
+    marginBottom: 25
+  },
+  confirm: {
+    color: colors.lightdark,
+    marginTop: 25,
+    marginBottom: 16,
+    textAlign: 'center'
+  },
+  buttonBar: {
+    marginBottom: 80,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 })

@@ -44,6 +44,7 @@ const createTestProps = props => ({
     }
   ],
   addSurveyData: jest.fn(),
+  removeFamilyMembers: jest.fn(),
   addSurveyFamilyMemberData: jest.fn(),
   ...props
 })
@@ -129,6 +130,48 @@ describe('FamilyMembersNames View', () => {
         .props().disabled
     ).toBe(false)
   })
+  it('changes family members count', () => {
+    wrapper
+      .find('#familyMembersCount')
+      .props()
+      .onChange(4, 'familyMembersCount')
+
+    expect(wrapper.instance().props.addSurveyData).toHaveBeenCalledTimes(1)
+    expect(wrapper.instance().props.addSurveyData).toHaveBeenCalledWith(
+      4,
+      'familyData',
+      {
+        familyMembersCount: 4
+      }
+    )
+  })
+  it('remove excess family members when count is lowered', () => {
+    wrapper
+      .find('#familyMembersCount')
+      .props()
+      .onChange(1, 'familyMembersCount')
+
+    expect(wrapper.instance().props.removeFamilyMembers).toHaveBeenCalledTimes(
+      1
+    )
+    expect(wrapper.instance().props.removeFamilyMembers).toHaveBeenCalledWith(
+      4,
+      1
+    )
+  })
+  it('shows and hides errors', () => {
+    wrapper.instance().detectError(true, 'test')
+
+    expect(wrapper).toHaveState({ errorsDetected: ['test'] })
+
+    wrapper.instance().detectError(true, 'anotherError')
+
+    expect(wrapper).toHaveState({ errorsDetected: ['test', 'anotherError'] })
+
+    wrapper.instance().detectError(false, 'test')
+
+    expect(wrapper).toHaveState({ errorsDetected: ['anotherError'] })
+  })
   it('disables Button when no count is selected', () => {
     const props = createTestProps({
       drafts: [
@@ -153,6 +196,8 @@ describe('FamilyMembersNames View', () => {
       ]
     })
     wrapper = shallow(<FamilyMembersNames {...props} />)
+    wrapper.instance().errorsDetected = ['error']
+    wrapper.setState({ errorsDetected: ['error'] })
     expect(
       wrapper
         .find(Button)
@@ -183,6 +228,8 @@ describe('FamilyMembersNames View', () => {
       ]
     })
     wrapper = shallow(<FamilyMembersNames {...props} />)
+    wrapper.instance().errorsDetected = ['error']
+    wrapper.setState({ errorsDetected: ['error'] })
     expect(
       wrapper
         .find(Button)

@@ -51,7 +51,7 @@
       ]
     },
     {
-      "questionText": "What is your primary economic activity?",
+      "questionText": "What is your firstParticipant economic activity?",
       "answerType": "select",
       "dimension": "Income",
       "required": true,

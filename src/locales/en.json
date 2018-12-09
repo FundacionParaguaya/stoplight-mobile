@@ -40,14 +40,14 @@
   "views": {
     "dashboard": "Dashboard",
     "createLifemap": "Create a life map",
-    "latestDrafts": "Latest drafts",
+    "latestDrafts": "Latest snapshots",
     "noDrafts": "No drafts to display",
     "termsConditions": "Terms & Conditions",
     "privacyPolicy": "Privacy Policy",
     "location": "Location",
     "socioEconomic": "Socio Economic",
     "yourLifeMap": "Your life map",
-    "primaryParticipant": "Primary participant",
+    "primaryParticipant": "Family participant",
     "familyMembers": "Family members",
     "gender": "Gender",
     "birthDates": "Birth dates",
@@ -100,9 +100,15 @@
       "howDidYouGetIt": "How did you get it?",
       "whatDidItTakeToAchieveThis": "What did it take to achieve this?",
       "great": "Great!",
-      "youHaveCompletedTheLifemap": "You have completed the lifemap"
+      "youHaveCompletedTheLifemap": "You have completed the lifemap",
+      "beforeTheLifeMapIsCompleted": "Before the Life Map is completed...",
+      "youNeedToAddPriotity": "You need to add one priotity",
+      "youNeedToAddPriorities": "You need to add %n priorities"
     },
     "modals": {
+      "lifeMapWillNotBeSaved": "If you do not enter all details on this page the life map will not be saved!",
+      "weCannotContinueToCreateTheLifeMap": "If you do not agree we cannot continue to create the Life Map!",
+      "areYouSureYouWantToExit": "Are you sure you want to exit?",
       "yourLifemapIsNotComplete": "Your lifemap is not complete. Are you sure you want to exit?",
       "thisWillBeSavedAsADraft": "This will be saved as a draft."
     },

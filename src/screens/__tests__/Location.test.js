@@ -45,7 +45,7 @@ const createTestProps = props => ({
           {
             firstName: 'Juan',
             lastName: 'Perez',
-            countryOfBirth: 'Brazil'
+            birthCountry: 'Brazil'
           },
           {
             firstName: 'Ana',
@@ -108,21 +108,18 @@ describe('Family Location component', () => {
       accuracy: 15
     })
   })
-  it('sets countryOfBirth as default country', () => {
-    expect(wrapper.find('#countrySelect')).toHaveProp('value', 'Brazil')
-  })
   it('edits draft in field change', () => {
     wrapper
-      .find('#postalCode')
+      .find('#postCode')
       .props()
-      .onChangeText('123', 'postalCode')
+      .onChangeText('123', 'postCode')
 
     wrapper
-      .find('#houseDescription')
+      .find('#address')
       .props()
-      .onChangeText('Foo', 'houseDescription')
+      .onChangeText('Foo', 'address')
 
-    expect(wrapper.instance().props.addSurveyData).toHaveBeenCalledTimes(2)
+    expect(wrapper.instance().props.addSurveyData).toHaveBeenCalledTimes(3)
   })
   it('can search for address', () => {
     const spy = jest.spyOn(wrapper.instance(), 'searcForAddress')

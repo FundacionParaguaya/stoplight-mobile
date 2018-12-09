@@ -18,7 +18,7 @@ describe('environment actions', () => {
   })
 })
 
-describe('login actions', () => {
+describe('login/logout actions', () => {
   afterEach(() => {
     fetchMock.reset()
     fetchMock.restore()
@@ -70,6 +70,13 @@ describe('login actions', () => {
     return store.dispatch(action.login(user, pass, env)).then(() => {
       expect(store.getActions()).toEqual(expectedAction)
     })
+  })
+
+  it('should create an action to log the user out of the app', () => {
+    const expectedAction = {
+      type: action.USER_LOGOUT
+    }
+    expect(action.logout()).toEqual(expectedAction)
   })
 })
 
@@ -163,6 +170,17 @@ describe('drafts actions', () => {
     }
     expect(action.deleteDraft(id)).toEqual(expectedAction)
   })
+  it('should create an action to remove family memvers from draft', () => {
+    const id = 1
+    const afterIndex = 2
+
+    const expectedAction = {
+      type: action.REMOVE_FAMILY_MEMBERS,
+      id,
+      afterIndex
+    }
+    expect(action.removeFamilyMembers(id, afterIndex)).toEqual(expectedAction)
+  })
   it('should create an action to add survey data to draft', () => {
     const id = 1
     const category = 'category'
@@ -195,6 +213,32 @@ describe('drafts actions', () => {
     ).toEqual(expectedAction)
   })
 
+  it('should create an action to add surcey data to a family member', () => {
+    const id = 1
+    const index = 2
+    const payload = {
+      reason: 'reason',
+      action: 'action',
+      indicator: 'indicator'
+    }
+    const isSocioEconomicAnswer = false
+    const expectedAction = {
+      type: action.ADD_SURVEY_FAMILY_MEMBER_DATA,
+      id,
+      index,
+      payload,
+      isSocioEconomicAnswer
+    }
+    expect(
+      action.addSurveyFamilyMemberData({
+        id,
+        index,
+        payload,
+        isSocioEconomicAnswer
+      })
+    ).toEqual(expectedAction)
+  })
+
   it('should create an action to post a draft', () => {
     const env = 'https://mock/env'
     const token = 'token'
@@ -210,21 +254,27 @@ describe('drafts actions', () => {
       meta: {
         offline: {
           effect: {
-            url: `${env}/api/v1/snapshots`,
+            url: `${env}/graphql`,
             method: 'POST',
-            body: JSON.stringify(payload),
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              query:
+                'mutation addSnapshot($newSnapshot: NewSnapshotInput) {addSnapshot(newSnapshot: $newSnapshot)  { surveyId surveyVersionId snapshotStoplightAchievements { action indicator roadmap } snapshotStoplightPriorities { reason action indicator estimatedDate } family { familyId } user { userId  username } indicatorSurveyDataList {key value} economicSurveyDataList {key value} familyDataDTO { latitude longitude accuracy familyMemberDTOList { firstName lastName socioEconomicAnswers {key value} } } } }',
+              variables: { newSnapshot: payload }
+            })
           },
           commit: {
             type: action.SUBMIT_DRAFT_COMMIT,
             meta: {
-              id
+              id,
+              payload
             }
           },
           rollback: {
             type: action.SUBMIT_DRAFT_ROLLBACK,
             meta: {
-              id
+              id,
+              payload
             }
           }
         }

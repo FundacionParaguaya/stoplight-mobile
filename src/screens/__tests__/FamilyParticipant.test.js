@@ -11,10 +11,13 @@ import draft from '../__mocks__/draftMock.json'
 const createTestProps = props => ({
   t: value => value,
   createDraft: jest.fn(),
+  deleteDraft: jest.fn(),
   addSurveyFamilyMemberData: jest.fn(),
   navigation: {
     navigate: jest.fn(),
-    getParam: param => (param === 'draft' ? null : 1)
+    getParam: param => (param === 'draft' ? null : 1),
+    setParams: jest.fn(),
+    reset: jest.fn()
   },
   drafts: [draft],
   surveys: [
@@ -98,7 +101,9 @@ describe('Family Participant View', () => {
         const props = createTestProps({
           navigation: {
             navigate: jest.fn(),
-            getParam: param => (param === 'draft' ? 4 : 1)
+            getParam: param => (param === 'draft' ? 4 : 1),
+            setParams: jest.fn(),
+            reset: jest.fn()
           },
           ...props
         })
@@ -140,7 +145,9 @@ describe('Family Participant View', () => {
       const props = createTestProps({
         navigation: {
           navigate: jest.fn(),
-          getParam: param => (param === 'draft' ? 4 : 1)
+          getParam: param => (param === 'draft' ? 4 : 1),
+          setParams: jest.fn(),
+          reset: jest.fn()
         },
         ...props
       })
@@ -199,21 +206,54 @@ describe('Family Participant View', () => {
       ).toHaveBeenCalledTimes(1)
     })
 
-    it('has correct initial state', () => {
-      expect(wrapper.instance().state).toEqual({
-        errorsDetected: []
-      })
-    })
-
     it('detects an error', () => {
-      wrapper.instance().detectError(true, 'phone')
-      expect(wrapper.instance().state.errorsDetected).toEqual(['phone'])
+      wrapper.instance().detectError(true, 'phoneNumber')
+      expect(wrapper.instance().errorsDetected).toEqual(['phoneNumber'])
     })
 
     it('detects when the error is corrected', () => {
-      wrapper.setState({ errorsDetected: ['phone'] })
-      wrapper.instance().detectError(false, 'phone')
-      expect(wrapper.instance().state.errorsDetected).toEqual([])
+      wrapper.setState({ errorsDetected: ['phoneNumber'] })
+      wrapper.instance().detectError(false, 'phoneNumber')
+      expect(wrapper.instance().errorsDetected).toEqual([])
+    })
+    it('deletes draft if first time in participant screen', () => {
+      const props = createTestProps({
+        navigation: {
+          navigate: jest.fn(),
+          getParam: param => (param === 'deleteDraft' ? true : 4),
+          setParams: jest.fn(),
+          reset: jest.fn(),
+          state: {
+            params: {
+              deleteDraft: true
+            }
+          }
+        },
+        ...props
+      })
+      wrapper.instance().componentDidUpdate(props)
+
+      expect(wrapper.instance().props.deleteDraft).toHaveBeenCalledTimes(1)
+    })
+
+    it('doesn\'t delete draft if visiting from Dashboard', () => {
+      const props = createTestProps({
+        navigation: {
+          navigate: jest.fn(),
+          getParam: param => (param === 'deleteDraft' ? false : 4),
+          setParams: jest.fn(),
+          reset: jest.fn(),
+          state: {
+            params: {
+              deleteDraft: false
+            }
+          }
+        },
+        ...props
+      })
+      wrapper.instance().componentDidUpdate(props)
+
+      expect(wrapper.instance().props.deleteDraft).toHaveBeenCalledTimes(0)
     })
   })
 })

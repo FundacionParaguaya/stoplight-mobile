@@ -34,7 +34,9 @@ class TextInput extends Component {
       text: text.trim(),
       status: text ? 'filled' : 'blur'
     })
-    this.props.validation ? this.validateInput(text.trim()) : ''
+    this.props.validation || this.props.required
+      ? this.validateInput(text.trim())
+      : ''
   }
 
   handleError(errorMsg) {
@@ -72,7 +74,7 @@ class TextInput extends Component {
       return this.handleError(i18n.t('validation.alphabeticCharacters'))
     }
     if (
-      this.props.validation === 'phone' &&
+      this.props.validation === 'phoneNumber' &&
       !/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/.test(text) &&
       !validator.isEmpty(text)
     ) {
@@ -99,6 +101,13 @@ class TextInput extends Component {
         return colors.red
       default:
         return colors.palegrey
+    }
+  }
+
+  componentDidMount() {
+    // on mount validate empty required fields without showing an errors message
+    if (this.props.required && !this.props.value) {
+      this.props.detectError(true, this.props.field)
     }
   }
 
@@ -207,10 +216,11 @@ TextInput.propTypes = {
   required: PropTypes.bool,
   readonly: PropTypes.bool,
   onChangeText: PropTypes.func.isRequired,
+  multiline: PropTypes.bool,
   validation: PropTypes.oneOf([
     'email',
     'string',
-    'phone',
+    'phoneNumber',
     'number',
     'long-string'
   ]),

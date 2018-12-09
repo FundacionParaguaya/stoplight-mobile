@@ -1,6 +1,7 @@
 // Login
 
 export const SET_LOGIN_STATE = 'SET_LOGIN_STATE'
+export const USER_LOGOUT = 'USER_LOGOUT'
 
 export const login = (username, password, env) => dispatch =>
   fetch(
@@ -33,20 +34,9 @@ export const login = (username, password, env) => dispatch =>
     )
     .catch(e => e)
 
-export const logout = (env, token) => dispatch =>
-  fetch(`${env}/oauth/revoke-token`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` }
-  })
-    .then(() => {
-      dispatch({
-        type: SET_LOGIN_STATE,
-        token: null,
-        status: null,
-        username: null
-      })
-    })
-    .catch(e => e)
+export const logout = () => ({
+  type: USER_LOGOUT
+})
 
 // Environment
 
@@ -112,6 +102,7 @@ export const ADD_SURVEY_FAMILY_MEMBER_DATA = 'ADD_SURVEY_FAMILY_MEMBER_DATA'
 export const SUBMIT_DRAFT = 'SUBMIT_DRAFT'
 export const SUBMIT_DRAFT_COMMIT = 'SUBMIT_DRAFT_COMMIT'
 export const SUBMIT_DRAFT_ROLLBACK = 'SUBMIT_DRAFT_ROLLBACK'
+export const REMOVE_FAMILY_MEMBERS = 'REMOVE_FAMILY_MEMBERS'
 
 export const createDraft = payload => ({
   type: CREATE_DRAFT,
@@ -147,6 +138,12 @@ export const addSurveyFamilyMemberData = ({
   payload
 })
 
+export const removeFamilyMembers = (id, afterIndex) => ({
+  type: REMOVE_FAMILY_MEMBERS,
+  id,
+  afterIndex
+})
+
 export const addSurveyData = (id, category, payload) => ({
   type: ADD_SURVEY_DATA,
   category,
@@ -158,26 +155,33 @@ export const submitDraft = (env, token, id, payload) => ({
   type: SUBMIT_DRAFT,
   env,
   token,
-  payload,
   id,
+  payload,
+
   meta: {
     offline: {
       effect: {
-        url: `${env}/api/v1/snapshots`,
+        url: `${env}/graphql`,
         method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          query:
+            'mutation addSnapshot($newSnapshot: NewSnapshotInput) {addSnapshot(newSnapshot: $newSnapshot)  { surveyId surveyVersionId snapshotStoplightAchievements { action indicator roadmap } snapshotStoplightPriorities { reason action indicator estimatedDate } family { familyId } user { userId  username } indicatorSurveyDataList {key value} economicSurveyDataList {key value} familyDataDTO { latitude longitude accuracy familyMemberDTOList { firstName lastName socioEconomicAnswers {key value} } } } }',
+          variables: { newSnapshot: payload }
+        })
       },
       commit: {
         type: SUBMIT_DRAFT_COMMIT,
         meta: {
-          id
+          id,
+          payload
         }
       },
       rollback: {
         type: SUBMIT_DRAFT_ROLLBACK,
         meta: {
-          id
+          id,
+          payload
         }
       }
     }

@@ -19,16 +19,21 @@ const createTestProps = props => ({
       dimension: 'Income'
     }
   ],
-  draftData: [
-    {
-      key: 'FamilySavings',
-      value: 2
-    },
-    {
-      key: 'FamilyIncome',
-      value: 3
-    }
-  ],
+  draftData: {
+    draftId: 1,
+    priorities: [{ action: 'Some action' }],
+    achievements: [{ action: 'Some action' }],
+    indicatorSurveyDataList: [
+      {
+        key: 'FamilySavings',
+        value: 2
+      },
+      {
+        key: 'FamilyIncome',
+        value: 3
+      }
+    ]
+  },
   navigateToScreen: jest.fn(),
   ...props
 })
@@ -70,6 +75,74 @@ describe('LifemapOverview Component', () => {
           .props().color
       ).toEqual(2)
     })
+    it('passes the correct priority value when false', () => {
+      expect(
+        wrapper
+          .find(LifemapOverviewListItem)
+          .first()
+          .props().priority
+      ).toEqual(false)
+    })
+    it('passes the correct priority value when true', () => {
+      props = createTestProps({
+        draftData: {
+          draftId: 1,
+          priorities: [{ action: 'Some action', indicator: 'FamilySavings' }],
+          achievements: [],
+          indicatorSurveyDataList: [
+            {
+              key: 'FamilySavings',
+              value: 2
+            },
+            {
+              key: 'FamilyIncome',
+              value: 3
+            }
+          ]
+        }
+      })
+      wrapper = shallow(<LifemapOverview {...props} />)
+      expect(
+        wrapper
+          .find(LifemapOverviewListItem)
+          .first()
+          .props().priority
+      ).toEqual(true)
+    })
+    it('passes the correct achievement value when false', () => {
+      expect(
+        wrapper
+          .find(LifemapOverviewListItem)
+          .first()
+          .props().achievement
+      ).toEqual(false)
+    })
+    it('passes the correct achievement value when true', () => {
+      props = createTestProps({
+        draftData: {
+          draftId: 1,
+          priorities: [],
+          achievements: [{ action: 'Some action', indicator: 'FamilySavings' }],
+          indicatorSurveyDataList: [
+            {
+              key: 'FamilySavings',
+              value: 2
+            },
+            {
+              key: 'FamilyIncome',
+              value: 3
+            }
+          ]
+        }
+      })
+      wrapper = shallow(<LifemapOverview {...props} />)
+      expect(
+        wrapper
+          .find(LifemapOverviewListItem)
+          .first()
+          .props().achievement
+      ).toEqual(true)
+    })
 
     it('calls navigateToScreen with the correct arg for priority', () => {
       wrapper
@@ -80,7 +153,8 @@ describe('LifemapOverview Component', () => {
       expect(wrapper.instance().props.navigateToScreen).toHaveBeenCalledTimes(1)
       expect(wrapper.instance().props.navigateToScreen).toHaveBeenCalledWith(
         'AddPriority',
-        'FamilySavings'
+        'FamilySavings',
+        'Family Savings'
       )
     })
 
@@ -93,7 +167,8 @@ describe('LifemapOverview Component', () => {
       expect(wrapper.instance().props.navigateToScreen).toHaveBeenCalledTimes(1)
       expect(wrapper.instance().props.navigateToScreen).toHaveBeenCalledWith(
         'AddAchievement',
-        'FamilyIncome'
+        'FamilyIncome',
+        'Family Income'
       )
     })
   })

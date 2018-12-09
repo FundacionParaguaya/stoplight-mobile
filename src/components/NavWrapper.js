@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, StatusBar } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getHydrationState } from '../redux/store'
 import { LoginStack, AppStack } from './navigation'
 import Loading from './Loading'
+import colors from '../theme.json'
 
 export class NavWrapper extends Component {
   state = {
@@ -12,13 +13,16 @@ export class NavWrapper extends Component {
     rehydrated: false
   }
   slowLoadingTimer
+  checkHydrationTimer
   clearTimers = () => {
     clearTimeout(this.slowLoadingTimer)
     this.slowLoadingTimer = null
+    clearTimeout(this.checkHydrationTimer)
+    this.checkHydrationTimer = null
   }
   checkHydration = () => {
     if (getHydrationState() === false) {
-      setTimeout(() => {
+      this.checkHydrationTimer = setTimeout(() => {
         this.checkHydration()
       }, 1000)
     } else {
@@ -42,12 +46,17 @@ export class NavWrapper extends Component {
     this.clearTimers()
   }
   render() {
-    return this.state.rehydrated ? (
+    return (
       <View style={styles.container}>
-        {this.props.user.token ? <AppStack /> : <LoginStack />}
+        <StatusBar backgroundColor={colors.palebeige} barStyle="dark-content" />
+        {this.state.rehydrated ? (
+          <View style={styles.container}>
+            {this.props.user.token ? <AppStack /> : <LoginStack />}
+          </View>
+        ) : (
+          <Loading time={this.state.loadingTime} />
+        )}
       </View>
-    ) : (
-      <Loading time={this.state.loadingTime} />
     )
   }
 }

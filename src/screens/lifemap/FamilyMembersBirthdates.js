@@ -14,7 +14,21 @@ export class FamilyMembersBirthdates extends Component {
   draftId = this.props.navigation.getParam('draftId')
   survey = this.props.navigation.getParam('survey')
 
+  errorsDetected = []
+
   state = { errorsDetected: [] }
+
+  detectError = (error, field) => {
+    if (error && !this.errorsDetected.includes(field)) {
+      this.errorsDetected.push(field)
+    } else if (!error) {
+      this.errorsDetected = this.errorsDetected.filter(item => item !== field)
+    }
+
+    this.setState({
+      errorsDetected: this.errorsDetected
+    })
+  }
 
   handleClick() {
     this.props.navigation.navigate('Location', {
@@ -28,16 +42,6 @@ export class FamilyMembersBirthdates extends Component {
       return
     }
     return draft.familyData[field]
-  }
-
-  detectError = (error, field) => {
-    if (error && !this.state.errorsDetected.includes(field)) {
-      this.setState({ errorsDetected: [...this.state.errorsDetected, field] })
-    } else if (!error) {
-      this.setState({
-        errorsDetected: this.state.errorsDetected.filter(item => item !== field)
-      })
-    }
   }
 
   addFamilyMemberBirthdate(birthDate, index) {
@@ -89,9 +93,9 @@ export class FamilyMembersBirthdates extends Component {
 
         <View style={{ height: 50, marginTop: 30 }}>
           <Button
+            disabled={!!this.errorsDetected.length}
             colored
             text={t('general.continue')}
-            disabled={!!this.state.errorsDetected.length}
             handleClick={() => this.handleClick()}
           />
         </View>

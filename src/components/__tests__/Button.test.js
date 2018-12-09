@@ -41,11 +41,11 @@ describe('Button Component', () => {
       })
       wrapper = shallow(<Button {...props} />)
 
-      expect(wrapper.find(TouchableOpacity).props().style.backgroundColor).toBe(
-        colors.palegreen
-      )
+      expect(
+        wrapper.find(TouchableOpacity).props().style[1].backgroundColor
+      ).toBe(colors.palegreen)
 
-      expect(wrapper.find(Text).props().style.color).toBe(colors.white)
+      expect(wrapper.find(Text).props().style[1].color).toBe(colors.white)
     })
   })
   describe('functionality', () => {

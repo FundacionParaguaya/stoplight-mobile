@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import { ScrollView, TextInput, Text } from 'react-native'
 import Button from '../../components/Button'
 import { Login } from '../Login'
+import Loading from '../../components/Loading'
 
 const createTestProps = props => ({
   setEnv: jest.fn(),
@@ -48,6 +49,15 @@ describe('Login View', () => {
       await wrapper.instance().onLogin()
       expect(wrapper.find(Text)).toHaveLength(5)
       expect(wrapper.find('#error-message')).toExist()
+    })
+    it('shows loading screen while loging in', () => {
+      expect(wrapper.find(Loading)).toHaveLength(0)
+      wrapper
+        .find('#login-button')
+        .props()
+        .handleClick()
+
+      expect(wrapper.find(Loading)).toHaveLength(1)
     })
   })
 

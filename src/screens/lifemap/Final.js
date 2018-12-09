@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withNamespaces } from 'react-i18next'
+import { NavigationActions } from 'react-navigation'
 
 import RoundImage from '../../components/RoundImage'
 import LifemapVisual from '../../components/LifemapVisual'
@@ -42,13 +43,22 @@ export class Final extends Component {
             {t('views.lifemap.youHaveCompletedTheLifemap')}
           </Text>
           <RoundImage source="partner" />
-          <LifemapVisual bigMargin data={draft.indicatorSurveyDataList} />
+          <LifemapVisual
+            bigMargin
+            questions={draft.indicatorSurveyDataList}
+            priorities={draft.priorities}
+            achievements={draft.achievements}
+          />
         </View>
         <View style={{ height: 50 }}>
           <Button
             colored
             text={t('general.close')}
-            handleClick={() => this.props.navigation.navigate('Dashboard')}
+            handleClick={() =>
+              this.props.navigation.reset([
+                NavigationActions.navigate({ routeName: 'Dashboard' })
+              ])
+            }
           />
         </View>
       </ScrollView>
