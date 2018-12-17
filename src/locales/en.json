@@ -10,7 +10,7 @@
     "continue": "Continue",
     "gotIt": "Got it!",
     "save": "Save",
-    "close": "Close",
+    "close": "Save & close",
     "yes": "Yes",
     "no": "No"
   },
@@ -39,14 +39,14 @@
   },
   "views": {
     "dashboard": "Dashboard",
-    "createLifemap": "Create a life map",
-    "latestDrafts": "Latest life maps",
+    "createLifemap": "Create a Life Map",
+    "latestDrafts": "Latest Life Maps",
     "noDrafts": "No drafts to display",
     "termsConditions": "Terms & Conditions",
     "privacyPolicy": "Privacy Policy",
     "location": "Location",
     "socioEconomic": "Socio Economic",
-    "yourLifeMap": "Your life map",
+    "yourLifeMap": "Your Life Map",
     "primaryParticipant": "Family participant",
     "familyMembers": "Family members",
     "gender": "Gender",
@@ -90,7 +90,7 @@
     },
     "lifemap": {
       "thisLifeMapHas":
-        "This life map has %n questions. It will take approximately 35 minutes to complete!",
+        "This Life Map has %n questions. It will take approximately 35 minutes to complete!",
       "responseRequired": "*Response required",
       "skipThisQuestion": "Skip this question",
       "youSkipped": "You skipped these indicators",
@@ -112,12 +112,12 @@
     },
     "modals": {
       "lifeMapWillNotBeSaved":
-        "If you do not enter all details on this page the life map will not be saved!",
+        "If you do not enter all details on this page the Life Map will not be saved!",
       "weCannotContinueToCreateTheLifeMap":
-        "If you do not agree we cannot continue to create the life map!",
+        "If you do not agree we cannot continue to create the Life Map!",
       "areYouSureYouWantToExit": "Are you sure you want to exit?",
       "yourLifemapIsNotComplete":
-        "Your life map is not complete. Are you sure you want to exit?",
+        "Your Life Map is not complete. Are you sure you want to exit?",
       "thisWillBeSavedAsADraft": "This will be saved as a draft."
     },
     "logout": {
