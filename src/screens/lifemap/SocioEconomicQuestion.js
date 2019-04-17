@@ -310,6 +310,7 @@ export class SocioEconomicQuestion extends Component {
 
     return (
       <StickyFooter
+        readonly={this.readonly}
         handleClick={this.submitForm}
         continueLabel={t('general.continue')}
         progress={

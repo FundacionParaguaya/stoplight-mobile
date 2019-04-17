@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text , Platform} from 'react-native'
+import { StyleSheet, Text, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v1'
