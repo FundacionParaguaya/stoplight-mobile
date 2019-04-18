@@ -26,6 +26,16 @@ export class Overview extends Component {
   survey = this.props.navigation.getParam('survey')
   resumeDraft = this.props.navigation.getParam('resumeDraft')
   componentDidMount() {
+    const data = this.familyLifemap
+      ? this.familyLifemap
+      : this.props.drafts.find(item => item.draftId === this.draftId)
+    const mandatoryPrioritiesCount = this.getMandatoryPrioritiesCount(data)
+    if (
+      !mandatoryPrioritiesCount ||
+      mandatoryPrioritiesCount - data.priorities.length <= 0
+    ) {
+      this.setState({ tipIsVisible: false })
+    }
     if (!this.resumeDraft && !this.familyLifemap) {
       this.props.addDraftProgress(this.draftId, {
         screen: 'Overview'
