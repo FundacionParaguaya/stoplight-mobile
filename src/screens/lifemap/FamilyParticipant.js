@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     paddingBottom: 20,
+    paddingTop: 8,
     paddingHorizontal: 20,
     color: colors.grey
   }
