@@ -185,7 +185,9 @@ const styles = StyleSheet.create({
   skip: {
     alignItems: 'flex-end',
     marginRight: 30,
-    marginTop: 15
+    marginTop: 0,
+    height: 60,
+    justifyContent: 'center'
   },
   link: {
     color: colors.palegreen
