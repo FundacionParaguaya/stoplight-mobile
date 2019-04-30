@@ -69,7 +69,6 @@ export class Slider extends Component {
           data={this.props.slides}
           renderItem={this.renderSlide}
           sliderWidth={width}
-          containerCustomStyle={{ overflow: 'visible' }}
           itemWidth={this.props.portrait ? width - 60 : width / 2 + 50}
           loop={true}
           inactiveSlideOpacity={1}
@@ -77,6 +76,8 @@ export class Slider extends Component {
           loopClonesPerSide={10}
           firstItem={activeSlide}
           activeSlideOffset={50}
+          inactiveSlideScale={1}
+          slideStyle={{paddingHorizontal: 8}}
         />
       </View>
     )
