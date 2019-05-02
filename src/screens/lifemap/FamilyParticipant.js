@@ -224,7 +224,6 @@ export class FamilyParticipant extends Component {
       this.props.navigation.getParam('family') ||
       this.props.drafts.find(draft => draft.draftId === this.draftId)
     let autofocusFirstName
-    console.log(draft)
     if (this.getFieldValue(draft, 'firstName')) {
       autofocusFirstName = false
     } else {
