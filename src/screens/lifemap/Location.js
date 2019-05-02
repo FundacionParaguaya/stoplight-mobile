@@ -348,7 +348,6 @@ export class Location extends Component {
     } = this.state
 
     const draft = this.props.navigation.getParam('family') || getDraft()
-
     if (loading) {
       return (
         <View style={[globalStyles.container, styles.placeholder]}>

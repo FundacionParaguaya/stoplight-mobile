@@ -183,6 +183,17 @@ export class FamilyParticipant extends Component {
   }
 
   addSurveyData = (text, field) => {
+    let draft = this.props.drafts.find(draft => draft.draftId === this.draftId)
+    let primaryParticipantDraft = (primaryParticipantDraft =
+      draft.familyData.familyMembersList[0])
+    if (
+      primaryParticipantDraft.gender === 'O' &&
+      field === 'gender' &&
+      text !== 'O'
+    ) {
+      delete primaryParticipantDraft.otherGender
+    }
+
     this.props.addSurveyFamilyMemberData({
       id: this.draftId,
       index: 0,
@@ -213,6 +224,7 @@ export class FamilyParticipant extends Component {
       this.props.navigation.getParam('family') ||
       this.props.drafts.find(draft => draft.draftId === this.draftId)
     let autofocusFirstName
+    console.log(draft)
     if (this.getFieldValue(draft, 'firstName')) {
       autofocusFirstName = false
     } else {
@@ -230,14 +242,9 @@ export class FamilyParticipant extends Component {
       >
         <Decoration variation="primaryParticipant">
           <Icon name="face" color={colors.grey} size={61} style={styles.icon} />
-          {readonly === false ? (
-            <Text
-              readonly={readonly}
-              style={[globalStyles.h2Bold, styles.heading]}
-            >
-              {t('views.family.primaryParticipantHeading')}
-            </Text>
-          ) : null}
+          <Text style={[globalStyles.h2Bold, styles.heading]}>
+            {t('views.family.primaryParticipantHeading')}
+          </Text>
         </Decoration>
 
         <TextInput
@@ -276,7 +283,19 @@ export class FamilyParticipant extends Component {
           showErrors={showErrors}
           options={this.gender}
         />
-
+        {draft && draft.familyData.familyMembersList[0].gender === 'O' ? (
+          <TextInput
+            field="otherGender"
+            validation="string"
+            onChangeText={this.addSurveyData}
+            readonly={readonly}
+            placeholder={t('views.family.specifyGender')}
+            value={this.getFieldValue(draft, 'otherGender') || ''}
+            required
+            detectError={this.detectError}
+            showErrors={showErrors}
+          />
+        ) : null}
         <DateInput
           required
           label={t('views.family.dateOfBirth')}
@@ -310,6 +329,7 @@ export class FamilyParticipant extends Component {
           detectError={this.detectError}
           showErrors={showErrors}
         />
+
         <Select
           id="country"
           required

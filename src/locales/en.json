@@ -73,6 +73,7 @@
       "firstName": "First name",
       "lastName": "Last name",
       "selectGender": "Select gender",
+      "specifyGender": "Specify gender",
       "documentType": "Document type",
       "documentNumber": "Document number",
       "selectACountry": "Select a country",

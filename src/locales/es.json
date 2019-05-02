@@ -72,6 +72,7 @@
       "familyMembersHeading": "Ahora, ¡cuéntanos sobre las personas con las que vives!",
       "firstName": "Nombre",
       "lastName": "Apellido",
+      "specifyGender": "Especificar género",
       "selectGender": "Seleccione género",
       "documentType": "Tipo de documento",
       "documentNumber": "Número de documento",
