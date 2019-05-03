@@ -183,6 +183,31 @@ export class FamilyParticipant extends Component {
   }
 
   addSurveyData = (text, field) => {
+    let draft = this.props.drafts.find(draft => draft.draftId === this.draftId)
+    const { survey } = this.props.nav
+
+    let primaryParticipantDraft = (primaryParticipantDraft =
+      draft.familyData.familyMembersList[0])
+
+    if (field === 'documentType') {
+      let otherTypeDocumentNumber
+      let docValues = survey.surveyConfig.documentType
+      docValues.forEach(ele => {
+        if (
+          ele.text.toLowerCase().includes('other') ||
+          ele.text.toLowerCase().includes('otro')
+        ) {
+          otherTypeDocumentNumber = ele.value
+        }
+      })
+      if (
+        otherTypeDocumentNumber === this.getFieldValue(draft, 'documentType') &&
+        text !== this.getFieldValue(draft, 'documentType')
+      ) {
+        delete primaryParticipantDraft.customdocumentType
+      }
+    }
+
     this.props.addSurveyFamilyMemberData({
       id: this.draftId,
       index: 0,
@@ -208,7 +233,16 @@ export class FamilyParticipant extends Component {
     const { t } = this.props
     const { survey, readonly } = this.props.nav
     const { showErrors } = this.state
-
+    let otherTypeDocumentNumber = 99
+    let docValues = survey.surveyConfig.documentType
+    docValues.forEach(ele => {
+      if (
+        ele.text.toLowerCase().includes('other') ||
+        ele.text.toLowerCase().includes('otro')
+      ) {
+        otherTypeDocumentNumber = ele.value
+      }
+    })
     const draft =
       this.props.navigation.getParam('family') ||
       this.props.drafts.find(draft => draft.draftId === this.draftId)
@@ -218,7 +252,8 @@ export class FamilyParticipant extends Component {
     } else {
       autofocusFirstName = true
     }
-
+    console.log(draft)
+    console.log(this.props)
     return (
       <StickyFooter
         handleClick={this.handleClick}
@@ -230,7 +265,9 @@ export class FamilyParticipant extends Component {
       >
         <Decoration variation="primaryParticipant">
           <Icon name="face" color={colors.grey} size={61} style={styles.icon} />
-          <Text style={[globalStyles.h2Bold, styles.heading]}>{t('views.family.primaryParticipantHeading')}</Text>
+          <Text style={[globalStyles.h2Bold, styles.heading]}>
+            {t('views.family.primaryParticipantHeading')}
+          </Text>
         </Decoration>
 
         <TextInput
@@ -293,6 +330,21 @@ export class FamilyParticipant extends Component {
           showErrors={showErrors}
           options={this.documentType}
         />
+        {otherTypeDocumentNumber ===
+        this.getFieldValue(draft, 'documentType') ? (
+          <TextInput
+            field="customdocumentType"
+            validation="string"
+            onChangeText={this.addSurveyData}
+            readonly={readonly}
+            placeholder={t('views.family.customdocumentType')}
+            value={this.getFieldValue(draft, 'customdocumentType') || ''}
+            required
+            detectError={this.detectError}
+            showErrors={showErrors}
+          />
+        ) : null}
+
         <TextInput
           onChangeText={this.addSurveyData}
           readonly={readonly}

@@ -169,6 +169,7 @@ export class SocioEconomicQuestion extends Component {
       }
     })
   }
+
   getFieldValue = (draft, field) => {
     if (
       !draft ||
@@ -177,10 +178,27 @@ export class SocioEconomicQuestion extends Component {
     ) {
       return
     }
-
     return draft.economicSurveyDataList.filter(item => item.key === field)[0]
       .value
   }
+  addSurveyDataOtherField = (text, field) => {
+    this.props.addSurveyData(this.props.nav.draftId, 'economicSurveyDataList', {
+      [field]: 'OTHER',
+      other: text
+    })
+  }
+  getOtherFieldValue = (draft, field) => {
+    if (
+      !draft ||
+      !draft.economicSurveyDataList ||
+      !draft.economicSurveyDataList.filter(item => item.key === field)[0]
+    ) {
+      return
+    }
+    return draft.economicSurveyDataList.filter(item => item.key === field)[0]
+      .other
+  }
+
   getFamilyMemberFieldValue = (draft, field, index) => {
     if (
       !draft ||
@@ -313,22 +331,87 @@ export class SocioEconomicQuestion extends Component {
                   : false
                 : question
             )
-            .map(question =>
-              question.answerType === 'select' ? (
-                <Select
-                  key={question.codeName}
-                  required={question.required}
-                  onChange={this.addSurveyData}
-                  placeholder={question.questionText}
-                  showErrors={showErrors}
-                  label={question.questionText}
-                  field={question.codeName}
-                  value={this.getFieldValue(draft, question.codeName) || ''}
-                  detectError={this.detectError}
-                  readonly={readonly}
-                  options={question.options}
-                />
-              ) : question.answerType === 'number' ? (
+            .map(question => {
+              if (question.answerType === 'select') {
+                let otherOptionDetected = false
+
+                question.options.forEach(e => {
+                  if (e.value === 'OTHER') {
+                    otherOptionDetected = true
+                  }
+                })
+
+                if (otherOptionDetected) {
+                  return (
+                    <React.Fragment key={question.codeName}>
+                      <Select
+                        required={question.required}
+                        onChange={this.addSurveyData}
+                        placeholder={question.questionText}
+                        showErrors={showErrors}
+                        label={question.questionText}
+                        field={question.codeName}
+                        value={
+                          this.getFieldValue(draft, question.codeName) || ''
+                        }
+                        detectError={this.detectError}
+                        readonly={readonly}
+                        options={question.options}
+                      />
+                      {this.getFieldValue(draft, question.codeName) ===
+                      'OTHER' ? (
+                        <TextInput
+                          required={question.required}
+                          field={question.codeName}
+                          validation="string"
+                          onChangeText={this.addSurveyDataOtherField}
+                          readonly={readonly}
+                          placeholder={t('views.family.specifyQuestionAbove')}
+                          value={
+                            this.getOtherFieldValue(draft, question.codeName) ||
+                            ''
+                          }
+                          detectError={this.detectError}
+                          showErrors={showErrors}
+                        />
+                      ) : null}
+                    </React.Fragment>
+                  )
+                } else {
+                  return (
+                    <Select
+                      key={question.codeName}
+                      required={question.required}
+                      onChange={this.addSurveyData}
+                      placeholder={question.questionText}
+                      showErrors={showErrors}
+                      label={question.questionText}
+                      field={question.codeName}
+                      value={this.getFieldValue(draft, question.codeName) || ''}
+                      detectError={this.detectError}
+                      readonly={readonly}
+                      options={question.options}
+                    />
+                  )
+                }
+              } else if (question.answerType === 'number') {
+                return (
+                  <TextInput
+                    multiline
+                    key={question.codeName}
+                    required={question.required}
+                    onChangeText={this.addSurveyData}
+                    placeholder={question.questionText}
+                    showErrors={showErrors}
+                    field={question.codeName}
+                    value={this.getFieldValue(draft, question.codeName) || ''}
+                    detectError={this.detectError}
+                    readonly={readonly}
+                    validation="number"
+                    keyboardType="numeric"
+                  />
+                )
+              } else {
                 <TextInput
                   multiline
                   key={question.codeName}
@@ -340,24 +423,9 @@ export class SocioEconomicQuestion extends Component {
                   value={this.getFieldValue(draft, question.codeName) || ''}
                   detectError={this.detectError}
                   readonly={readonly}
-                  validation="number"
-                  keyboardType="numeric"
                 />
-              ) : (
-                <TextInput
-                  multiline
-                  key={question.codeName}
-                  required={question.required}
-                  onChangeText={this.addSurveyData}
-                  placeholder={question.questionText}
-                  showErrors={showErrors}
-                  field={question.codeName}
-                  value={this.getFieldValue(draft, question.codeName) || ''}
-                  detectError={this.detectError}
-                  readonly={readonly}
-                />
-              )
-            )
+              }
+            })
         ) : (
           <View />
         )}

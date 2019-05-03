@@ -148,38 +148,54 @@ export const drafts = (state = [], action) => {
         // if this is the draft we are editing
         if (draft.draftId === action.id) {
           const draftCategory = draft[action.category]
-
           if (Array.isArray(draftCategory)) {
             // if category is an Array
             const item = draftCategory.filter(
               item => item.key === Object.keys(action.payload)[0]
             )[0]
-
-            if (item) {
-              // if item exists in array update it
-              const index = draftCategory.indexOf(item)
-              return {
-                ...draft,
-                [action.category]: [
-                  ...draftCategory.slice(0, index),
-                  {
-                    key: Object.keys(action.payload)[0],
-                    value: Object.values(action.payload)[0]
-                  },
-                  ...draftCategory.slice(index + 1)
-                ]
+            if (Object.keys(action.payload).length === 2) {
+              if (item) {
+                const index = draftCategory.indexOf(item)
+                return {
+                  ...draft,
+                  [action.category]: [
+                    ...draftCategory.slice(0, index),
+                    {
+                      key: Object.keys(action.payload)[0],
+                      value: Object.values(action.payload)[0],
+                      other: Object.values(action.payload)[1]
+                    },
+                    ...draftCategory.slice(index + 1)
+                  ]
+                }
               }
             } else {
-              // if item is not in array push it
-              return {
-                ...draft,
-                [action.category]: [
-                  ...draftCategory,
-                  {
-                    key: Object.keys(action.payload)[0],
-                    value: Object.values(action.payload)[0]
-                  }
-                ]
+              if (item) {
+                // if item exists in array update it
+                const index = draftCategory.indexOf(item)
+                return {
+                  ...draft,
+                  [action.category]: [
+                    ...draftCategory.slice(0, index),
+                    {
+                      key: Object.keys(action.payload)[0],
+                      value: Object.values(action.payload)[0]
+                    },
+                    ...draftCategory.slice(index + 1)
+                  ]
+                }
+              } else {
+                // if item is not in array push it
+                return {
+                  ...draft,
+                  [action.category]: [
+                    ...draftCategory,
+                    {
+                      key: Object.keys(action.payload)[0],
+                      value: Object.values(action.payload)[0]
+                    }
+                  ]
+                }
               }
             }
           } else {
