@@ -31,10 +31,7 @@ export class Overview extends Component {
       : getDraft()
 
     // show priorities message if no priorities are made or they are not enough
-    if (
-      !draft.priorities.length ||
-      this.getMandatoryPrioritiesCount(data) > draft.priorities.length
-    ) {
+    if (this.getMandatoryPrioritiesCount(data) > draft.priorities.length) {
       this.setState({
         tipIsVisible: true
       })
