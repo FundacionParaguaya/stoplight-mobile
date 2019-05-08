@@ -20,7 +20,6 @@ import DateInput from '../../components/DateInput'
 import Decoration from '../../components/decoration/Decoration'
 import colors from '../../theme.json'
 import globalStyles from '../../globalStyles'
-
 export class FamilyParticipant extends Component {
   //Get draft id from Redux store if it exists else create new draft id
   draftId = this.props.nav.readonly
@@ -183,6 +182,36 @@ export class FamilyParticipant extends Component {
   }
 
   addSurveyData = (text, field) => {
+    let draft = this.props.drafts.find(draft => draft.draftId === this.draftId)
+    let primaryParticipantDraft = (primaryParticipantDraft =
+      draft.familyData.familyMembersList[0])
+    if (
+      primaryParticipantDraft.gender === 'O' &&
+      field === 'gender' &&
+      text !== 'O'
+    ) {
+      delete primaryParticipantDraft.customGender
+    }
+
+    if (field === 'documentType') {
+      const { survey } = this.props.nav
+      let otherTypeDocumentNumber
+      let docValues = survey.surveyConfig.documentType
+      docValues.forEach(ele => {
+        if (typeof ele.otherOption !== undefined) {
+          if (ele.otherOption) {
+            otherTypeDocumentNumber = ele.value
+          }
+        }
+      })
+      if (
+        otherTypeDocumentNumber === this.getFieldValue(draft, 'documentType') &&
+        text !== this.getFieldValue(draft, 'documentType')
+      ) {
+        delete primaryParticipantDraft.customDocumentType
+      }
+    }
+
     this.props.addSurveyFamilyMemberData({
       id: this.draftId,
       index: 0,
@@ -218,7 +247,15 @@ export class FamilyParticipant extends Component {
     } else {
       autofocusFirstName = true
     }
-
+    let otherTypeDocumentNumber = 0
+    let docValues = survey.surveyConfig.documentType
+    docValues.forEach(ele => {
+      if (typeof ele.otherOption !== undefined) {
+        if (ele.otherOption) {
+          otherTypeDocumentNumber = ele.value
+        }
+      }
+    })
     return (
       <StickyFooter
         handleClick={this.handleClick}
@@ -276,7 +313,19 @@ export class FamilyParticipant extends Component {
           showErrors={showErrors}
           options={this.gender}
         />
-
+        {draft && draft.familyData.familyMembersList[0].gender === 'O' ? (
+          <TextInput
+            field="customGender"
+            validation="string"
+            onChangeText={this.addSurveyData}
+            readonly={readonly}
+            placeholder={t('views.family.specifyGender')}
+            value={this.getFieldValue(draft, 'customGender') || ''}
+            required
+            detectError={this.detectError}
+            showErrors={showErrors}
+          />
+        ) : null}
         <DateInput
           required
           label={t('views.family.dateOfBirth')}
@@ -300,6 +349,21 @@ export class FamilyParticipant extends Component {
           showErrors={showErrors}
           options={this.documentType}
         />
+        {otherTypeDocumentNumber ===
+        this.getFieldValue(draft, 'documentType') ? (
+          <TextInput
+            field="customDocumentType"
+            validation="string"
+            onChangeText={this.addSurveyData}
+            readonly={readonly}
+            placeholder={t('views.family.customDocumentType')}
+            value={this.getFieldValue(draft, 'customDocumentType') || ''}
+            required
+            detectError={this.detectError}
+            showErrors={showErrors}
+          />
+        ) : null}
+
         <TextInput
           onChangeText={this.addSurveyData}
           readonly={readonly}
