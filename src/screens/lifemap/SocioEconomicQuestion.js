@@ -365,7 +365,7 @@ export class SocioEconomicQuestion extends Component {
                           validation="string"
                           onChangeText={this.addSurveyDataOtherField}
                           readonly={readonly}
-                          placeholder={t('views.family.specifyQuestionAbove')}
+                          placeholder={t('views.family.specifyOther')}
                           value={
                             this.getOtherFieldValue(draft, question.codeName) ||
                             ''
