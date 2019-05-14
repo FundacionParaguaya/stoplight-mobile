@@ -120,7 +120,6 @@ export class Question extends Component {
     const portrait = !!dimensions && isPortrait(dimensions)
     const tablet = !!dimensions && isTablet(dimensions)
     const bodyHeight = dimensions.height - headerHeight - paddingOfStickyFooter
-
     return (
       <StickyFooter
         handleClick={this.handleClick}
