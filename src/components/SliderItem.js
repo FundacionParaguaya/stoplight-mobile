@@ -96,6 +96,7 @@ export default class SliderItem extends Component {
               }}
             >
               <Text
+                onPress={this.props.onPress}
                 onLayout={event => this.calculateTextContentHeight(event)}
                 style={[
                   {
