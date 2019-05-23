@@ -2,8 +2,26 @@ import { Platform, StyleSheet } from 'react-native'
 import colors from './theme.json'
 
 export default StyleSheet.create({
+  ViewMainContainer: {
+    backgroundColor: colors.white,
+    flex: 1
+  },
+  ScrollMainContainerNotCentered: {
+    flexGrow: 0,
+    backgroundColor: colors.white
+  },
+  ScrollMainContainerCentered: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: colors.white
+  },
   background: {
     backgroundColor: colors.white
+  },
+  containerNoPadding: {
+    flex: 1,
+    backgroundColor: colors.white,
+    padding: 25
   },
   container: {
     flex: 1,

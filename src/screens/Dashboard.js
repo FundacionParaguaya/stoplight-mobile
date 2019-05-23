@@ -113,73 +113,89 @@ export class Dashboard extends Component {
     const { t, drafts } = this.props
     const list = drafts.slice().reverse()
     return (
-      <ScrollView style={globalStyles.background}>
-        <View ref={this.acessibleComponent} accessible={true}>
-          {this.props.offline.outbox.length ? null : (
-            <View>
-              <View style={globalStyles.container}>
+      <View style={globalStyles.ViewMainContainer}>
+        <ScrollView
+          contentContainerStyle={
+            drafts.length
+              ? globalStyles.ScrollMainContainerNotCentered
+              : globalStyles.ScrollMainContainerCentered
+          }
+        >
+          <View ref={this.acessibleComponent} accessible={true}>
+            {this.props.offline.outbox.length ? null : (
+              <View>
                 <View
-                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                  style={
+                    drafts.length
+                      ? globalStyles.container
+                      : globalStyles.containerNoPadding
+                  }
                 >
-                  <Decoration>
-                    <RoundImage source="family" />
-                  </Decoration>
-                  <View style={styles.familiesIcon}>
-                    <Icon
-                      name="face"
-                      style={styles.familiesIconIcon}
-                      size={60}
-                    />
+                  <View
+                    style={{ alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <Decoration>
+                      <RoundImage source="family" />
+                    </Decoration>
+                    <View style={styles.familiesIcon}>
+                      <Icon
+                        name="face"
+                        style={styles.familiesIconIcon}
+                        size={60}
+                      />
+                    </View>
+
+                    <Text style={{ ...styles.familiesCount }}>
+                      {this.props.families.length} {t('views.families')}
+                    </Text>
                   </View>
 
-                  <Text style={{ ...styles.familiesCount }}>
-                    {this.props.families.length} {t('views.families')}
-                  </Text>
+                  <Button
+                    id="create-lifemap"
+                    text={t('views.createLifemap')}
+                    colored
+                    handleClick={() =>
+                      this.props.navigation.navigate('Surveys')
+                    }
+                  />
                 </View>
-
-                <Button
-                  id="create-lifemap"
-                  text={t('views.createLifemap')}
-                  colored
-                  handleClick={() => this.props.navigation.navigate('Surveys')}
+                {drafts.length ? (
+                  <View style={styles.borderBottom}>
+                    <Text
+                      style={{ ...globalStyles.subline, ...styles.listTitle }}
+                    >
+                      {t('views.latestDrafts')}
+                    </Text>
+                  </View>
+                ) : null}
+                <FlatList
+                  style={{ ...styles.background }}
+                  data={list}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <DraftListItem
+                      item={item}
+                      handleClick={() => {
+                        switch (item.status) {
+                          case 'Pending sync':
+                            this.navigateToPendingSync(item)
+                            break
+                          case 'Synced':
+                            this.navigateToSynced(item)
+                            break
+                          default:
+                            this.navigateToDraft(item)
+                        }
+                      }}
+                      lng={this.props.lng}
+                    />
+                  )}
                 />
               </View>
-              {drafts.length ? (
-                <View style={styles.borderBottom}>
-                  <Text
-                    style={{ ...globalStyles.subline, ...styles.listTitle }}
-                  >
-                    {t('views.latestDrafts')}
-                  </Text>
-                </View>
-              ) : null}
-              <FlatList
-                style={{ ...styles.background }}
-                data={list}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <DraftListItem
-                    item={item}
-                    handleClick={() => {
-                      switch (item.status) {
-                        case 'Pending sync':
-                          this.navigateToPendingSync(item)
-                          break
-                        case 'Synced':
-                          this.navigateToSynced(item)
-                          break
-                        default:
-                          this.navigateToDraft(item)
-                      }
-                    }}
-                    lng={this.props.lng}
-                  />
-                )}
-              />
-            </View>
-          )}
-        </View>
-      </ScrollView>
+            )}
+          </View>
+        </ScrollView>
+      </View>
     )
   }
 }
