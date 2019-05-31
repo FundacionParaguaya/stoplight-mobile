@@ -73,13 +73,14 @@ export class Location extends Component {
     const { draft } = this.state
     const { familyData } = draft
     const { coordinates } = region.geometry
-    const longitude = coordinates[0]
-    const latitude = coordinates[1]
-
+    const longitudeCheck = coordinates[0]
+    const latitudeCheck = coordinates[1]
+    const longitude = familyData.longitude
+    const latitude = familyData.latitude
     // prevent jumping of the marker by updating only when the region changes
     if (
-      familyData.latitude !== latitude ||
-      familyData.longitude !== longitude
+      latitude !== latitudeCheck ||
+      longitude !== longitudeCheck
     ) {
       this.setState({
         draft: {
@@ -97,6 +98,7 @@ export class Location extends Component {
 
   // if the user has draged the map and the draft has stored some coordinates
   setCoordinatesFromDraft = isOnline => {
+    
     const { draft } = this.state
     const { familyData } = draft
     this.setState({
@@ -655,6 +657,7 @@ export class Location extends Component {
             centerCoordinate={[+familyData.longitude, +familyData.latitude]}
             zoomLevel={15}
             style={{ width: '100%', flexGrow: 2 }}
+            onStyleLoad={ el => this.getEl(el)}
             logoEnabled={false}
             zoomEnabled={!this.readOnly}
             rotateEnabled={false}
