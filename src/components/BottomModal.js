@@ -38,7 +38,7 @@ export default class BottomModal extends Component {
             style={styles.overlay}
             onPress={onEmptyClose}
             accessible={false}
-            importantForAccessibility="no-hide-descendants"  
+            importantForAccessibility="no-hide-descendants"
           />
           {children}
         </Modal>

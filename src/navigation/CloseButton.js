@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { View } from 'react-native'
 import IconButton from '../components/IconButton'
 
 class CloseButton extends Component {
@@ -19,14 +20,18 @@ class CloseButton extends Component {
   }
   render() {
     return (
-      <IconButton
-        style={this.props.style}
-        onPress={this.handlePress}
-        icon="close"
-        size={25}
-        accessible={true}
-        accessibilityLabel={'Exit'}
-      />
+      <View>
+        {this.props.navigation.state.routeName !== 'Final' ? (
+          <IconButton
+            style={this.props.style}
+            onPress={this.handlePress}
+            icon="close"
+            size={25}
+            accessible={true}
+            accessibilityLabel={'Exit'}
+          />
+        ) : null}
+      </View>
     )
   }
 }
