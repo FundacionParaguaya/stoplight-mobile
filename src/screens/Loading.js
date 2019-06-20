@@ -47,6 +47,7 @@ export class Loading extends Component {
       (!!this.props.sync.images.total &&
         this.props.sync.images.total === this.props.sync.images.synced)
     ) {
+      this.unsubscribeNetChange()
       this.props.navigation.navigate('DrawerStack')
     } else {
       this.setState({
@@ -160,14 +161,13 @@ export class Loading extends Component {
     NetInfo.fetch().then(state => {
       if (!state.isConnected) {
         this.props.logout()
-        this.props.navigation.navigate('Login', {
-          connection: state.isConnected
-        })
+        this.props.navigation.navigate('Login')
       }
     })
 
     // navigate back to login on connection loss
     this.unsubscribeNetChange = NetInfo.addEventListener(state => {
+      console.log('netChange')
       if (!state.isConnected) {
         this.props.logout()
         this.props.navigation.navigate('Login', {
@@ -193,6 +193,9 @@ export class Loading extends Component {
       !!images.total &&
       images.total === images.synced
     ) {
+      // prevent loging out
+
+      this.unsubscribeNetChange()
       // if everything is synced navigate to Dashboard
       this.props.navigation.navigate('DrawerStack')
     } else {
@@ -234,8 +237,14 @@ export class Loading extends Component {
       this.props.sync.images.total === this.props.sync.images.synced &&
       this.state.maps.every(map => map.status === 100)
     ) {
+      // prevent loging out
+      this.unsubscribeNetChange()
       this.props.navigation.navigate('DrawerStack')
     }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeNetChange()
   }
 
   render() {

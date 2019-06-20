@@ -6,7 +6,9 @@ import {
   USER_LOGOUT,
   SET_ENV,
   LOAD_SURVEYS_COMMIT,
+  LOAD_SURVEYS_ROLLBACK,
   LOAD_FAMILIES_COMMIT,
+  LOAD_FAMILIES_ROLLBACK,
   CREATE_DRAFT,
   UPDATE_DRAFT,
   ADD_SURVEY_DATA,
@@ -288,6 +290,7 @@ export const sync = (
     appVersion: null,
     surveys: false,
     families: false,
+    error: false,
     images: {
       total: 0,
       synced: 0
@@ -384,6 +387,17 @@ export const rootReducer = (state, action) => {
     }
   }
 
+  // set login sync error message
+  if (action.type === LOAD_SURVEYS_ROLLBACK) {
+    state = {
+      ...state,
+      sync: {
+        ...state.sync,
+        error: 'Could not sync surveys'
+      }
+    }
+  }
+
   // note that families are synced in the store
   if (action.type === LOAD_FAMILIES_COMMIT) {
     state = {
@@ -391,6 +405,17 @@ export const rootReducer = (state, action) => {
       sync: {
         ...state.sync,
         families: true
+      }
+    }
+  }
+
+  // set login sync error message
+  if (action.type === LOAD_FAMILIES_ROLLBACK) {
+    state = {
+      ...state,
+      sync: {
+        ...state.sync,
+        error: 'Could not sync families'
       }
     }
   }
@@ -422,6 +447,7 @@ export const rootReducer = (state, action) => {
         appVersion: null,
         surveys: false,
         families: false,
+        error: false,
         images: {
           total: 0,
           synced: 0

@@ -24,6 +24,10 @@ export class Dashboard extends Component {
   acessibleComponent = React.createRef()
 
   componentDidMount() {
+    if (!this.props.user.token) {
+      this.props.navigation.navigate('Login')
+    }
+
     if (UIManager.AccessibilityEventTypes) {
       setTimeout(() => {
         UIManager.sendAccessibilityEvent(

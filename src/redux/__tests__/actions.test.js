@@ -102,6 +102,7 @@ describe('families actions', () => {
       meta: {
         offline: {
           commit: { type: 'LOAD_FAMILIES_COMMIT' },
+          rollback: { type: 'LOAD_FAMILIES_ROLLBACK' },
           effect: {
             body:
               '{"query":"query { familiesNewStructure {familyId name code snapshotList { surveyId createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneNumber socioEconomicAnswers { key value}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue } indicatorSurveyDataList { key value } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } } } }"}',
@@ -128,6 +129,7 @@ describe('surveys actions', () => {
       meta: {
         offline: {
           commit: { type: 'LOAD_SURVEYS_COMMIT' },
+          rollback: { type: 'LOAD_SURVEYS_ROLLBACK' },
           effect: {
             body:
               '{"query":"query { surveysByUser { title id createdAt description minimumPriorities privacyPolicy { title  text } termsConditions{ title text }  surveyConfig { documentType {text value} gender { text value} surveyLocation { country latitude longitude}  offlineMaps { from, to, center, name } }  surveyEconomicQuestions { questionText codeName answerType topic required forFamilyMember options {text value conditions{codeName, type, values, operator, valueType, showIfNoData}}, conditions{codeName, type, value, operator} } surveyStoplightQuestions { questionText codeName dimension id stoplightColors { url value description } required } } }"}',
