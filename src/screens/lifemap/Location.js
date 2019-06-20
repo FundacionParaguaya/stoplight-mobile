@@ -83,7 +83,6 @@ export class Location extends Component {
       familyData.longitude !== longitude ||
       zoom !== region.properties.zoomLevel
     ) {
-      console.log('onDragMap', region)
       this.setState({
         zoom: region.properties.zoomLevel || 15,
         draft: {

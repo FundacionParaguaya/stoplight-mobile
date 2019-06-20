@@ -23,6 +23,8 @@ describe('Login View', () => {
   beforeEach(() => {
     props = createTestProps()
     wrapper = shallow(<Login {...props} />)
+
+    wrapper.setState({ preparingScreen: false })
   })
 
   describe('rendering', () => {

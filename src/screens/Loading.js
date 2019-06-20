@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import MapboxGL from '@mapbox/react-native-mapbox-gl'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import DeviceInfo from 'react-native-device-info'
+import NetInfo from '@react-native-community/netinfo'
 import {
   loadFamilies,
   loadSurveys,
@@ -24,6 +25,7 @@ export class Loading extends Component {
     downloadingMap: false,
     maps: []
   }
+  unsubscribeNetChange
 
   syncSurveys = resync => {
     // mark that loading has stated to show the progress
@@ -154,6 +156,26 @@ export class Loading extends Component {
   onMapDownloadError = (offlineRegion, mapDownloadError) => {}
 
   componentDidMount() {
+    // check connection on mount
+    NetInfo.fetch().then(state => {
+      if (!state.isConnected) {
+        this.props.logout()
+        this.props.navigation.navigate('Login', {
+          connection: state.isConnected
+        })
+      }
+    })
+
+    // navigate back to login on connection loss
+    this.unsubscribeNetChange = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        this.props.logout()
+        this.props.navigation.navigate('Login', {
+          connection: state.isConnected
+        })
+      }
+    })
+
     const { families, surveys, images, appVersion } = this.props.sync
 
     if (!this.props.user.token) {

@@ -29,28 +29,35 @@ export class Login extends Component {
     password: '',
     error: false,
     connection: false,
+    preparingScreen: true,
     loading: false,
     syncMaps: true,
     syncImages: true
   }
   componentDidMount() {
-    if (this.props.user.token) {
-      this.props.navigation.navigate('Loading')
-    } else {
-      this.setDimensions()
-      NetInfo.fetch().then(state =>
-        this.setConnectivityState(state.isConnected)
-      )
-      this.unsubscribeNetChange = NetInfo.addEventListener(state => {
-        this.setConnectivityState(state.isConnected)
+    this.setDimensions()
+    NetInfo.fetch().then(state => {
+      if (state.isConnected && this.props.user.token) {
+        this.props.navigation.navigate('Loading')
+      }
+
+      this.setConnectivityState(state.isConnected)
+      this.setState({
+        preparingScreen: false
       })
-    }
+    })
+    this.unsubscribeNetChange = NetInfo.addEventListener(state => {
+      this.setConnectivityState(state.isConnected)
+    })
   }
 
-  setConnectivityState = isConnected =>
-    isConnected
-      ? this.setState({ connection: true, error: '' })
-      : this.setState({ connection: false, error: 'No connection' })
+  setConnectivityState = isConnected => {
+    if (isConnected) {
+      this.setState({ connection: true, error: '' })
+    } else {
+      this.setState({ connection: false, error: 'No connection' })
+    }
+  }
 
   setDimensions = () => {
     this.props.setDimensions({
@@ -114,7 +121,7 @@ export class Login extends Component {
   }
 
   render() {
-    return (
+    return !this.state.preparingScreen ? (
       <View style={globalStyles.container}>
         <ScrollView style={globalStyles.content}>
           <Image style={styles.logo} source={logo} />
@@ -203,6 +210,8 @@ export class Login extends Component {
           )}
         </ScrollView>
       </View>
+    ) : (
+      <View />
     )
   }
 }
