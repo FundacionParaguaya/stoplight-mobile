@@ -154,7 +154,12 @@ export class Loading extends Component {
     })
   }
 
-  onMapDownloadError = (offlineRegion, mapDownloadError) => {}
+  onMapDownloadError = () => {
+    this.props.navigation.navigate('Login', {
+      syncError:
+        'There was a problem with downloading your offline maps. Please, try loging in again.'
+    })
+  }
 
   componentDidMount() {
     // check connection on mount
@@ -167,12 +172,9 @@ export class Loading extends Component {
 
     // navigate back to login on connection loss
     this.unsubscribeNetChange = NetInfo.addEventListener(state => {
-      console.log('netChange')
       if (!state.isConnected) {
         this.props.logout()
-        this.props.navigation.navigate('Login', {
-          connection: state.isConnected
-        })
+        this.props.navigation.navigate('Login')
       }
     })
 
@@ -240,6 +242,13 @@ export class Loading extends Component {
       // prevent loging out
       this.unsubscribeNetChange()
       this.props.navigation.navigate('DrawerStack')
+    }
+
+    // catch login sync error
+    if (!prevProps.sync.error && this.props.sync.error) {
+      const syncError = this.props.sync.error
+      this.props.logout()
+      this.props.navigation.navigate('Login', { syncError })
     }
   }
 

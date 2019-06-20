@@ -189,6 +189,13 @@ export class Login extends Component {
               disabled={this.state.error === 'No connection' ? true : false}
             />
           )}
+          {this.props.navigation.getParam('syncError') ? (
+            <View style={{ marginTop: 20 }}>
+              <Text style={styles.error}>
+                {this.props.navigation.getParam('syncError')}
+              </Text>
+            </View>
+          ) : null}
           {nodeEnv.NODE_ENV === 'development' && (
             <View style={{ marginTop: 20 }}>
               <Text>Dev options</Text>

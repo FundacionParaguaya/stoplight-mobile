@@ -12,7 +12,8 @@ const createTestProps = props => ({
   env: 'production',
   user: { status: null },
   navigation: {
-    navigate: arg => arg
+    navigate: arg => arg,
+    getParam: jest.fn()
   },
   ...props
 })

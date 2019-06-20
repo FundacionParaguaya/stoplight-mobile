@@ -393,7 +393,7 @@ export const rootReducer = (state, action) => {
       ...state,
       sync: {
         ...state.sync,
-        error: 'Could not sync surveys'
+        error: 'We could not load your surveys. Please, try loging in again.'
       }
     }
   }
@@ -415,7 +415,7 @@ export const rootReducer = (state, action) => {
       ...state,
       sync: {
         ...state.sync,
-        error: 'Could not sync families'
+        error: 'We could not load your families. Please, try loging in again.'
       }
     }
   }
