@@ -1,5 +1,53 @@
 # Change Log
 
+## [v1.9.10](https://github.com/FundacionParaguaya/MentorApp/tree/v1.9.10) (2019-06-20)
+[Full Changelog](https://github.com/FundacionParaguaya/MentorApp/compare/v1.9.9...v1.9.10)
+
+**Fixed bugs:**
+
+- Blank screen [\#814](https://github.com/FundacionParaguaya/MentorApp/issues/814)
+- Dashboard crash [\#813](https://github.com/FundacionParaguaya/MentorApp/issues/813)
+
+## [v1.9.9](https://github.com/FundacionParaguaya/MentorApp/tree/v1.9.9) (2019-06-20)
+[Full Changelog](https://github.com/FundacionParaguaya/MentorApp/compare/v1.9.7...v1.9.9)
+
+**Fixed bugs:**
+
+- Hotfix: Broken production fetch surveys API call. [\#809](https://github.com/FundacionParaguaya/MentorApp/issues/809)
+
+**Closed issues:**
+
+- Add missing family member index in socioEconomic [\#808](https://github.com/FundacionParaguaya/MentorApp/issues/808)
+- End to End Testing for the Mobile App [\#594](https://github.com/FundacionParaguaya/MentorApp/issues/594)
+
+## [v1.9.7](https://github.com/FundacionParaguaya/MentorApp/tree/v1.9.7) (2019-06-19)
+[Full Changelog](https://github.com/FundacionParaguaya/MentorApp/compare/v1.9.6...v1.9.7)
+
+**Fixed bugs:**
+
+- TypeErrorrender\(src/screens/Family\) [\#803](https://github.com/FundacionParaguaya/MentorApp/issues/803)
+- TypeErrorgetPotentialPrioritiesCount\(src/screens/lifemap/Overview\) [\#802](https://github.com/FundacionParaguaya/MentorApp/issues/802)
+- TypeErrorcall\(src/screens/lifemap/Location\) [\#801](https://github.com/FundacionParaguaya/MentorApp/issues/801)
+- TypeError?\(src/screens/lifemap/AddPriority\) [\#800](https://github.com/FundacionParaguaya/MentorApp/issues/800)
+- TypeError?\(src/screens/lifemap/AddAchievement\) [\#799](https://github.com/FundacionParaguaya/MentorApp/issues/799)
+- TypeErroronPress\(src/screens/lifemap/SocioEconomicQuestion\) [\#798](https://github.com/FundacionParaguaya/MentorApp/issues/798)
+- Error while updating property 'centerCoordinate' of a view managed by: RCTMGLAndroidTextureMapView [\#797](https://github.com/FundacionParaguaya/MentorApp/issues/797)
+- URIError?\(src/screens/Families\) [\#796](https://github.com/FundacionParaguaya/MentorApp/issues/796)
+- Geco has 3 sync errors [\#795](https://github.com/FundacionParaguaya/MentorApp/issues/795)
+- Conditional question not showing  [\#726](https://github.com/FundacionParaguaya/MentorApp/issues/726)
+
+**Closed issues:**
+
+- Conditional Logic - Add support for condition grouping [\#749](https://github.com/FundacionParaguaya/MentorApp/issues/749)
+
+**Merged pull requests:**
+
+- removed problematic decodeURIComponent method [\#807](https://github.com/FundacionParaguaya/MentorApp/pull/807) ([vasildimitroffhristoff](https://github.com/vasildimitroffhristoff))
+- 1. added fail safe check for email and phone properties in Family scr… [\#806](https://github.com/FundacionParaguaya/MentorApp/pull/806) ([vasildimitroffhristoff](https://github.com/vasildimitroffhristoff))
+- 800 add priority error [\#805](https://github.com/FundacionParaguaya/MentorApp/pull/805) ([vasildimitroffhristoff](https://github.com/vasildimitroffhristoff))
+- fixed failing getPotentialPrioritiesCount due to missing draft and su… [\#804](https://github.com/FundacionParaguaya/MentorApp/pull/804) ([vasildimitroffhristoff](https://github.com/vasildimitroffhristoff))
+- Added support for conditions groups [\#791](https://github.com/FundacionParaguaya/MentorApp/pull/791) ([vasildimitroffhristoff](https://github.com/vasildimitroffhristoff))
+
 ## [v1.9.6](https://github.com/FundacionParaguaya/MentorApp/tree/v1.9.6) (2019-06-17)
 [Full Changelog](https://github.com/FundacionParaguaya/MentorApp/compare/v1.9.5...v1.9.6)
 

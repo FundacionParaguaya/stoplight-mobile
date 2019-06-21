@@ -1,6 +1,6 @@
 {
   "name": "PovertyStoplightApp",
-  "version": "1.9.9",
+  "version": "1.9.10",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start -- --reset-cache",
