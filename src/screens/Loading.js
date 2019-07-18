@@ -177,12 +177,13 @@ export class Loading extends Component {
     let mapAllNames = []
     let mapAllNumber = 0
     this.state.maps.map(map => {
+      let mapfornow = map.status || 0
       if (mapAllNames.length === this.state.maps.length - 1) {
-        mapAllNumber = mapAllNumber + map.status
+        mapAllNumber = mapAllNumber + mapfornow
         mapAllPercentage = mapAllNumber / this.state.maps.length
       } else {
         mapAllNames.push(map.name)
-        mapAllNumber = mapAllNumber + map.status
+        mapAllNumber = mapAllNumber + mapfornow
       }
     })
     if (isNaN(mapAllPercentage) && mapAllPercentage !== 100) {
