@@ -47,6 +47,15 @@ export const setDimensions = dimensions => ({
   dimensions
 })
 
+// Download images/maps
+
+export const SET_DOWNLOADMAPSIMAGES = 'SET_DOWNLOADMAPSIMAGES'
+
+export const setDownloadMapsAndImages = downloadMapsAndImages => ({
+  type: SET_DOWNLOADMAPSIMAGES,
+  downloadMapsAndImages
+})
+
 // Environment
 
 export const SET_ENV = 'SET_ENV'

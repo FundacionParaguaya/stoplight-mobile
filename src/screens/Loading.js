@@ -48,7 +48,7 @@ export class Loading extends Component {
 
   handleImageCaching = () => {
     if (
-      !this.props.navigation.getParam('syncImages') ||
+      !this.props.downloadMapsAndImages.downloadImages ||
       (!!this.props.sync.images.total &&
         this.props.sync.images.total === this.props.sync.images.synced)
     ) {
@@ -96,7 +96,7 @@ export class Loading extends Component {
   }
 
   checkOfflineMaps = () => {
-    if (!this.props.navigation.getParam('syncMaps')) {
+    if (!this.props.downloadMapsAndImages.downloadMaps) {
       return this.handleImageCaching()
     }
     const mapsArray = []
@@ -471,6 +471,7 @@ export class Loading extends Component {
 Loading.propTypes = {
   loadFamilies: PropTypes.func.isRequired,
   loadSurveys: PropTypes.func.isRequired,
+  downloadMapsAndImages: PropTypes.object,
   logout: PropTypes.func,
   resetSyncState: PropTypes.func,
   setAppVersion: PropTypes.func,
@@ -523,7 +524,8 @@ export const mapStateToProps = ({
   user,
   offline,
   families,
-  hydration
+  hydration,
+  downloadMapsAndImages
 }) => ({
   sync,
   surveys,
@@ -531,7 +533,8 @@ export const mapStateToProps = ({
   user,
   offline,
   families,
-  hydration
+  hydration,
+  downloadMapsAndImages
 })
 
 const mapDispatchToProps = {

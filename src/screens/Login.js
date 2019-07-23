@@ -14,7 +14,12 @@ import DeviceInfo from 'react-native-device-info'
 import { connect } from 'react-redux'
 import { CheckBox } from 'react-native-elements'
 import NetInfo from '@react-native-community/netinfo'
-import { setEnv, login, setDimensions } from '../redux/actions'
+import {
+  setEnv,
+  login,
+  setDimensions,
+  setDownloadMapsAndImages
+} from '../redux/actions'
 import logo from '../../assets/images/logo.png'
 import { url } from '../config'
 import globalStyles from '../globalStyles'
@@ -41,13 +46,12 @@ export class Login extends Component {
     notEnoughStorageSpace: false
   }
   componentDidMount() {
-    // if use has logged in navigate to Loading
+    // if use has logged in navigate to Loadin
     if (this.props.user.token) {
       this.props.navigation.navigate('Loading')
     } else {
       AppState.addEventListener('change', this.handleAppStateChange)
       this.setDimensions()
-
       // check connection
       NetInfo.fetch().then(state =>
         this.setConnectivityState(state.isConnected)
@@ -98,6 +102,10 @@ export class Login extends Component {
     this.setState({
       loading: true
     })
+    this.props.setDownloadMapsAndImages({
+      downloadMaps: this.state.syncMaps,
+      downloadImages: this.state.syncImages
+    })
 
     let env = this.state.username.trim() === 'demo' ? 'demo' : 'production'
     let username = this.state.username.trim()
@@ -125,12 +133,11 @@ export class Login extends Component {
         })
         this.setState({ error: 'Wrong username or password' })
       } else {
-        const { syncMaps, syncImages } = this.state
         this.setState({
           loading: false,
           error: false
         })
-        this.props.navigation.navigate('Loading', { syncMaps, syncImages })
+        this.props.navigation.navigate('Loading')
       }
     })
   }
@@ -289,6 +296,7 @@ Login.propTypes = {
   setEnv: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   setDimensions: PropTypes.func.isRequired,
+  setDownloadMapsAndImages: PropTypes.func.isRequired,
   env: PropTypes.oneOf(['production', 'demo', 'testing', 'development']),
   navigation: PropTypes.object.isRequired,
   dimensions: PropTypes.object,
@@ -339,7 +347,8 @@ const mapStateToProps = ({ env, user, dimensions }) => ({
 const mapDispatchToProps = {
   setEnv,
   login,
-  setDimensions
+  setDimensions,
+  setDownloadMapsAndImages
 }
 
 export default connect(

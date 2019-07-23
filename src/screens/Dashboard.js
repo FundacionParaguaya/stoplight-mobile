@@ -20,6 +20,7 @@ import globalStyles from '../globalStyles'
 import { connect } from 'react-redux'
 import colors from '../theme.json'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
 export class Dashboard extends Component {
   acessibleComponent = React.createRef()
   state = {
