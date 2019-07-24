@@ -98,8 +98,7 @@ export class Loading extends Component {
   // STEP 3 - check and cache the offline maps
   checkOfflineMaps = () => {
     if (
-      (typeof this.props.navigation.getParam('syncMaps') !== 'undefined' &&
-        !this.props.downloadMapsAndImages.downloadMaps) ||
+      !this.props.downloadMapsAndImages.downloadMaps ||
       this.props.sync.maps
     ) {
       return this.handleImageCaching()
@@ -190,8 +189,7 @@ export class Loading extends Component {
   // STEP 4 - cache the survey indicator images
   handleImageCaching = () => {
     if (
-      (typeof this.props.navigation.getParam('syncImages') !== 'undefined' &&
-        !this.props.downloadMapsAndImages.downloadImages) ||
+      !this.props.downloadMapsAndImages.downloadImages ||
       (!!this.props.sync.images.total &&
         this.props.sync.images.total === this.props.sync.images.synced)
     ) {
