@@ -14,6 +14,7 @@ import Decoration from '../../components/decoration/Decoration'
 import colors from '../../theme.json'
 import globalStyles from '../../globalStyles'
 import { getTotalScreens } from './helpers'
+
 export class FamilyParticipant extends Component {
   survey = this.props.navigation.getParam('survey')
 
@@ -22,6 +23,7 @@ export class FamilyParticipant extends Component {
   errorsDetected = []
 
   state = {
+    loading: false,
     errorsDetected: [],
     showErrors: false,
     draft: null
@@ -52,31 +54,35 @@ export class FamilyParticipant extends Component {
 
   handleClick = () => {
     const { countFamilyMembers } = this.state.draft.familyData
-
     // check if form is valid
     if (this.errorsDetected.length) {
       this.setState({
         showErrors: true
       })
     } else {
-      const { draft } = this.state
-      const survey = this.survey
-      // if this is a new draft, add it to the store
-      if (this.props.navigation.getParam('isNewDraft')) {
-        this.props.createDraft(draft)
-      } else {
-        this.props.updateDraft(draft.draftId, draft)
-      }
-
-      if (countFamilyMembers && countFamilyMembers > 1) {
-        // if multiple family members navigate to members screens
-        this.props.navigation.push('FamilyMembersNames', {
-          draft,
-          survey
+      if (!this.state.loading) {
+        this.setState({
+          loading: true
         })
-      } else {
-        // if only one family member, navigate directly to location
-        this.props.navigation.navigate('Location', { draft, survey })
+        const { draft } = this.state
+        const survey = this.survey
+        // if this is a new draft, add it to the store
+        if (this.props.navigation.getParam('isNewDraft')) {
+          this.props.createDraft(draft)
+        } else {
+          this.props.updateDraft(draft.draftId, draft)
+        }
+
+        if (countFamilyMembers && countFamilyMembers > 1) {
+          // if multiple family members navigate to members screens
+          this.props.navigation.push('FamilyMembersNames', {
+            draft,
+            survey
+          })
+        } else {
+          // if only one family member, navigate directly to location
+          this.props.navigation.navigate('Location', { draft, survey })
+        }
       }
     }
   }
