@@ -38,6 +38,15 @@ export const logout = () => ({
   type: USER_LOGOUT
 })
 
+// Download images/maps
+
+export const SET_DOWNLOADMAPSIMAGES = 'SET_DOWNLOADMAPSIMAGES'
+
+export const setDownloadMapsAndImages = downloadMapsAndImages => ({
+  type: SET_DOWNLOADMAPSIMAGES,
+  downloadMapsAndImages
+})
+
 // Dimensions
 
 export const SET_DIMENSIONS = 'SET_DIMENSIONS'

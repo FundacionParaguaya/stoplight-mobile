@@ -24,7 +24,8 @@ import {
   SET_SYNCED_STATE,
   RESET_SYNCED_STATE,
   SET_DIMENSIONS,
-  UPDATE_NAV
+  UPDATE_NAV,
+  SET_DOWNLOADMAPSIMAGES
 } from './actions'
 
 //Login
@@ -57,6 +58,20 @@ export const env = (state = 'production', action) => {
   switch (action.type) {
     case SET_ENV:
       return action.env
+    default:
+      return state
+  }
+}
+
+//Download Maps or images
+
+export const downloadMapsAndImages = (
+  state = { downloadMaps: true, downloadImages: true },
+  action
+) => {
+  switch (action.type) {
+    case SET_DOWNLOADMAPSIMAGES:
+      return action.downloadMapsAndImages
     default:
       return state
   }
@@ -391,7 +406,8 @@ const appReducer = combineReducers({
   hydration,
   sync,
   dimensions,
-  nav
+  nav,
+  downloadMapsAndImages
 })
 
 export const rootReducer = (state, action) => {
