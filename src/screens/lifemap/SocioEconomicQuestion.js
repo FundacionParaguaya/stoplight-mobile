@@ -640,7 +640,7 @@ SocioEconomicQuestion.propTypes = {
   addSurveyDataCheckBox: PropTypes.func,
   drafts: PropTypes.array,
   nav: PropTypes.object,
-  lng: PropTypes.String
+  lng: PropTypes.func
 }
 
 const styles = StyleSheet.create({

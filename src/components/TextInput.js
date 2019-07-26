@@ -285,7 +285,7 @@ TextInput.propTypes = {
   upperCase: PropTypes.bool,
   multiline: PropTypes.bool,
   showErrors: PropTypes.bool,
-  lng: PropTypes.string,
+  lng: PropTypes.func,
   keyboardType: PropTypes.string,
   validation: PropTypes.oneOf([
     'email',
