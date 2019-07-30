@@ -48,14 +48,7 @@ describe('login/logout actions', () => {
         body: { access_token: 'token', user: { username: 'username' } }
       }
     )
-    const expectedAction = [
-      {
-        type: action.SET_LOGIN_STATE,
-        token: 'token',
-        status: 200,
-        username: 'username'
-      }
-    ]
+    const expectedAction = []
 
     return store.dispatch(action.login(user, pass, env)).then(() => {
       expect(store.getActions()).toEqual(expectedAction)
@@ -73,6 +66,7 @@ describe('login/logout actions', () => {
     )
     const expectedAction = [
       {
+        role: null,
         type: action.SET_LOGIN_STATE,
         token: null,
         status: 401,

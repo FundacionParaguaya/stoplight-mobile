@@ -115,7 +115,7 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const { t, drafts, families } = this.props
+    const { t, drafts, families, user } = this.props
 
     const allDraftFamilies = drafts.filter(
       d => d.status === 'Draft' || d.status === 'Pending sync'
@@ -191,20 +191,21 @@ export class Dashboard extends Component {
                       <Text style={styles.colorIndicator}>Red</Text>
                     </View>
                   </View>
-
-                  <Button
-                    style={{
-                      marginTop: 20,
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                      width: '100%',
-                      maxWidth: 400
-                    }}
-                    id="create-lifemap"
-                    text={t('views.createLifemap')}
-                    colored
-                    handleClick={this.navigateToCreateLifemap}
-                  />
+                  {!!user.role && user.role === 'ROLE_SURVEY_USER' ? (
+                    <Button
+                      style={{
+                        marginTop: 20,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        width: '100%',
+                        maxWidth: 400
+                      }}
+                      id="create-lifemap"
+                      text={t('views.createLifemap')}
+                      colored
+                      handleClick={this.navigateToCreateLifemap}
+                    />
+                  ) : null}
                 </View>
                 {drafts.length ? (
                   <View style={styles.borderBottom}>

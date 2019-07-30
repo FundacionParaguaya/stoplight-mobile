@@ -192,19 +192,22 @@ export class DrawerContent extends Component {
                 text={i18n.t('views.home')}
                 textStyle={styles.label}
               />
-              <IconButton
-                id="surveys"
-                style={{
-                  ...styles.navItem,
-                  backgroundColor:
-                    this.state.activeTab === 'Surveys' ? colors.primary : null
-                }}
-                onPress={() => this.navigateToScreen('Surveys', currentStack)}
-                icon="swap-calls"
-                size={20}
-                textStyle={styles.label}
-                text={i18n.t('views.createLifemap')}
-              />
+              {!!user.role && user.role === 'ROLE_SURVEY_USER' ? (
+                <IconButton
+                  id="surveys"
+                  style={{
+                    ...styles.navItem,
+                    backgroundColor:
+                      this.state.activeTab === 'Surveys' ? colors.primary : null
+                  }}
+                  onPress={() => this.navigateToScreen('Surveys', currentStack)}
+                  icon="swap-calls"
+                  size={20}
+                  textStyle={styles.label}
+                  text={i18n.t('views.createLifemap')}
+                />
+              ) : null}
+
               <IconButton
                 id="families"
                 style={{

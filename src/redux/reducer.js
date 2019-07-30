@@ -31,7 +31,7 @@ import {
 //Login
 
 export const user = (
-  state = { token: null, status: null, username: null },
+  state = { token: null, status: null, username: null, role: null },
   action
 ) => {
   switch (action.type) {
@@ -39,13 +39,15 @@ export const user = (
       return {
         status: action.status,
         token: action.token,
-        username: action.username
+        username: action.username,
+        role: action.role
       }
     case USER_LOGOUT:
       return {
         status: null,
         token: null,
-        username: null
+        username: null,
+        role: null
       }
     default:
       return state
@@ -451,7 +453,7 @@ export const rootReducer = (state, action) => {
     // reset store
     state = {
       ...state,
-      user: { token: null, status: null, username: null },
+      user: { token: null, status: null, username: null, role: null },
       drafts: [],
       surveys: [],
       families: [],
