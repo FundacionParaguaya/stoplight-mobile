@@ -27,7 +27,7 @@ export const login = (username, password, env) => dispatch =>
     })
     .then(data => {
       dispatch({
-        role: data.user.authorities[0].authority,
+        role: data.user.authorities ? data.user.authorities[0].authority : null,
         type: SET_LOGIN_STATE,
         token: data.access_token,
         status: 200,
