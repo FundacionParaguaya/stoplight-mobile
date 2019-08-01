@@ -497,7 +497,24 @@ export const rootReducer = (state, action) => {
 
     Sentry.captureBreadcrumb({
       message: 'Sync error',
-      category: 'action'
+      category: 'action',
+      data: {
+        error:
+          action.payload.response && action.payload.response.message
+            ? action.payload.response.message
+            : 'Undefined server error',
+        description: action.payload.response
+          ? `Code: ${
+              action.payload.response.code
+                ? action.payload.response.code
+                : 'Undefined server code'
+            } / Message: ${
+              action.payload.response.message
+                ? action.payload.response.message
+                : 'Undefined server message'
+            }`
+          : ''
+      }
     })
     Sentry.captureException('Sync error')
   }
