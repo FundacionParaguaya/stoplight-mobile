@@ -509,7 +509,7 @@ export class Location extends Component {
     const {familyData} = draft;
 
     if (!this.readOnly) {
-      this.props.navigation.setOptions({
+      this.props.navigation.setParams({
         onPressBack: this.onPressBack,
       });
     }
