@@ -28,14 +28,15 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 350,
         borderRadius: 3,
-        paddingTop: '100%'
+        //paddingTop: '100%'
+
     },
     imageContainer: {
         width: `100%`,
         maxHeight: 550,
         flex: 1,
         alignItems: 'center',
-        margin: 20
+        margin: 20,
     }
 })
 
@@ -65,6 +66,7 @@ const ProfileImages = ({
                                         <Image
                                             style={styles.image}
                                             source={{ uri: images }}
+                                            resizeMode='contain'
                                         />
                                     </View>
                                 </View>
@@ -85,7 +87,7 @@ const ProfileImages = ({
                                         flexGrow: 1,
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
-                                        justifyContent: 'space-between',
+                                        //justifyContent: 'space-between',
                                         padding: '0.66%',
                                         marginBottom: 20
                                     }}
