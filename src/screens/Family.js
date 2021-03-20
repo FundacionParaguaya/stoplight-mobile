@@ -338,9 +338,7 @@ export class Family extends Component {
           <ScrollView>
             <ProjectsPopup
               isOpen={this.state.openProjectModal}
-              afterSelect={(selectedSurvey, project) => {
-                this.retakeSurvey(selectedSurvey, project);
-              }}
+              afterSelect={this.retakeSurvey}
               toggleModal={this.toggleProjectModal}
               selectedSurvey={this.survey}
               onClose={this.toggleProjectModal}
