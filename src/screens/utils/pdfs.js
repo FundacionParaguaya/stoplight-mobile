@@ -47,7 +47,7 @@ export const getColor = value => {
   }
 }
 
-const createTableRow = (indicatorsArray, survey, achievements, priorities) => {
+const createTableRow = (indicatorsArray, survey, achievements, priorities, previousIndicatorsList) => {
   return `<tr style="${styles.tableRow}">
               ${indicatorsArray
                 .map(indicator => {
@@ -59,7 +59,7 @@ const createTableRow = (indicatorsArray, survey, achievements, priorities) => {
                   return `<td style="width: ${100 / MAX_COLS}%;${
                     styles.tableData
                   }">
-                              <div style="${styles.indicatorWrapper}">
+                           
                             ${
                               achievements.some(
                                 a => a.indicator === indicator.key
@@ -235,6 +235,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
   const indicatorsList = draft.indicatorSurveyDataList
   const achievements = draft.achievements
   const priorities = draft.priorities
+  const previousIndicatorsList = draft.previousIndicatorSurveyDataList;
   let dateCreated = draft && draft.created && moment.utc(draft.created)
   dateCreated.locale(getLocaleForLanguage(lng))
 
@@ -255,7 +256,8 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
           indicatorsList.slice(index, index + MAX_COLS),
           survey,
           achievements,
-          priorities
+          priorities,
+          previousIndicatorsList.slice(index, index+MAX_COLS),
         )
       }
     })
