@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react';
 import {
   StyleSheet,
   ScrollView,
   FlatList,
   UIManager,
-  findNodeHandle
-} from 'react-native'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { withNamespaces } from 'react-i18next'
-import globalStyles from '../globalStyles'
-import RoundImage from '../components/RoundImage'
-import LifemapListItem from '../components/LifemapListItem'
-import Decoration from '../components/decoration/Decoration'
-import colors from '../theme.json'
-import ProjectsPopup from '../components/ProjectsPopup'
+  findNodeHandle,
+} from 'react-native';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {withNamespaces} from 'react-i18next';
+import globalStyles from '../globalStyles';
+import RoundImage from '../components/RoundImage';
+import LifemapListItem from '../components/LifemapListItem';
+import Decoration from '../components/decoration/Decoration';
+import colors from '../theme.json';
+import ProjectsPopup from '../components/ProjectsPopup';
 
 export class Surveys extends Component {
-  acessibleComponent = React.createRef()
+  acessibleComponent = React.createRef();
   state = {
-    openProjectModal:false,
-    selectedSurvey:null
-  }
+    openProjectModal: false,
+    selectedSurvey: null,
+  };
 
   componentDidMount() {
     // focuses component on render for device to begin talking
@@ -29,52 +29,56 @@ export class Surveys extends Component {
       setTimeout(() => {
         UIManager.sendAccessibilityEvent(
           findNodeHandle(this.acessibleComponent.current),
-          UIManager.AccessibilityEventTypes.typeViewFocused
-        )
-      }, 1)
+          UIManager.AccessibilityEventTypes.typeViewFocused,
+        );
+      }, 1);
     }
   }
 
-  handleClickOnSurvey = survey => {
-    if(!!this.props.projects && this.props.projects.
-      filter(project => project.active === true).length > 0) {
-      this.setState({ openProjectModal: true, selectedSurvey: survey })
-    }else{
-      this.loadSurveyById(survey)
+  handleClickOnSurvey = (survey) => {
+    if (
+      !!this.props.projects &&
+      this.props.projects.filter((project) => project.active === true).length >
+        0
+    ) {
+      this.setState({openProjectModal: true, selectedSurvey: survey});
+    } else {
+      this.loadSurveyById(survey);
     }
-    
-  }
+  };
 
   toggleProjectModal = () => {
-    this.setState({ openProjectModal: !this.state.openProjectModal })
-  }
+    this.setState({openProjectModal: !this.state.openProjectModal});
+  };
 
   loadSurveyById = (survey, project) => {
-    this.props.navigation.navigate('Terms', {
-      page: 'terms',
-      survey,
-      project
-    })
-  }
-
-
+    this.setState(
+      {openProjectModal: false},
+      this.props.navigation.navigate('Terms', {
+        page: 'terms',
+        survey,
+        project,
+      }),
+    );
+  };
 
   render() {
     return (
       <ScrollView
         ref={this.acessibleComponent}
         accessible={true}
-        style={{ ...globalStyles.container, padding: 0 }}
-      >
+        style={{...globalStyles.container, padding: 0}}>
         <ProjectsPopup
-           isOpen={this.state.openProjectModal}
-           afterSelect={this.loadSurveyById}
-           toggleModal = {this.toggleProjectModal}
-           selectedSurvey={this.state.selectedSurvey}
-           onClose = {this.toggleProjectModal}
-           projects={!!this.props.projects && 
-            this.props.projects.filter(project => project.active === true)}
-            />
+          isOpen={this.state.openProjectModal}
+          afterSelect={this.loadSurveyById}
+          toggleModal={this.toggleProjectModal}
+          selectedSurvey={this.state.selectedSurvey}
+          onClose={this.toggleProjectModal}
+          projects={
+            !!this.props.projects &&
+            this.props.projects.filter((project) => project.active === true)
+          }
+        />
         <Decoration variation="lifemap">
           <RoundImage source="surveys" />
         </Decoration>
@@ -82,7 +86,7 @@ export class Surveys extends Component {
           style={styles.list}
           data={this.props.surveys}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <LifemapListItem
               name={item.title}
               handleClick={() => this.handleClickOnSurvey(item)}
@@ -91,34 +95,31 @@ export class Surveys extends Component {
           initialNumToRender={5}
         />
       </ScrollView>
-    )
+    );
   }
 }
 const styles = StyleSheet.create({
   list: {
     borderTopColor: colors.lightgrey,
     borderTopWidth: 1,
-    paddingBottom: 60
-  }
-})
+    paddingBottom: 60,
+  },
+});
 
 Surveys.propTypes = {
   surveys: PropTypes.array,
   navigation: PropTypes.object.isRequired,
   lng: PropTypes.string,
-  t: PropTypes.func
-}
+  t: PropTypes.func,
+};
 
-const mapStateToProps = ({ surveys, projects }) => ({
+const mapStateToProps = ({surveys, projects}) => ({
   surveys,
-  projects
-})
+  projects,
+});
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {};
 
 export default withNamespaces()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Surveys)
-)
+  connect(mapStateToProps, mapDispatchToProps)(Surveys),
+);

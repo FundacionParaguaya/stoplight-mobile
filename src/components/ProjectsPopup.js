@@ -20,8 +20,7 @@ const ProjectsPopup = ({
     afterSelect
 }) => {
     const onClose = (selected, project) => {
-        selected && afterSelect(selectedSurvey, project);
-        toggleModal();
+        selected ? afterSelect(selectedSurvey, project):toggleModal();
     };
     const dimensions = useWindowDimensions();
     // Styles based on screen size and orientation
