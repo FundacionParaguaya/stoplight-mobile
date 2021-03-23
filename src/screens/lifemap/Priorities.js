@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, Text, Image, TouchableHighlight} from 'react-native';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { updateDraft } from '../../redux/actions';
-import { withNamespaces } from 'react-i18next';
+import {connect} from 'react-redux';
+import {updateDraft} from '../../redux/actions';
+import {withNamespaces} from 'react-i18next';
 import StickyFooter from '../../components/StickyFooter';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Decoration from '../../components/decoration/Decoration';
@@ -13,7 +13,7 @@ import BottomModal from '../../components/BottomModal';
 import arrow from '../../../assets/images/selectArrow.png';
 import globalStyles from '../../globalStyles';
 import colors from '../../theme.json';
-import { prioritiesScreen } from '../../screens/utils/accessibilityHelpers';
+import {prioritiesScreen} from '../../screens/utils/accessibilityHelpers';
 import RoundImage from '../../components/RoundImage';
 import IndicatorsSummary from '../../components/IndicatorsSummary';
 
@@ -117,12 +117,13 @@ export class Priorities extends Component {
   };
 
   getTipDescription = (mandatoryPrioritiesCount, tipValue) => {
-    const { t } = this.props;
+    const {t} = this.props;
     const draft = this.getDraft();
     //no mandatory priotities
     if (tipValue) {
-      return `${t('general.create')} ${mandatoryPrioritiesCount - draft.priorities.length
-        } ${t('views.lifemap.priorities').toLowerCase()}!`;
+      return `${t('general.create')} ${
+        mandatoryPrioritiesCount - draft.priorities.length
+      } ${t('views.lifemap.priorities').toLowerCase()}!`;
     }
     if (
       !mandatoryPrioritiesCount ||
@@ -143,7 +144,7 @@ export class Priorities extends Component {
   };
 
   componentDidMount() {
-    const draft = this.getDraft();
+    let draft = this.getDraft();
     // show priorities message if no priorities are made or they are not enough
     if (
       !draft.priorities.length ||
@@ -156,6 +157,26 @@ export class Priorities extends Component {
       }
     }
 
+    const family = this.props.families.find(
+      (family) => family.familyId == draft.familyData.familyId,
+    );
+    if (!!family) {
+      draft = {
+        ...draft,
+        previousIndicatorSurveyDataList:
+          family.snapshotList[0].indicatorSurveyDataList,
+        previousIndicatorPriorities: family.snapshotList[0].priorities,
+        previousIndicatorAchievements: family.snapshotList[0].achievements,
+      };
+      this.props.updateDraft({
+        ...draft,
+        progress: {
+          ...draft.progress,
+          screen: 'Overview',
+        },
+      });
+    }
+
     if (!this.isDraftResuming && !this.familyLifemap) {
       this.props.updateDraft({
         draft: {
@@ -166,7 +187,7 @@ export class Priorities extends Component {
           },
         },
       });
-      
+
       this.props.navigation.setParams({
         onPressBack: this.onPressBack,
         withoutCloseButton: draft.draftId ? false : true,
@@ -179,8 +200,8 @@ export class Priorities extends Component {
   }
 
   render() {
-    const { t } = this.props;
-    const { filterModalIsOpen, selectedFilter, filterLabel } = this.state;
+    const {t} = this.props;
+    const {filterModalIsOpen, selectedFilter, filterLabel} = this.state;
     let draft = this.getDraft();
     const mandatoryPrioritiesCount = this.getMandatoryPrioritiesCount(draft);
     const screenAccessibilityContent =
@@ -189,21 +210,24 @@ export class Priorities extends Component {
         this.getTipDescription(mandatoryPrioritiesCount, true),
       ) || '';
 
-    const family = this.props.families.find(family => family.familyId == draft.familyData.familyId);
+    const family = this.props.families.find(
+      (family) => family.familyId == draft.familyData.familyId,
+    );
     if (!!family) {
       draft = {
         ...draft,
-        previousIndicatorSurveyDataList: family.snapshotList[0].indicatorSurveyDataList,
+        previousIndicatorSurveyDataList:
+          family.snapshotList[0].indicatorSurveyDataList,
         previousIndicatorPriorities: family.snapshotList[0].priorities,
-        previousIndicatorAchievements: family.snapshotList[0].achievements
-      }
+        previousIndicatorAchievements: family.snapshotList[0].achievements,
+      };
     }
 
     return (
       <StickyFooter
         continueLabel={t('general.continue')}
         onContinue={() => this.onContinue(mandatoryPrioritiesCount, draft)}
-        style={{ marginBottom: -20 }}
+        style={{marginBottom: -20}}
         type={this.state.tipIsVisible ? 'tip' : 'button'}
         tipTitle={t('views.lifemap.toComplete')}
         onTipClose={this.onTipClose}
@@ -219,15 +243,16 @@ export class Priorities extends Component {
 
             <Decoration variation="priorities">
               <RoundImage source="stoplight" />
-
             </Decoration>
             <IndicatorsSummary
-            containerStyle = {{ marginTop: 60,marginBottom: 10}}
+              containerStyle={{marginTop: 60, marginBottom: 10}}
               indicators={draft.indicatorSurveyDataList}
             />
             <View style={styles.subheading}>
-              <Text textAlign='left' style={globalStyles.h3}>{t('views.lifemap.toCompleteLifemap')}</Text>
-              <Text  style={globalStyles.h3}>
+              <Text textAlign="left" style={globalStyles.h3}>
+                {t('views.lifemap.toCompleteLifemap')}
+              </Text>
+              <Text style={globalStyles.h3}>
                 {this.getTipDescription(mandatoryPrioritiesCount)}
               </Text>
 
@@ -376,7 +401,7 @@ const styles = StyleSheet.create({
   },
   infoPriorities: {
     fontSize: 19,
-    textAlign:'left'
+    textAlign: 'left',
   },
   arrow: {
     marginLeft: 7,
@@ -394,7 +419,7 @@ const styles = StyleSheet.create({
     height: 180,
     justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ rotate: '25deg' }],
+    transform: [{rotate: '25deg'}],
   },
   dropdown: {
     paddingVertical: 16,
@@ -422,7 +447,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 20,
     paddingRight: 10,
-    marginVertical: 10
+    marginVertical: 10,
   },
   modalTitle: {
     color: colors.grey,
@@ -443,7 +468,7 @@ const mapDispatchToProps = {
   updateDraft,
 };
 
-const mapStateToProps = ({ drafts, families }) => ({ drafts, families });
+const mapStateToProps = ({drafts, families}) => ({drafts, families});
 
 export default withNamespaces()(
   connect(mapStateToProps, mapDispatchToProps)(Priorities),
