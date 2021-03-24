@@ -109,7 +109,7 @@ const createTableRow = (
                                   (a) => a.indicator === indicator.key,
                                 )
                                   ? achievementIcon(
-                                      'position:absolute;max-width:35px;left:35px;border-radius:35px;z-index:15;',
+                                      'position:absolute;width:30px;left:35px;border-radius:35px;z-index:15;',
                                     )
                                   : ''
                               }
@@ -118,7 +118,7 @@ const createTableRow = (
                                   (p) => p.indicator === indicator.key,
                                 )
                                   ? priorityIcon(
-                                      'position:absolute;max-width:35px;border-radius:35px;left:35px;z-index:15;',
+                                      'position:absolute;width:30px; border-radius:45px;left:35px;z-index:15;',
                                     )
                                   : ''
                               }
