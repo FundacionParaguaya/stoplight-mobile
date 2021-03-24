@@ -12,10 +12,6 @@ import { getLocaleForLanguage } from '../../utils'
 
 import i18n from '../../i18n'
 
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
-
 
 class SyncListItem extends Component {
 

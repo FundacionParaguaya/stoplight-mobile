@@ -3,12 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import moment from 'moment'
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
-moment.locale('en')
-
+import moment from 'moment';
 import colors from '../../theme.json'
 import globalStyles from '../../globalStyles'
 import i18n from '../../i18n'
@@ -20,6 +15,10 @@ export class SyncUpToDate extends Component {
     if (typeof s !== 'string') return ''
     const string = s.split('.').join('')
     return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  componentDidMount(){
+    moment.locale(getLocaleForLanguage(this.props.lng));
   }
 
   render() {

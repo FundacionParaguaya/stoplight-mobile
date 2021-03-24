@@ -1,7 +1,3 @@
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
-
 import moment from 'moment'
 
 import i18n from '../../i18n'
@@ -16,7 +12,6 @@ import {
 
 import { getLocaleForLanguage } from '../../utils'
 
-moment.locale('en')
 const MAX_COLS = 5
 
 export const getReportTitle = snapshot => {
@@ -119,6 +114,7 @@ const generatePrioritiesTable = (
   indicatorsArray,
   lng
 ) => {
+  moment.locale(getLocaleForLanguage(lng))
   return `
           <table cellspacing="0" stye="${
             styles.tableWithHeader
@@ -232,6 +228,7 @@ const generateAchievementsTable = (
 /* END ACHIEVEMENTS TABLE */
 
 const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
+  moment.locale(getLocaleForLanguage(lng))
   const indicatorsList = draft.indicatorSurveyDataList
   const achievements = draft.achievements
   const priorities = draft.priorities
