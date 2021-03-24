@@ -16,9 +16,6 @@ export class FamiliesListItem extends Component {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
-  componentDidMount() {
-    moment.locale(getLocaleForLanguage(this.props.lng));
-  }
 
   render() {
     const { family, lng, t } = this.props

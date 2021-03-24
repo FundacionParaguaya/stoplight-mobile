@@ -114,7 +114,6 @@ const generatePrioritiesTable = (
   indicatorsArray,
   lng
 ) => {
-  moment.locale(getLocaleForLanguage(lng))
   return `
           <table cellspacing="0" stye="${
             styles.tableWithHeader
@@ -228,7 +227,6 @@ const generateAchievementsTable = (
 /* END ACHIEVEMENTS TABLE */
 
 const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
-  moment.locale(getLocaleForLanguage(lng))
   const indicatorsList = draft.indicatorSurveyDataList
   const achievements = draft.achievements
   const priorities = draft.priorities
