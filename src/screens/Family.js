@@ -38,9 +38,8 @@ import colors from '../theme.json';
 import OverviewComponent from './lifemap/Overview';
 import {prepareDraftForSubmit} from './utils/helpers';
 import ProjectsPopup from '../components/ProjectsPopup';
-import {isPortrait} from '../responsivenessHelpers';
-import family from '../../assets/images/family.png';
 import ProfileImages from '../components/ProfileImages';
+import { getLocaleForLanguage } from '../utils'
 
 export class Family extends Component {
   unsubscribeNetChange;
@@ -80,6 +79,7 @@ export class Family extends Component {
     this.props.navigation.addListener('focus', () => {
       this.forceUpdate();
     });
+    
     // // monitor for connection changes
     this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
       this.setState({isOnline: state.isConnected});
@@ -98,6 +98,7 @@ export class Family extends Component {
       onPressBack: this.onPressBack,
       withoutCloseButton: true,
     });
+    moment.locale(getLocaleForLanguage(this.props.lng))
   }
 
   sendEmail = async (email) => {
