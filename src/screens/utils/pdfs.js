@@ -77,12 +77,16 @@ const createTableRow = (
                             ${
                               previousIndicatorsList && previousIndicatorsList.length > 0 ?
                               `<div style="position:relative">
+                            
+                            <div style="${
+                              styles.prevBall
+                            }background-color:${prevIndColor};">
                             ${
                               previousIndicatorAchievements.some(
                                 (a) => a.indicator === indicator.key,
                               )
                                 ? achievementIcon(
-                                    'position:absolute;max-width:25px;left:17px;border-radius:35px;',
+                                    'max-width:20px;border-radius:35px;',
 
                                   )
                                 : ''
@@ -92,13 +96,11 @@ const createTableRow = (
                                 (p) => p.indicator === indicator.key,
                               )
                                 ? priorityIcon(
-                                    'position:absolute;max-width:25px;left:17px;border-radius:35px',
+                                    'max-width:20px;border-radius:35px',
                                   )
                                 : ''
                             }
-                            <div style="${
-                              styles.prevBall
-                            }background-color:${prevIndColor};"></div>
+                            </div>
                             </div>`
                             :''}
                               
@@ -109,7 +111,7 @@ const createTableRow = (
                                   (a) => a.indicator === indicator.key,
                                 )
                                   ? achievementIcon(
-                                      'position:absolute;width:30px;left:35px;border-radius:35px;z-index:15;',
+                                      'position:absolute;width:25px;left:35px;border-radius:35px;z-index:15;',
                                     )
                                   : ''
                               }
@@ -118,7 +120,7 @@ const createTableRow = (
                                   (p) => p.indicator === indicator.key,
                                 )
                                   ? priorityIcon(
-                                      'position:absolute;width:30px; border-radius:45px;left:35px;z-index:15;',
+                                      'position:absolute;width:25px; border-radius:45px;left:35px;z-index:15;',
                                     )
                                   : ''
                               }

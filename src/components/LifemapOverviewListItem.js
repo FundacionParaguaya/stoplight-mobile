@@ -1,99 +1,108 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Text, StyleSheet, View } from 'react-native'
-import ListItem from './ListItem'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {Text, StyleSheet, View} from 'react-native';
+import ListItem from './ListItem';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import { withNamespaces } from 'react-i18next';
+import {withNamespaces} from 'react-i18next';
 
-import colors from '../theme.json'
-import globalStyles from '../globalStyles'
+import colors from '../theme.json';
+import globalStyles from '../globalStyles';
 
 class LifemapOverviewListItem extends Component {
-  defineColor = value => {
+  defineColor = (value) => {
     switch (value) {
       case 1:
-        return colors.red
+        return colors.red;
       case 2:
-        return colors.gold
+        return colors.gold;
       case 3:
-        return colors.palegreen
+        return colors.palegreen;
       case 0:
-        return colors.palegrey
+        return colors.palegrey;
 
       default:
-        return colors.palegrey
+        return colors.palegrey;
     }
-  }
+  };
 
-  defineAccessibilityTextForColor = value => {
+  defineAccessibilityTextForColor = (value) => {
     switch (value) {
       case 1:
-        return 'red'
+        return 'red';
       case 2:
-        return 'yellow'
+        return 'yellow';
       case 3:
-        return 'green'
+        return 'green';
       case 0:
-        return 'grey'
+        return 'grey';
 
       default:
-        return 'grey'
+        return 'grey';
     }
-  }
-  
+  };
+
   render() {
-    const { t, pendingPrioritySync, errorPrioritySync } = this.props;
+    const {t, pendingPrioritySync, errorPrioritySync} = this.props;
     const disabledButton = this.props.draftOverview
       ? !this.props.color
-      : (!this.props.achievement && !this.props.priority) || this.props.readOnly
+      : (!this.props.achievement && !this.props.priority) ||
+        this.props.readOnly;
 
     return (
       <ListItem
         onPress={this.props.handleClick}
         style={styles.container}
-        disabled={disabledButton}
-      >
+        disabled={disabledButton}>
         {this.props.isRetake ? (
-          <View style={{ marginRight: -28 }}>
-            {this.props.previousAchievement ? (
-              <Icon
-                name="stars"
-                color={colors.blue}
-                size={20}
-                style={{
-                  ...styles.blueIcon,
-                  width: 20,
-                  height: 20,
-                }}
-              />
-            ) : (
+          <View style={{marginRight: -21}}>
+            <View
+              style={{
+                backgroundColor: this.defineColor(this.props.previousColor),
+                height: 30,
+                width: 30,
+                borderRadius: 30,
+                marginRight: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {this.props.previousAchievement ? (
+                <View style={{
+                  ...styles.blueIconPrev,
+                    //backgroundColor: colors.blue,
+                    color:colors.white,
+                    width: 17,
+                    height: 17,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                  <Icon
+                    name="stars"
+                    color={colors.blue}
+                    size={15}
+                   
+                  />
+                </View>
+              ) : (
                 <View />
               )}
-            {this.props.previousPriority ? (
-              <View
-                style={{
-                  ...styles.blueIcon,
-                  backgroundColor: colors.blue,
-                  width: 20,
-                  height: 20,
-
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <Icon2 name="pin" color={colors.white} size={12} />
-              </View>
-            ) : (
+              {this.props.previousPriority ? (
+                <View
+                  style={{
+                    ...styles.blueIconPrev,
+                    backgroundColor: colors.blue,
+                    borderWidth:2,
+                    width: 18,
+                    height: 18,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon2 name="pin" color={colors.white} size={8} />
+                </View>
+              ) : (
                 <View />
               )}
-
-            <Icon
-              name="brightness-1"
-              color={this.defineColor(this.props.previousColor)}
-              size={30}
-              style={{ marginRight: 15 }}
-            />
+            </View>
           </View>
         ) : null}
         <View>
@@ -106,12 +115,12 @@ class LifemapOverviewListItem extends Component {
                 ...styles.blueIcon,
                 width: 20,
                 height: 20,
-                zIndex: 15
+                zIndex: 15,
               }}
             />
           ) : (
-              <View />
-            )}
+            <View />
+          )}
           {this.props.priority ? (
             <View
               style={{
@@ -121,14 +130,13 @@ class LifemapOverviewListItem extends Component {
                 height: 20,
                 justifyContent: 'center',
                 alignItems: 'center',
-                zIndex: 15
-              }}
-            >
+                zIndex: 15,
+              }}>
               <Icon2 name="pin" color={colors.white} size={12} />
             </View>
           ) : (
-              <View />
-            )}
+            <View />
+          )}
           {pendingPrioritySync || errorPrioritySync ? (
             <View
               style={{
@@ -138,62 +146,63 @@ class LifemapOverviewListItem extends Component {
                 height: 20,
                 justifyContent: 'center',
                 alignItems: 'center',
-                zIndex: 15
-              }}
-            >
+                zIndex: 15,
+              }}>
               <Icon2 name="pin" color={colors.white} size={12} />
             </View>
           ) : (
-              <View />
-            )}
-          <Icon
-            name="brightness-1"
-            color={this.defineColor(this.props.color)}
-            size={40}
-            style={{ marginRight: 15, zIndex: 10 }}
+            <View />
+          )}
+          <View
+            style={[
+              styles.ball,
+              {
+                backgroundColor: this.defineColor(this.props.color),
+              },
+            ]}
           />
         </View>
         <View style={[styles.listItem, styles.borderBottom]}>
           <View>
             <Text
-              style={{ ...globalStyles.p }}
+              style={{...globalStyles.p}}
               accessibilityLabel={this.props.name}
               accessibilityHint={this.defineAccessibilityTextForColor(
-                this.props.color
-              )}
-            >
+                this.props.color,
+              )}>
               {this.props.name}
             </Text>
-            {errorPrioritySync &&
-              <Text style={styles.errorLabel}>{t('views.family.priorityError')}</Text>
-            }
-            {pendingPrioritySync &&
-              <Text style={styles.pendingLabel}>{t('views.family.priorityPending')}</Text>
-            }
+            {errorPrioritySync && (
+              <Text style={styles.errorLabel}>
+                {t('views.family.priorityError')}
+              </Text>
+            )}
+            {pendingPrioritySync && (
+              <Text style={styles.pendingLabel}>
+                {t('views.family.priorityPending')}
+              </Text>
+            )}
           </View>
 
           {!disabledButton ? (
             <Icon name="navigate-next" size={23} color={colors.lightdark} />
           ) : (
-              <View />
-            )}
+            <View />
+          )}
         </View>
       </ListItem>
-    )
+    );
   }
 }
 
 LifemapOverviewListItem.propTypes = {
   name: PropTypes.string.isRequired,
   achievement: PropTypes.bool,
-  priority:PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool   
-  ]),
+  priority: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   color: PropTypes.number.isRequired,
   handleClick: PropTypes.func.isRequired,
-  draftOverview: PropTypes.bool
-}
+  draftOverview: PropTypes.bool,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -201,8 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     paddingHorizontal: 20,
-    maxWidth: '100%'
-
+    maxWidth: '100%',
   },
   listItem: {
     height: 95,
@@ -212,11 +220,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   borderBottom: {
     borderBottomColor: colors.lightgrey,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+  },
+  blueIconPrev: {
+    borderRadius: 17,
+    backgroundColor: colors.white,
+    borderColor: colors.white,
+    borderWidth: 0.5,
+    zIndex: 10,
+  },
+  ball: {
+    marginRight: 15,
+    zIndex: 10,
+    borderWidth: 3,
+    borderColor: 'white',
+    borderStyle: 'solid',
+    height: 50,
+    width: 50,
+    borderRadius: 50,
   },
   blueIcon: {
     position: 'absolute',
@@ -225,7 +250,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderColor: colors.white,
     borderWidth: 2,
-    zIndex: 10
+    zIndex: 10,
   },
   pendingLabel: {
     marginTop: 5,
@@ -234,7 +259,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     borderRadius: 10,
     color: 'white',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   errorLabel: {
     marginTop: 5,
@@ -243,9 +268,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     borderRadius: 10,
     color: 'white',
-    alignSelf: 'flex-start'
-  }
+    alignSelf: 'flex-start',
+  },
+});
 
-})
-
-export default withNamespaces()(LifemapOverviewListItem)
+export default withNamespaces()(LifemapOverviewListItem);
