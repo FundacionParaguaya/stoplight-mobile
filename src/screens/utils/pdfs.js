@@ -315,8 +315,8 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
           achievements,
           priorities,
           previousIndicatorsList.slice(index, index + MAX_COLS),
-          previousIndicatorPriorities.slice(index, index + MAX_COLS),
-          previousIndicatorAchievements.slice(index, index + MAX_COLS)
+          previousIndicatorPriorities,
+          previousIndicatorAchievements
         );
       }
     })

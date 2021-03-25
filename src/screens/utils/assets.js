@@ -9,7 +9,7 @@ export const styles = {
   indicatorName:
     'display:block; text-align: center;height: 65px;padding: 5px; font-size: 12px;',
   ball: 'margin:0 auto;width:60px;border-radius:60px;border: 4px solid white;height: 60px;z-index:12;',
-  smallBall: 'margin:0 auto;width:30px;border-radius:30px;height: 30px;',
+  smallBall: 'margin:0 auto;width:50px;border-radius:50px;height: 50px;',
   prevBall:'margin-right: -10;width:40px;border-radius:50px;height: 40px;z-index:8;display:flex;align-items: center;justify-content: center;',
   indicatorWrapper:
     'position:relative;break-inside: avoid;page-break-inside: avoid;z-index:0;',
