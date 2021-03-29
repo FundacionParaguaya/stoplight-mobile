@@ -3,17 +3,11 @@ import PropTypes from 'prop-types'
 import { Text, StyleSheet, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import moment from 'moment'
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
 import colors from '../theme.json'
 import globalStyles from '../globalStyles'
 import ListItem from './ListItem'
 import { withNamespaces } from 'react-i18next'
 import { getLocaleForLanguage } from '../utils'
-
-
-moment.locale('en')
 
 export class FamiliesListItem extends Component {
   capitalize = s => {
@@ -21,6 +15,7 @@ export class FamiliesListItem extends Component {
     const string = s.split('.').join('')
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
+
 
   render() {
     const { family, lng, t } = this.props

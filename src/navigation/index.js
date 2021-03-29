@@ -10,6 +10,15 @@ import DrawerNavigator from './DrawerNavigator';
 import LoginScreen from '../screens/Login';
 import LoadingScreen from '../screens/Loading';
 import {setDimensions} from '../redux/actions';
+import { getLocaleForLanguage } from '../utils'
+
+import 'moment/locale/es'
+import 'moment/locale/pt'
+import 'moment/locale/fr'
+
+
+import moment from 'moment'
+
 const Drawer = createDrawerNavigator();
 // import RootStack from './stacks'
 const Stack = createStackNavigator();
@@ -28,6 +37,7 @@ export class NavWrapper extends Component {
   componentDidMount() {
     this.dimensionChange();
     Dimensions.addEventListener('change', this.dimensionChange);
+    moment.locale(getLocaleForLanguage(this.props.lng))
     this.setState({loading: false});
   }
 
@@ -91,11 +101,12 @@ NavWrapper.propTypes = {
   setDimensions: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({user, sync, dimensions, hydration}) => ({
+const mapStateToProps = ({user, sync, dimensions, hydration,lng}) => ({
   user,
   sync,
   dimensions,
   hydration,
+  lng
 });
 
 const mapDispatchToProps = {

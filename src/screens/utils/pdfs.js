@@ -1,7 +1,3 @@
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
-
 import moment from 'moment'
 
 import i18n from '../../i18n'
@@ -16,7 +12,6 @@ import {
 
 import { getLocaleForLanguage } from '../../utils'
 
-moment.locale('en')
 const MAX_COLS = 5
 
 export const getReportTitle = snapshot => {
