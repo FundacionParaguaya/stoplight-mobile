@@ -89,6 +89,7 @@
     "projects": "Projects",
     "project": "Project",
     "createLifemap": "Begin Stoplight survey",
+    "noSurveys":"There are no available surveys",
     "latestDrafts": "Latest Life Maps",
     "noDrafts": "No drafts to display",
     "termsConditions": "Terms & Conditions",

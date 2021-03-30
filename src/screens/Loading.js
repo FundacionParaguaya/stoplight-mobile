@@ -173,7 +173,8 @@ export class Loading extends Component {
     if (
       !this.props.downloadMapsAndImages.downloadImages ||
       (!!this.props.sync.images.total &&
-        this.props.sync.images.total === this.props.sync.images.synced)
+        this.props.sync.images.total === this.props.sync.images.synced) ||
+        this.props.surveys .length == 0
     ) {
       this.handleAudioCaching();
       //this.props.navigation.navigate('DrawerStack');
@@ -190,7 +191,7 @@ export class Loading extends Component {
   handleAudioCaching = () => {
     if (!this.props.downloadMapsAndImages.downloadAudios ||
       ((this.props.sync.audios.total != null) &&
-        this.props.sync.audios.total === this.props.sync.audios.synced)
+        this.props.sync.audios.total === this.props.sync.audios.synced) || this.props.surveys.length == 0
     ) {
       this.props.navigation.navigate('DrawerStack')
     } else if (!this.state.cachingAudios) {
@@ -341,7 +342,7 @@ export class Loading extends Component {
     }
 
     if (
-      this.props.surveys.length &&
+     // this.props.surveys.length &&
       !this.props.offline.outbox.lenght &&
       this.state.mapsDownloaded &&
       this.state.maps.every((map) => map.status === 100) &&
@@ -353,7 +354,7 @@ export class Loading extends Component {
     }
 
     if (
-      this.props.surveys.length &&
+    //  this.props.surveys.length &&
       !this.props.offline.outbox.lenght &&
       this.state.mapsDownloaded &&
       this.state.maps.every((map) => map.status === 100) &&

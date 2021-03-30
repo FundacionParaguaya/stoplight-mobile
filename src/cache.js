@@ -134,16 +134,22 @@ export const cacheAudios = async audioURLS => {
 
 export const initImageCaching = async () => {
   const surveys = getSurveys()
-  const imageURLs = await filterURLsFromSurveys(surveys)
-  cacheImages(imageURLs)
+  if(surveys.length) {
+    const imageURLs = await filterURLsFromSurveys(surveys)
+    cacheImages(imageURLs)
+  }
+  
 }
 
 
 
 export const initAudioCaching = async () => {
   const surveys = getSurveys();
-  const audioURLS = await filterAudioURLsFromSurveys(surveys);
-  cacheAudios(audioURLS);
+  if(surveys.length) {
+    const audioURLS = await filterAudioURLsFromSurveys(surveys);
+    cacheAudios(audioURLS);
+  }
+
 
 
 }
