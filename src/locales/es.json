@@ -89,6 +89,7 @@
     "dashboard": "Stoplight Mobile",
     "home": "Inicio",
     "createLifemap": "Toma tu Semáforo",
+    "noSurveys":"No se encuentran encuestas disponibles",
     "latestDrafts": "Últimas instantáneas",
     "noDrafts": "No hay borradores para mostrar",
     "termsConditions": "Términos & condiciones",

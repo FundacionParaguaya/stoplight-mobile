@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {
+  View,
+  Text,
   StyleSheet,
   ScrollView,
   FlatList,
@@ -63,6 +65,7 @@ export class Surveys extends Component {
   };
 
   render() {
+    const {t} = this.props;
     return (
       <ScrollView
         ref={this.acessibleComponent}
@@ -82,10 +85,16 @@ export class Surveys extends Component {
         <Decoration variation="lifemap">
           <RoundImage source="surveys" />
         </Decoration>
+
         <FlatList
           style={styles.list}
           data={this.props.surveys}
           keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={globalStyles.h3}>{t('views.noSurveys')}</Text>
+            </View>
+          }
           renderItem={({item}) => (
             <LifemapListItem
               name={item.title}
@@ -103,6 +112,11 @@ const styles = StyleSheet.create({
     borderTopColor: colors.lightgrey,
     borderTopWidth: 1,
     paddingBottom: 60,
+  },
+  emptyContainer: {
+    marginTop: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
