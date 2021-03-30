@@ -1,6 +1,4 @@
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
+
 
 import moment from 'moment'
 import PropTypes from 'prop-types'
@@ -14,7 +12,8 @@ import i18n from '../i18n'
 import colors from '../theme.json'
 import ListItem from './ListItem'
 
-moment.locale('en')
+
+
 
 class DraftListItem extends Component {
   getColor = status => {

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import 'moment/locale/es';
 import 'moment/locale/pt';
 import 'moment/locale/fr';
 
 import moment from 'moment';
+=======
+import moment from 'moment'
+>>>>>>> e1ef581fdebc21a2d5138de67508362ec8045b9a
 
 import i18n from '../../i18n';
 import colors from '../../theme.json';
@@ -16,8 +20,12 @@ import {
 
 import {getLocaleForLanguage} from '../../utils';
 
+<<<<<<< HEAD
 moment.locale('en');
 const MAX_COLS = 5;
+=======
+const MAX_COLS = 5
+>>>>>>> e1ef581fdebc21a2d5138de67508362ec8045b9a
 
 export const getReportTitle = (snapshot) => {
   const firstParticipant = snapshot.familyData.familyMembersList.find(
