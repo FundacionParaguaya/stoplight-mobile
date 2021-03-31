@@ -98,7 +98,6 @@ export class Family extends Component {
       onPressBack: this.onPressBack,
       withoutCloseButton: true,
     });
-    moment.locale(getLocaleForLanguage(this.props.lng))
   }
 
   sendEmail = async (email) => {
@@ -566,7 +565,7 @@ export class Family extends Component {
                       color: '#000000',
                     }}>{`${t('views.family.lifeMapCreatedOn')}: \n${moment(
                     this.familyLifemap.created,
-                  ).format('MMM DD, YYYY')}`}</Text>
+                  ).locale(getLocaleForLanguage(this.props.lng)).format('MMM DD, YYYY')}`}</Text>
                   <RoundImage source="lifemap" />
 
                   {this.props.route.params.familyLifemap.status &&
@@ -609,7 +608,7 @@ export class Family extends Component {
                 <Text
                   style={{...styles.lifemapCreated, ...globalStyles.h3}}>{`${t(
                   'views.family.created',
-                )}:  ${moment(this.familyLifemap.created).format(
+                )}:  ${moment(this.familyLifemap.created).locale(getLocaleForLanguage(this.props.lng)).format(
                   'MMM DD, YYYY',
                 )}`}</Text>
                 {this.project ? (
