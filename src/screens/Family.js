@@ -314,6 +314,7 @@ export class Family extends Component {
         ? familyData.familyMembersList[0].phoneNumber
         : false;
 
+
     return (
       <ScrollView
         style={globalStyles.background}
@@ -471,14 +472,16 @@ export class Family extends Component {
                   {t('views.familyMembers').toUpperCase()}
                 </Text>
                 <FlatList
-                  data={familyData.familyMembersList}
+                  data={
+                    familyData.familyMembersList.sort((a,b) => 
+                    b.firstParticipant - a.firstParticipant)}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <FamilyListItem
                       icon
                       text={`${item.firstName} ${!index ? item.lastName : ''}`}
                       handleClick={() => {
-                        if (!index) {
+                        if (item.firstParticipant) {
                           navigation.navigate('FamilyParticipant', {
                             survey: this.survey,
                             family: this.familyLifemap,
