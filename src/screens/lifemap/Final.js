@@ -158,13 +158,16 @@ export class Final extends Component {
     try {
       const fileName = getReportTitle(this.draft);
       const filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.pdf`;
+      const existLogo = await RNFetchBlob.fs.exists(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`);
       const pdfOptions = buildPDFOptions(
         this.draft,
         this.survey,
         this.props.lng || 'en',
-        this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`)
+        this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`),
+        existLogo
       );
       const pdf = await RNHTMLtoPDF.convert(pdfOptions);
+      
       RNFetchBlob.fs
         .cp(pdf.filePath, filePath)
         .then(() =>
@@ -187,11 +190,15 @@ export class Final extends Component {
   }
 
   async print() {
+    const existLogo = await RNFetchBlob.fs.exists(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`);
     this.setState({ printing: true });
     const options = buildPrintOptions(
       this.draft,
       this.survey,
       this.props.lng || 'en',
+      this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`),
+      existLogo
+      
     );
     try {
       await RNPrint.print(options);
