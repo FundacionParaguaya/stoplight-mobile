@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
+  Platform,
   Text,
   View,
 } from 'react-native';
@@ -55,6 +56,8 @@ export class Final extends Component {
     whatsappNotification: false,
   };
 
+  
+
   onPressBack = () => {
     //If sign support, the go to sign view
     if (this.survey.surveyConfig.signSupport) {
@@ -97,6 +100,10 @@ export class Final extends Component {
     this.props.updateDraft(updatedDraft);
     this.prepareDraftForSubmit();
   };
+
+  getProperSourceForOS(source) {
+    return Platform.OS === 'android' ? 'file://' + source : '' + source
+  }
 
   prepareDraftForSubmit() {
     if (this.state.loading) {
@@ -151,12 +158,16 @@ export class Final extends Component {
     try {
       const fileName = getReportTitle(this.draft);
       const filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.pdf`;
+      const existLogo = await RNFetchBlob.fs.exists(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`);
       const pdfOptions = buildPDFOptions(
         this.draft,
         this.survey,
         this.props.lng || 'en',
+        this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`),
+        existLogo
       );
       const pdf = await RNHTMLtoPDF.convert(pdfOptions);
+      
       RNFetchBlob.fs
         .cp(pdf.filePath, filePath)
         .then(() =>
@@ -179,11 +190,15 @@ export class Final extends Component {
   }
 
   async print() {
+    const existLogo = await RNFetchBlob.fs.exists(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`);
     this.setState({ printing: true });
     const options = buildPrintOptions(
       this.draft,
       this.survey,
       this.props.lng || 'en',
+      this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`),
+      existLogo
+      
     );
     try {
       await RNPrint.print(options);
