@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
+  Platform,
   Text,
   View,
 } from 'react-native';
@@ -55,6 +56,8 @@ export class Final extends Component {
     whatsappNotification: false,
   };
 
+  
+
   onPressBack = () => {
     //If sign support, the go to sign view
     if (this.survey.surveyConfig.signSupport) {
@@ -97,6 +100,10 @@ export class Final extends Component {
     this.props.updateDraft(updatedDraft);
     this.prepareDraftForSubmit();
   };
+
+  getProperSourceForOS(source) {
+    return Platform.OS === 'android' ? 'file://' + source : '' + source
+  }
 
   prepareDraftForSubmit() {
     if (this.state.loading) {
@@ -155,6 +162,7 @@ export class Final extends Component {
         this.draft,
         this.survey,
         this.props.lng || 'en',
+        this.getProperSourceForOS(`${RNFetchBlob.fs.dirs.DocumentDir}/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`)
       );
       const pdf = await RNHTMLtoPDF.convert(pdfOptions);
       RNFetchBlob.fs

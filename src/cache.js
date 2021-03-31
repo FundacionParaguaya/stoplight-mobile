@@ -4,15 +4,19 @@ import { setSyncedItemTotal, setSyncedItemAmount } from './redux/actions'
 let dirs = RNFetchBlob.fs.dirs
 
 export const getSurveys = () => store.getState().surveys
+export const getUser = () => store.getState().user
 let isOnline = true
 
 export const filterURLsFromSurveys = surveys => {
   const imageURLs = []
+  const logoOrgUrl = getUser().organization.logoUrl;
   surveys.forEach(survey =>
     survey.surveyStoplightQuestions.forEach(question =>
       question.stoplightColors.forEach(color => imageURLs.push(color.url))
     )
   )
+  logoOrgUrl ?  imageURLs.push(logoOrgUrl): null;
+ 
   // set total amount of images to be cached
   store.dispatch(setSyncedItemTotal('images', imageURLs.length))
   return imageURLs
@@ -132,11 +136,14 @@ export const cacheAudios = async audioURLS => {
 }
 
 
+
 export const initImageCaching = async () => {
   const surveys = getSurveys()
   const imageURLs = await filterURLsFromSurveys(surveys)
   cacheImages(imageURLs)
 }
+
+
 
 
 

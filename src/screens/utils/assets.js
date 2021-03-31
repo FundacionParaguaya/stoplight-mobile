@@ -1,10 +1,11 @@
 export const styles = {
   wrapper:
-    'display:flex;align-content: space-between;border-bottom: 1px solid rgb(221,221,221);margin-bottom: 20px;',
+    'display:flex;align-items: center;justify-items:space-between; border-bottom: 1px solid rgb(221,221,221);margin-bottom: 20px;, width:100%',
   wrapperHeader: 'display:flex;align-content: space-between;',
-  title: 'width:50%;height:40px;font-size:20px;',
+  sideWrapper:'display:flex;align-items: center; justify-content:space-between;width:50%',
+  title: 'width:50%;font-size:20px;',
   date:
-    'width: 50%;height:40px;margin-left: auto;text-align:right;font-size:18px;',
+    'width: 50%;margin-left: auto;text-align:right;font-size:18px;',
   table: 'table-layout:fixed;width:100%; border-spacing:0 2rem;',
   indicatorName:
     'display:block; text-align: center;height: 65px;padding: 5px; font-size: 12px;',

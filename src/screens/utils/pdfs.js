@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment';
 
 import i18n from '../../i18n';
 import colors from '../../theme.json';
@@ -12,7 +12,7 @@ import {
 
 import {getLocaleForLanguage} from '../../utils';
 
-const MAX_COLS = 5
+const MAX_COLS = 5;
 
 export const getReportTitle = (snapshot) => {
   const firstParticipant = snapshot.familyData.familyMembersList.find(
@@ -49,7 +49,7 @@ const createTableRow = (
   priorities,
   previousIndicatorsList,
   previousIndicatorPriorities,
-  previousIndicatorAchievements
+  previousIndicatorAchievements,
 ) => {
   console.log('previusInd', previousIndicatorsList);
   return `<tr style="${styles.tableRow}">
@@ -64,14 +64,17 @@ const createTableRow = (
                     (prevInd) => prevInd.key == indicator.key,
                   );
 
-                  const prevIndColor = previousIndicator ?  getColor(previousIndicator.value):null ;
+                  const prevIndColor = previousIndicator
+                    ? getColor(previousIndicator.value)
+                    : null;
                   return `<td style="width: ${100 / MAX_COLS}%;${
                     styles.tableData
                   }">
                               <div style="${styles.indicatorBallContainer}">
                             ${
-                              previousIndicatorsList && previousIndicatorsList.length > 0 ?
-                              `<div style="position:relative">
+                              previousIndicatorsList &&
+                              previousIndicatorsList.length > 0
+                                ? `<div style="position:relative">
                             
                             <div style="${
                               styles.prevBall
@@ -82,7 +85,6 @@ const createTableRow = (
                               )
                                 ? achievementIcon(
                                     'max-width:20px;border-radius:35px;',
-
                                   )
                                 : ''
                             }
@@ -97,7 +99,8 @@ const createTableRow = (
                             }
                             </div>
                             </div>`
-                            :''}
+                                : ''
+                            }
                               
 
                               <div style="position:relative">
@@ -134,16 +137,19 @@ const createTableRow = (
             </tr>`;
 };
 
-
 /* PRIORITIES TABLE */
-const generateTableHeaderForPriorities = (dateCreated) => `
+const generateTableHeaderForPriorities = (dateCreated, logo) => `
   <div style="${styles.wrapperHeader};page-break-before: always;">
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myPriorities',
 )} ${priorityIconWithoutStyles}</h2>
+<div style="${styles.sideWrapper}">
               <h2 style="${styles.date};margin-top:40px;">${dateCreated.format(
   'MMMM D, YYYY',
 )}</h2>
+${logo ? `<img src=${logo} width="100"  />` : ''}
+  
+</div>
             </div>
   <tr>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.status')}</th>
@@ -166,12 +172,13 @@ const generatePrioritiesTable = (
   survey,
   indicatorsArray,
   lng,
+  logo
 ) => {
   return `
           <table cellspacing="0" stye="${
             styles.tableWithHeader
           };page-break-after: always;">
-            ${generateTableHeaderForPriorities(dateCreated)}
+            ${generateTableHeaderForPriorities(dateCreated, logo)}
             ${priorities
               .map((priority, index) => {
                 const stripe = index % 2 !== 0;
@@ -215,14 +222,18 @@ const generatePrioritiesTable = (
 /* END PRIORITIES TABLE */
 
 /* ACHIEVEMENTS TABLE */
-const generateTableHeaderForAchievements = (dateCreated) => `
+const generateTableHeaderForAchievements = (dateCreated, logo) => `
   <div style="${styles.wrapperHeader};page-break-before: always;">
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myAchievements',
 )} ${achievementIconWithoutStyles}</h2>
-              <h2 style="${styles.date};margin-top:40px;">${dateCreated.format(
+<div style="${styles.sideWrapper}">
+              <h2 style="${styles.date};">${dateCreated.format(
   'MMMM D, YYYY',
 )}</h2>
+${logo ? `<img src=${logo} width="100"  />` : ''}
+  
+</div>
             </div>
   <tr>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.status')}</th>
@@ -240,12 +251,13 @@ const generateAchievementsTable = (
   dateCreated,
   survey,
   indicatorsArray,
+  logo
 ) => {
   return `
               <table cellspacing="0" stye="${
                 styles.tableWithHeader
               };page-break-after: always;">
-                ${generateTableHeaderForAchievements(dateCreated)}
+                ${generateTableHeaderForAchievements(dateCreated, logo)}
                 ${achievements
                   .map((achievement, index) => {
                     const stripe = index % 2 !== 0;
@@ -281,13 +293,14 @@ const generateAchievementsTable = (
 };
 /* END ACHIEVEMENTS TABLE */
 
-const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
+const generateLifeMapHtmlTemplate = (draft, survey, lng, logo) => {
   const indicatorsList = draft.indicatorSurveyDataList;
   const achievements = draft.achievements;
   const priorities = draft.priorities;
   const previousIndicatorsList = draft.previousIndicatorSurveyDataList || [];
   const previousIndicatorPriorities = draft.previousIndicatorPriorities || [];
-  const previousIndicatorAchievements = draft.previousIndicatorAchievements || [];
+  const previousIndicatorAchievements =
+    draft.previousIndicatorAchievements || [];
   let dateCreated = draft && draft.created && moment.utc(draft.created);
   dateCreated.locale(getLocaleForLanguage(lng));
 
@@ -297,9 +310,14 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
             <h2 style="${styles.title}">${reportTitle}, ${i18n.t(
     'views.lifemap.lifeMap',
   )}</h2>
+  <div style="${styles.sideWrapper}">
             <h2 style="${styles.date}">${dateCreated.format(
     'MMMM D, YYYY',
   )}</h2>
+  ${logo ? `<img src=${logo} width="100"  />` : ''}
+  
+  </div>
+  
           </div>
           <table style="${styles.table}">${indicatorsList
     .map((indicator, index) => {
@@ -311,7 +329,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
           priorities,
           previousIndicatorsList.slice(index, index + MAX_COLS),
           previousIndicatorPriorities,
-          previousIndicatorAchievements
+          previousIndicatorAchievements,
         );
       }
     })
@@ -325,6 +343,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
                 survey,
                 indicatorsList,
                 lng,
+                logo
               )
             : ''
         }
@@ -336,21 +355,22 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng) => {
                 survey,
                 indicatorsList,
                 lng,
+                logo
               )
             : ''
         }
         `;
 };
 
-export const buildPrintOptions = (draft, survey, lng) => {
+export const buildPrintOptions = (draft, survey, lng, logo) => {
   return {
-    html: generateLifeMapHtmlTemplate(draft, survey, lng),
+    html: generateLifeMapHtmlTemplate(draft, survey, lng.logo),
   };
 };
 
-export const buildPDFOptions = (draft, survey, lng) => {
+export const buildPDFOptions = (draft, survey, lng, logo) => {
   return {
-    html: generateLifeMapHtmlTemplate(draft, survey, lng),
+    html: generateLifeMapHtmlTemplate(draft, survey, lng, logo),
     fileName: 'lifemap.pdf',
     directory: 'docs',
     padding: 0,
