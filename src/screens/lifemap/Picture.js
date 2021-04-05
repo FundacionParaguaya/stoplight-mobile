@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
+import React, {Component} from 'react';
+import {withNamespaces} from 'react-i18next';
 import {
   Image,
   PermissionsAndroid,
@@ -8,25 +8,26 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  View,
 } from 'react-native';
 import CompressImage from 'react-native-compress-image';
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob';
 import Button from '../../components/Button';
 import Decoration from '../../components/decoration/Decoration';
 import RoundImage from '../../components/RoundImage';
 import StickyFooter from '../../components/StickyFooter';
 import globalStyles from '../../globalStyles';
-import { updateDraft } from '../../redux/actions';
+import {updateDraft} from '../../redux/actions';
 import colors from '../../theme.json';
-import { calculateProgressBar } from '../utils/helpers';
-
+import {calculateProgressBar} from '../utils/helpers';
+import {isTablet} from '../../responsivenessHelpers';
+import DeviceInfo from 'react-native-device-info';
 
 let options = {
-  storageOptions: { skipBackup: true, path: 'images', multiple: true },
+  storageOptions: {skipBackup: true, path: 'images', multiple: true},
 };
 export class Picture extends Component {
   state = {
@@ -59,7 +60,7 @@ export class Picture extends Component {
       updatedDraft.progress.screen = 'Picture';
       this.props.updateDraft(updatedDraft);
     }
-    this.setState({ pictures: this.draft.pictures });
+    this.setState({pictures: this.draft.pictures});
 
     this.props.navigation.setParams({
       onPressBack: this.onPressBack,
@@ -80,27 +81,28 @@ export class Picture extends Component {
           type: response.type,
           content: response.uri,
           size: response.fileSize,
-        }
+        };
 
         this.setState({
-          pictures: [
-            ...this.state.pictures,
-            processedImage,
-          ],
+          pictures: [...this.state.pictures, processedImage],
         });
 
-        await CompressImage.createCompressedImage(response.path, RNFetchBlob.fs.dirs.DownloadDir).then((compressedImage) => {
-
-          processedImage = {
-            name: compressedImage.name,
-            type: response.type,
-            content: compressedImage.uri,
-            compressedSize: compressedImage.size,
-            size: response.fileSize
-          }
-        }).catch((err) => {
-          console.log("Error:", err)
-        });
+        await CompressImage.createCompressedImage(
+          response.path,
+          RNFetchBlob.fs.dirs.DownloadDir,
+        )
+          .then((compressedImage) => {
+            processedImage = {
+              name: compressedImage.name,
+              type: response.type,
+              content: compressedImage.uri,
+              compressedSize: compressedImage.size,
+              size: response.fileSize,
+            };
+          })
+          .catch((err) => {
+            console.log('Error:', err);
+          });
 
         let updatedDraft = this.draft;
         let newArr = updatedDraft.pictures;
@@ -144,11 +146,11 @@ export class Picture extends Component {
     console.log('Draft beforee checking: ', this.draft);
 
     this.props.updateDraft(updatedDraft);
-    this.setState({ pictures: newState });
+    this.setState({pictures: newState});
 
     console.log('checking file after removing: ', newState);
     if (this.checkMaxLimit([...newState])) {
-      this.setState({ displayError: false });
+      this.setState({displayError: false});
       console.log('show error');
     }
   };
@@ -157,7 +159,7 @@ export class Picture extends Component {
     let survey = this.props.route.params.survey;
     console.log(this.draft);
     if (!this.checkMaxLimit([...this.state.pictures])) {
-      this.setState({ displayError: true });
+      this.setState({displayError: true});
       console.log('show error');
     } else if (survey.surveyConfig.signSupport) {
       this.props.navigation.replace('Signin', {
@@ -194,31 +196,32 @@ export class Picture extends Component {
               type: response.type,
               content: response.uri,
               size: response.fileSize,
-            }
+            };
 
             this.setState({
-              pictures: [
-                ...this.state.pictures,
-                processedImage,
-              ],
+              pictures: [...this.state.pictures, processedImage],
             });
 
-            await CompressImage.createCompressedImage(response.path, RNFetchBlob.fs.dirs.DownloadDir).then((compressedImage) => {
-
-              processedImage = {
-                name: compressedImage.name,
-                type: response.type,
-                content: compressedImage.uri,
-                compressedSize: compressedImage.size,
-                size: response.fileSize
-              }
-            }).catch((err) => {
-              console.log("Error:", err)
-            });
+            await CompressImage.createCompressedImage(
+              response.path,
+              RNFetchBlob.fs.dirs.DownloadDir,
+            )
+              .then((compressedImage) => {
+                processedImage = {
+                  name: compressedImage.name,
+                  type: response.type,
+                  content: compressedImage.uri,
+                  compressedSize: compressedImage.size,
+                  size: response.fileSize,
+                };
+              })
+              .catch((err) => {
+                console.log('Error:', err);
+              });
 
             let updatedDraft = this.draft;
             let newArr = updatedDraft.pictures;
-            console.log(processedImage)
+            console.log(processedImage);
             newArr.push(processedImage);
             updatedDraft.pictures = newArr;
             this.props.updateDraft(updatedDraft);
@@ -233,17 +236,21 @@ export class Picture extends Component {
   };
 
   render() {
-    const { t } = this.props;
+    const {t, dimensions} = this.props;
+    const isTablet = DeviceInfo.isTablet();
     return (
       <StickyFooter
         onContinue={() => this.onContinue(this.draft)}
         continueLabel={t('general.continue')}
-        progress={
-          calculateProgressBar({ readOnly: this.readOnly, draft: this.draft, currentScreen: "Picture", skipQuestions: true })
-        }>
+        progress={calculateProgressBar({
+          readOnly: this.readOnly,
+          draft: this.draft,
+          currentScreen: 'Picture',
+          skipQuestions: true,
+        })}>
         <View
           style={{
-            ...globalStyles.container,
+            ...globalStyles.containerNoPadding,
             padding: 0,
           }}>
           <View style={styles.container}>
@@ -252,22 +259,34 @@ export class Picture extends Component {
               contentContainerStyle={styles.contentContainer}>
               {this.state.pictures.length ? (
                 <View style={styles.mainImageContent}>
-                  {this.state.pictures.map((e) => (
+                  {this.state.pictures.map((e, index) => (
                     <View
                       key={e.name}
-                      style={styles.imageContainer}
+                      style={[
+                        styles.imageContainer,
+                        index !== this.state.pictures.length - 1
+                          ? {
+                              borderBottomColor: colors.lightgrey,
+                              borderBottomWidth: 1,
+                            }
+                          : null,
+                      ]}
                       onPress={() => this.removePicture(e)}>
-                      <Image
-                        key={e.content}
-                        style={styles.picture}
-                        source={{ uri: e.content }}
-                      />
-                      <Text style={styles.centerText}>
-                        {t('views.pictures.uploadedPicture')}
-                      </Text>
-                      {/* <View style={styles.descriptionContainer}>
-                    <Text style={styles.descriptionText}>{e.fileName}</Text>
-                  </View> */}
+                      <View style={styles.imageTitleContainer}>
+                        <Image
+                          key={e.content}
+                          style={[
+                            styles.picture,
+                            isTablet
+                              ? {height: 150, width: 150}
+                              : {height: 110, width: 110},
+                          ]}
+                          source={{uri: e.content}}
+                        />
+                        <Text style={[globalStyles.h2Bold, styles.titleStyle]}>
+                          {t('views.pictures.uploadedPicture')}
+                        </Text>
+                      </View>
                       <View style={styles.closeImageContainer}>
                         <Icon
                           style={styles.closeIconStyle}
@@ -280,13 +299,12 @@ export class Picture extends Component {
                   ))}
                 </View>
               ) : (
-                  <View style={styles.ballsAndImageContainer}>
-                    <Decoration variation="lifemap">
-                      <RoundImage source="picture" />
-                    </Decoration>
-                  </View>
-                )}
-
+                <View style={styles.ballsAndImageContainer}>
+                  <Decoration variation="lifemap">
+                    <RoundImage source="picture" />
+                  </Decoration>
+                </View>
+              )}
               <View style={styles.buttonContainer}>
                 <Button
                   id="camera_alt"
@@ -339,12 +357,17 @@ const styles = StyleSheet.create({
 
     fontSize: 25,
   },
-  centerText: { fontSize: 20 },
-
+  titleStyle: {
+    paddingLeft: 15,
+    paddingTop: 15,
+  },
   mainImageContent: {
     marginRight: 25,
     marginLeft: 25,
     marginBottom: 20,
+  },
+  imageTitleContainer: {
+    flexDirection: 'row',
   },
   ballsAndImageContainer: {
     marginTop: 25,
@@ -367,11 +390,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
   },
-  button: { width: '49%', alignSelf: 'center', marginTop: 20 },
+  button: {
+    fontSize: 18,
+    paddingHorizontal: 35,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
   buttonContainer: {
     marginBottom: 30,
+
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -382,7 +412,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     backgroundColor: 'transparent',
     marginTop: 35,
-    fontSize: 17,
+    fontSize: 18,
   },
 });
 
@@ -391,13 +421,14 @@ Picture.propTypes = {
   updateDraft: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   drafts: PropTypes.array.isRequired,
+  dimensions: PropTypes.object,
 };
 
 const mapDispatchToProps = {
   updateDraft,
 };
 
-const mapStateToProps = ({ drafts }) => ({ drafts });
+const mapStateToProps = ({drafts, dimensions}) => ({drafts, dimensions});
 
 export default withNamespaces()(
   connect(mapStateToProps, mapDispatchToProps)(Picture),
