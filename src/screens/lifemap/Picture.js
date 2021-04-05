@@ -23,6 +23,8 @@ import globalStyles from '../../globalStyles';
 import {updateDraft} from '../../redux/actions';
 import colors from '../../theme.json';
 import {calculateProgressBar} from '../utils/helpers';
+import {isTablet} from '../../responsivenessHelpers';
+import DeviceInfo from 'react-native-device-info';
 
 let options = {
   storageOptions: {skipBackup: true, path: 'images', multiple: true},
@@ -234,7 +236,8 @@ export class Picture extends Component {
   };
 
   render() {
-    const {t} = this.props;
+    const {t, dimensions} = this.props;
+    const isTablet = DeviceInfo.isTablet();
     return (
       <StickyFooter
         onContinue={() => this.onContinue(this.draft)}
@@ -259,20 +262,28 @@ export class Picture extends Component {
                   {this.state.pictures.map((e, index) => (
                     <View
                       key={e.name}
-                      style={[styles.imageContainer,(index !== this.state.pictures.length - 1) 
-                        ? { 
-                          borderBottomColor:colors.lightgrey,
-                          borderBottomWidth:1
-                        }
-                        : null]}
+                      style={[
+                        styles.imageContainer,
+                        index !== this.state.pictures.length - 1
+                          ? {
+                              borderBottomColor: colors.lightgrey,
+                              borderBottomWidth: 1,
+                            }
+                          : null,
+                      ]}
                       onPress={() => this.removePicture(e)}>
                       <View style={styles.imageTitleContainer}>
                         <Image
                           key={e.content}
-                          style={styles.picture}
+                          style={[
+                            styles.picture,
+                            isTablet
+                              ? {height: 150, width: 150}
+                              : {height: 110, width: 110},
+                          ]}
                           source={{uri: e.content}}
                         />
-                        <Text style={[globalStyles.h3Bold,styles.titleStyle]}>
+                        <Text style={[globalStyles.h2Bold, styles.titleStyle]}>
                           {t('views.pictures.uploadedPicture')}
                         </Text>
                       </View>
@@ -346,9 +357,9 @@ const styles = StyleSheet.create({
 
     fontSize: 25,
   },
-  titleStyle: { 
-    paddingLeft: 15, 
-    paddingTop: 15
+  titleStyle: {
+    paddingLeft: 15,
+    paddingTop: 15,
   },
   mainImageContent: {
     marginRight: 25,
@@ -379,11 +390,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop:15,
+    paddingTop: 15,
     paddingBottom: 15,
-    
   },
-  button: {  fontSize:18,  paddingHorizontal:35, alignSelf: 'center', marginTop: 20},
+  button: {
+    fontSize: 18,
+    paddingHorizontal: 35,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
   buttonContainer: {
     marginBottom: 30,
 
@@ -397,7 +412,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     backgroundColor: 'transparent',
     marginTop: 35,
-    fontSize: 18
+    fontSize: 18,
   },
 });
 
@@ -406,13 +421,14 @@ Picture.propTypes = {
   updateDraft: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   drafts: PropTypes.array.isRequired,
+  dimensions: PropTypes.object,
 };
 
 const mapDispatchToProps = {
   updateDraft,
 };
 
-const mapStateToProps = ({drafts}) => ({drafts});
+const mapStateToProps = ({drafts, dimensions}) => ({drafts, dimensions});
 
 export default withNamespaces()(
   connect(mapStateToProps, mapDispatchToProps)(Picture),
