@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   greenText: {
     color: colors.palegreen,
-    fontSize: 14
+    fontSize: 18
   },
   whiteText: {
     color: colors.white,

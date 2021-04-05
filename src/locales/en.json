@@ -74,7 +74,7 @@
       "takeAPicture": "Take a picture",
       "orUploadFromGalery": "Or upload from gallery",
       "uploadingImage": "Uploading image...",
-      "uploadedPicture": "Uploaded picture",
+      "uploadedPicture": "Image uploaded",
       "limit": "*You reached the 10MB limit! Please delete a picture to continue."
     },
     "sign": {
