@@ -118,10 +118,11 @@ export class Dashboard extends Component {
     }
   };
   navigateToSynced = (item) => {
+    const { firstName, lastName } = item.familyData.familyMembersList[0]
     this.props.navigation.navigate('Families', {
       screen: 'Family',
       params: {
-        familyName: item.familyData.familyMembersList[0].firstName,
+        familyName: `${firstName} ${lastName}`,
         familyLifemap: item,
         draftId: item.draftId,
         isDraft: !item,
