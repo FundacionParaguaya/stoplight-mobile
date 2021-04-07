@@ -313,7 +313,6 @@ export class Family extends Component {
         ? familyData.familyMembersList[0].phoneNumber
         : false;
 
-
     return (
       <ScrollView
         style={globalStyles.background}
@@ -563,8 +562,8 @@ export class Family extends Component {
                       marginBottom: 10,
                       textAlign: 'center',
                       color: '#000000',
-                    }}>{`${t('views.family.lifeMapCreatedOn')}: \n${moment(
-                    this.familyLifemap.created,
+                    }}>{`${t('views.family.lifeMapCreatedOn')}: \n${moment.unix(
+                    this.familyLifemap.createdAt,
                   ).locale(getLocaleForLanguage(this.props.lng)).format('MMM DD, YYYY')}`}</Text>
                   <RoundImage source="lifemap" />
 
@@ -608,7 +607,7 @@ export class Family extends Component {
                 <Text
                   style={{...styles.lifemapCreated, ...globalStyles.h3}}>{`${t(
                   'views.family.created',
-                )}:  ${moment(this.familyLifemap.created).locale(getLocaleForLanguage(this.props.lng)).format(
+                )}:  ${moment.unix(this.familyLifemap.createdAt).locale(getLocaleForLanguage(this.props.lng)).format(
                   'MMM DD, YYYY',
                 )}`}</Text>
                 {this.project ? (
