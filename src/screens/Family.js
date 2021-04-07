@@ -39,7 +39,7 @@ import OverviewComponent from './lifemap/Overview';
 import {prepareDraftForSubmit} from './utils/helpers';
 import ProjectsPopup from '../components/ProjectsPopup';
 import ProfileImages from '../components/ProfileImages';
-import { getLocaleForLanguage } from '../utils'
+import {getLocaleForLanguage} from '../utils';
 
 export class Family extends Component {
   unsubscribeNetChange;
@@ -79,7 +79,7 @@ export class Family extends Component {
     this.props.navigation.addListener('focus', () => {
       this.forceUpdate();
     });
-    
+
     // // monitor for connection changes
     this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
       this.setState({isOnline: state.isConnected});
@@ -313,6 +313,16 @@ export class Family extends Component {
         ? familyData.familyMembersList[0].phoneNumber
         : false;
 
+    const createdAt = this.familyLifemap.createdAt
+      ? moment
+          .unix(this.familyLifemap.createdAt)
+          .locale(getLocaleForLanguage(this.props.lng))
+          .format('MMM DD, YYYY')
+      : moment(this.familyLifemap.created)
+          .locale(getLocaleForLanguage(this.props.lng))
+          .format('MMM DD, YYYY');
+
+
     return (
       <ScrollView
         style={globalStyles.background}
@@ -470,9 +480,9 @@ export class Family extends Component {
                   {t('views.familyMembers').toUpperCase()}
                 </Text>
                 <FlatList
-                  data={
-                    familyData.familyMembersList.sort((a,b) => 
-                    b.firstParticipant - a.firstParticipant)}
+                  data={familyData.familyMembersList.sort(
+                    (a, b) => b.firstParticipant - a.firstParticipant,
+                  )}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <FamilyListItem
@@ -517,7 +527,7 @@ export class Family extends Component {
                 {!this.isDraft
                   ? this.socioEconomicCategories.map((item, index) => (
                       <FamilyListItem
-                        key={item}
+                        key={index}
                         text={item}
                         handleClick={() => {
                           navigation.navigate('SocioEconomicQuestion', {
@@ -562,9 +572,10 @@ export class Family extends Component {
                       marginBottom: 10,
                       textAlign: 'center',
                       color: '#000000',
-                    }}>{`${t('views.family.lifeMapCreatedOn')}: \n${moment.unix(
-                    this.familyLifemap.createdAt,
-                  ).locale(getLocaleForLanguage(this.props.lng)).format('MMM DD, YYYY')}`}</Text>
+                    }}>{`${t('views.family.lifeMapCreatedOn')}: \n${moment
+                    .unix(this.familyLifemap.createdAt)
+                    .locale(getLocaleForLanguage(this.props.lng))
+                    .format('MMM DD, YYYY')}`}</Text>
                   <RoundImage source="lifemap" />
 
                   {this.props.route.params.familyLifemap.status &&
@@ -607,9 +618,7 @@ export class Family extends Component {
                 <Text
                   style={{...styles.lifemapCreated, ...globalStyles.h3}}>{`${t(
                   'views.family.created',
-                )}:  ${moment.unix(this.familyLifemap.createdAt).locale(getLocaleForLanguage(this.props.lng)).format(
-                  'MMM DD, YYYY',
-                )}`}</Text>
+                )}:  ${createdAt}`}</Text>
                 {this.project ? (
                   <View style={styles.section}>
                     <View style={styles.content}>
