@@ -149,7 +149,7 @@ const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => `
 </div>
 
             
-${existLogo ? `<img src=${logo}  alt=" " width="140"  />` : ''}
+${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
   
 
             </div>
@@ -238,7 +238,7 @@ const generateTableHeaderForAchievements = (dateCreated, logo, existLogo) => `
 
 
               
-${existLogo ? `<img src=${logo}  alt=" " width="140"  />` : ''}
+${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
   
             </div>
   <tr>
@@ -324,7 +324,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
   )}</h2>
   </div>
 
-  ${existLogo ? `<img src=${logo}  alt=" " width="140"  />` : ''}
+  ${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
   
           </div>
           <table style="${styles.table}">${indicatorsList
