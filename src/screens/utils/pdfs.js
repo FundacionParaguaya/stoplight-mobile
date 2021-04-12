@@ -143,16 +143,10 @@ const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => `
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myPriorities',
 )} ${priorityIconWithoutStyles}</h2>
-<h2 style="${styles.date};">${dateCreated.format(
-  'MMMM D, YYYY',
-)}</h2>
-</div>
-
-            
-${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
-  
-
-            </div>
+<h2 style="${styles.date};">${dateCreated.format('MMMM D, YYYY')}</h2>
+</div>         
+  ${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
+  </div>
   <tr>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.status')}</th>
     <th style="${styles.tHeader};text-align:left;">${i18n.t(
@@ -175,10 +169,10 @@ const generatePrioritiesTable = (
   indicatorsArray,
   lng,
   logo,
-  existLogo
+  existLogo,
 ) => {
   return `
-          <table cellspacing="0" stye="${
+          <table cellspacing="0" style="${
             styles.tableWithHeader
           };page-break-after: always;">
             ${generateTableHeaderForPriorities(dateCreated, logo, existLogo)}
@@ -231,14 +225,12 @@ const generateTableHeaderForAchievements = (dateCreated, logo, existLogo) => `
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myAchievements',
 )} ${achievementIconWithoutStyles}</h2>
-<h2 style="${styles.date};">${dateCreated.format(
-  'MMMM D, YYYY',
-)}</h2>
+<h2 style="${styles.date};">${dateCreated.format('MMMM D, YYYY')}</h2>
 </div>
 
 
               
-${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
+${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
   
             </div>
   <tr>
@@ -259,13 +251,17 @@ const generateAchievementsTable = (
   indicatorsArray,
   lng,
   logo,
-  existLogo
+  existLogo,
 ) => {
   return `
-              <table cellspacing="0" stye="${
+              <table cellspacing="0" style="${
                 styles.tableWithHeader
               };page-break-after: always;">
-                ${generateTableHeaderForAchievements(dateCreated, logo, existLogo)}
+                ${generateTableHeaderForAchievements(
+                  dateCreated,
+                  logo,
+                  existLogo,
+                )}
                 ${achievements
                   .map((achievement, index) => {
                     const stripe = index % 2 !== 0;
@@ -319,12 +315,10 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
             <h2 style="${styles.title}">${reportTitle}, ${i18n.t(
     'views.lifemap.lifeMap',
   )}</h2>
-  <h2 style="${styles.date}">${dateCreated.format(
-    'MMMM D, YYYY',
-  )}</h2>
+  <h2 style="${styles.date}">${dateCreated.format('MMMM D, YYYY')}</h2>
   </div>
 
-  ${existLogo ? `<img src=${logo}  alt=" " width="75"  />` : ''}
+  ${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
   
           </div>
           <table style="${styles.table}">${indicatorsList
@@ -352,7 +346,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
                 indicatorsList,
                 lng,
                 logo,
-                existLogo
+                existLogo,
               )
             : ''
         }
@@ -365,16 +359,16 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
                 indicatorsList,
                 lng,
                 logo,
-                existLogo
+                existLogo,
               )
             : ''
         }
         `;
 };
 
-export const buildPrintOptions = (draft, survey, lng,logo, existLogo) => {
+export const buildPrintOptions = (draft, survey, lng, logo, existLogo) => {
   return {
-    html: generateLifeMapHtmlTemplate(draft, survey, lng,logo, existLogo),
+    html: generateLifeMapHtmlTemplate(draft, survey, lng, logo, existLogo),
   };
 };
 
