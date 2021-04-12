@@ -1,8 +1,9 @@
 export const styles = {
   wrapper:
-    'display:flex;align-items: center;justify-content:space-between; border-bottom: 1px solid rgb(221,221,221);margin-bottom: 20px;, width:100%',
-  wrapperHeader: 'display:flex;justify-content: space-between;',
+    'display:flex;align-items: center;justify-content:space-between; border-bottom: 1px solid rgb(221,221,221);margin-bottom: 20px;',
+  wrapperHeader: 'display:flex;justify-content: space-between;align-items: center;',
   sideWrapper:'display:flex;align-items: center; justify-content:space-between;width:50%',
+  logoImage:'max-width:75px;',
   titleWrapper:'display:block',
   title: 'width:100%; font-size:20px;',
   date:
