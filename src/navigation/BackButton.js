@@ -14,7 +14,7 @@ class BackButton extends Component {
   };
 
   handlePress = () => {
-    const {params} = this.props.route;
+    const {params, name} = this.props.route;
     const {navigation} = this.props;
     if (!params) {
       navigation.goBack();
@@ -26,7 +26,7 @@ class BackButton extends Component {
       params.deleteDraftOnExit && params.deleteDraftOnExit;
     const survey = params.survey && params.survey;
     const firstLifeMapScreen =
-      params.routeName && params.routeName === 'FamilyParticipant';
+      name && name === 'FamilyParticipant';
 
     // open the exit modal with the params it needs
     if (readOnly) {

@@ -153,7 +153,7 @@ export class Dashboard extends Component {
   };
 
   navigateToCreateLifemap = () => {
-    this.props.navigation.navigate('Surveys');
+    this.props.navigation.navigate('Surveys',{screen:'Surveys'});
   };
 
   toggleFilterModal = () => {
