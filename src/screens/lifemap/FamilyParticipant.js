@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from 'react-redux';
 import uuid from 'uuid/v1';
 
-
 import Decoration from '../../components/decoration/Decoration';
 import DateInput from '../../components/form/DateInput';
 import Select from '../../components/form/Select';
@@ -16,7 +15,7 @@ import StickyFooter from '../../components/StickyFooter';
 import globalStyles from '../../globalStyles';
 import {createDraft, updateDraft} from '../../redux/actions';
 import colors from '../../theme.json';
-import {generateNewDemoDraft,calculateProgressBar} from '../utils/helpers';
+import {generateNewDemoDraft, calculateProgressBar} from '../utils/helpers';
 import CallingCodes from './CallingCodes';
 import {getTotalScreens, setValidationSchema} from './helpers';
 
@@ -29,20 +28,21 @@ export class FamilyParticipant extends Component {
     text: `${element.country} - (+${element.value})`,
   }));
 
-  initialPhoneCode = this.survey ? this.phoneCodes.find(
-    (e) => e.code == (this.survey.surveyConfig.surveyLocation.country)
-  ).value:null;
+  initialPhoneCode = this.survey
+    ? this.phoneCodes.find(
+        (e) => e.code == this.survey.surveyConfig.surveyLocation.country,
+      ).value
+    : null;
 
   requiredFields =
-    (this.survey && this.survey.surveyConfig &&
+    (this.survey &&
+      this.survey.surveyConfig &&
       this.survey.surveyConfig.requiredFields &&
       this.survey.surveyConfig.requiredFields.primaryParticipant) ||
     null;
   familyMembersArray = []; // the options array for members count dropdown
   readOnlyDraft = this.props.route.params.family || [];
   projectId = this.props.route.params.project || null;
-
- 
 
   state = {
     errors: [],
@@ -54,21 +54,31 @@ export class FamilyParticipant extends Component {
 
   setError = (error, field) => {
     const {errors} = this.state;
+    let amountErrors = [];
 
     if (error && !errors.includes(field)) {
-      this.setState((previousState) => {
-        return {
-          ...previousState,
-          errors: [...previousState.errors, field],
-        };
-      });
+      this.setState(
+        (previousState) => {
+          amountErrors = [...previousState.errors, field];
+          return {
+            ...previousState,
+            errors: amountErrors,
+          };
+        },
+        () => this.onErrorStateChange(error || amountErrors.length),
+      );
     } else if (!error) {
-      this.setState({
-        errors: errors.filter((item) => item !== field),
-      });
+      this.setState(
+        (previousState) => {
+          amountErrors = errors.filter((item) => item !== field);
+          return {
+            ...previousState,
+            errors: amountErrors,
+          };
+        },
+        () => this.onErrorStateChange(error || amountErrors.length),
+      );
     }
-
-    this.onErrorStateChange(error || this.state.errors.length);
   };
 
   validateForm = () => {
@@ -194,8 +204,9 @@ export class FamilyParticipant extends Component {
       const phoneCode = draft.familyData.familyMembersList[0].phoneCode
         ? draft.familyData.familyMembersList[0].phoneCode
         : this.initialPhoneCode;
-      const contryCode = this.phoneCodes ?  this.phoneCodes.find((x) => x.value === phoneCode)
-        .code : null;
+      const contryCode = this.phoneCodes
+        ? this.phoneCodes.find((x) => x.value === phoneCode).code
+        : null;
       const international = '+' + phoneCode + ' ' + value;
       const phone = phoneUtil.parse(international, contryCode);
       let validation = phoneUtil.isValidNumber(phone);
@@ -234,6 +245,8 @@ export class FamilyParticipant extends Component {
 
     // for this particular screen we need to detect if form is valid
     // in order to delete the draft on exiting
+
+    console.log('hasError', hasErrors);
     navigation.setParams({
       deleteDraftOnExit: hasErrors,
     });
@@ -241,7 +254,10 @@ export class FamilyParticipant extends Component {
 
   createNewDraft() {
     // check if current survey is demo
-    const isDemo = this.survey && this.survey.surveyConfig && this.survey.surveyConfig.isDemo;
+    const isDemo =
+      this.survey &&
+      this.survey.surveyConfig &&
+      this.survey.surveyConfig.isDemo;
     // generate a new draft id
     const draftId = uuid();
 
@@ -249,7 +265,7 @@ export class FamilyParticipant extends Component {
     this.draftId = draftId;
     this.props.navigation.setParams({draftId});
 
-    console.log('create new', this.projectId)
+    console.log('create new', this.projectId);
 
     const regularDraft = {
       draftId,
@@ -275,7 +291,8 @@ export class FamilyParticipant extends Component {
           {
             firstParticipant: true,
             socioEconomicAnswers: [],
-            birthCountry: this.survey && this.survey.surveyConfig.surveyLocation.country,
+            birthCountry:
+              this.survey && this.survey.surveyConfig.surveyLocation.country,
             phoneCode: this.initialPhoneCode,
           },
         ],
@@ -284,7 +301,9 @@ export class FamilyParticipant extends Component {
 
     // create the new draft in redux
     this.props.createDraft(
-      isDemo ? generateNewDemoDraft(this.survey, draftId, this.projectId) : regularDraft,
+      isDemo
+        ? generateNewDemoDraft(this.survey, draftId, this.projectId)
+        : regularDraft,
     );
   }
 
@@ -296,6 +315,7 @@ export class FamilyParticipant extends Component {
     // else just set the draft progress
 
     if (!this.draftId && !this.readOnly) {
+      console.log('Draft creado');
       this.createNewDraft();
     } else if (
       !this.readOnly &&
@@ -316,7 +336,6 @@ export class FamilyParticipant extends Component {
   }
 
   render() {
-   
     const {t} = this.props;
     const {showErrors} = this.state;
     const draft = !this.readOnly ? this.getDraft() : this.readOnlyDraft;
@@ -326,7 +345,11 @@ export class FamilyParticipant extends Component {
         onContinue={this.validateForm}
         continueLabel={t('general.continue')}
         readOnly={!!this.readOnly}
-        progress={calculateProgressBar({readOnly:this.readOnly,draft:draft,screen:1})}>
+        progress={calculateProgressBar({
+          readOnly: this.readOnly,
+          draft: draft,
+          screen: 1,
+        })}>
         <Decoration variation="primaryParticipant">
           <Icon name="face" color={colors.grey} size={61} style={styles.icon} />
           {!this.readOnly ? (
@@ -368,10 +391,14 @@ export class FamilyParticipant extends Component {
         <Select
           id="gender"
           label={t('views.family.gender')}
-          placeholder={!!this.readOnly ? t('views.family.gender'): t('views.family.selectGender')}
+          placeholder={
+            !!this.readOnly
+              ? t('views.family.gender')
+              : t('views.family.selectGender')
+          }
           initialValue={participant.gender || ''}
           required={setValidationSchema(this.requiredFields, 'gender', true)}
-          options={this.survey ? this.survey.surveyConfig.gender:[]}
+          options={this.survey ? this.survey.surveyConfig.gender : []}
           onChange={this.updateParticipant}
           showErrors={showErrors}
           setError={(isError) => this.setError(isError, 'gender')}
@@ -396,7 +423,7 @@ export class FamilyParticipant extends Component {
           id="documentType"
           label={t('views.family.documentType')}
           placeholder={t('views.family.documentType')}
-          options={this.survey ? this.survey.surveyConfig.documentType:[]}
+          options={this.survey ? this.survey.surveyConfig.documentType : []}
           initialValue={participant.documentType || ''}
           required={setValidationSchema(
             this.requiredFields,
@@ -438,8 +465,12 @@ export class FamilyParticipant extends Component {
             'birthCountry',
             true,
           )}
-          defaultCountry={ this.survey ? this.survey.surveyConfig.surveyLocation.country:'PY'}
-          countriesOnTop={ this.survey ? this.survey.surveyConfig.countryOfBirth: null}
+          defaultCountry={
+            this.survey ? this.survey.surveyConfig.surveyLocation.country : 'PY'
+          }
+          countriesOnTop={
+            this.survey ? this.survey.surveyConfig.countryOfBirth : null
+          }
           readOnly={!!this.readOnly}
           onChange={this.updateParticipant}
           showErrors={showErrors}
