@@ -246,7 +246,6 @@ export class FamilyParticipant extends Component {
     // for this particular screen we need to detect if form is valid
     // in order to delete the draft on exiting
 
-    console.log('hasError', hasErrors);
     navigation.setParams({
       deleteDraftOnExit: hasErrors,
     });
@@ -265,7 +264,6 @@ export class FamilyParticipant extends Component {
     this.draftId = draftId;
     this.props.navigation.setParams({draftId});
 
-    console.log('create new', this.projectId);
 
     const regularDraft = {
       draftId,
@@ -315,7 +313,6 @@ export class FamilyParticipant extends Component {
     // else just set the draft progress
 
     if (!this.draftId && !this.readOnly) {
-      console.log('Draft creado');
       this.createNewDraft();
     } else if (
       !this.readOnly &&
