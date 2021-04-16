@@ -313,6 +313,13 @@ export class Family extends Component {
         ? familyData.familyMembersList[0].phoneNumber
         : false;
 
+    const sortedFamilyMembers =
+      familyData &&
+      familyData.familyMembersList &&
+      familyData.familyMembersList
+        .slice()
+        .sort((a, b) => b.firstParticipant - a.firstParticipant);
+
     const createdAt = this.familyLifemap.createdAt
       ? moment
           .unix(this.familyLifemap.createdAt)
@@ -321,7 +328,6 @@ export class Family extends Component {
       : moment(this.familyLifemap.created)
           .locale(getLocaleForLanguage(this.props.lng))
           .format('MMM DD, YYYY');
-
 
     return (
       <ScrollView
@@ -480,9 +486,7 @@ export class Family extends Component {
                   {t('views.familyMembers').toUpperCase()}
                 </Text>
                 <FlatList
-                  data={familyData.familyMembersList.sort(
-                    (a, b) => b.firstParticipant - a.firstParticipant,
-                  )}
+                  data={sortedFamilyMembers}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <FamilyListItem
@@ -786,7 +790,6 @@ const mapStateToProps = ({
   surveys,
   env,
   user,
-  drafts,
   syncStatus,
   projects,
   priorities,
@@ -794,7 +797,6 @@ const mapStateToProps = ({
   surveys,
   env,
   user,
-  drafts,
   syncStatus,
   projects,
   priorities,

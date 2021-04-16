@@ -238,6 +238,7 @@ export class Dashboard extends Component {
 
 
   componentDidMount() {
+
     if (!this.props.user.token) {
       this.props.navigation.navigate('Login');
     } else {
@@ -573,7 +574,7 @@ export class Dashboard extends Component {
                       ? this.state.filteredDrafts.slice().reverse()
                       : drafts.slice().reverse()
                   }
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={(item, index) => item.draftId}
                   renderItem={({ item }) => (
                     <DraftListItem
                       item={item}
