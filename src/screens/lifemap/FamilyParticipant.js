@@ -98,7 +98,7 @@ export class FamilyParticipant extends Component {
     const phoneNumberIsInvalid = !this.phoneValidation(
       firstParticipantPhoneNumber,
     );
-    console.log('firstEmail', firstParticipantEmail);
+
     const emailIsInvalid = !this.emailValidation(firstParticipantEmail);
 
     if (phoneNumberIsInvalid) {
@@ -108,8 +108,6 @@ export class FamilyParticipant extends Component {
     if (emailIsInvalid) {
       this.setError(true, 'email');
     }
-    console.log('eV', emailIsInvalid);
-    console.log('pV', phoneNumberIsInvalid);
 
     if (phoneNumberIsInvalid || emailIsInvalid || this.state.errors.length) {
       this.setState({
@@ -131,28 +129,6 @@ export class FamilyParticipant extends Component {
     const {draftId} = draft;
     const {familyMembersList} = draft.familyData;
 
-    /*     const firstParticipantPhoneNumber =
-      familyMembersList &&
-      familyMembersList.find((el) => el.firstParticipant).phoneNumber;
-    const firstParticipantEmail =
-      familyMembersList &&
-      familyMembersList.find((el) => el.firstParticipant).email;
-
-    const phoneNumberIsInvalid = !this.phoneValidation(
-      firstParticipantPhoneNumber,
-    );
-    const emailIsInvalid = !this.emailValidation(firstParticipantEmail);
-
-    if (phoneNumberIsInvalid) {
-      this.setError(true, 'phoneNumber');
-      return;
-    }
-
-    if (emailIsInvalid) {
-      this.setError(true, 'email');
-      return;
-    }
- */
     if (familyMembersList.length > 1) {
       // if multiple family members navigate to members screens
       this.props.navigation.replace('FamilyMembersNames', {
@@ -268,7 +244,6 @@ export class FamilyParticipant extends Component {
   };
 
   emailValidation = (value) => {
-    console.log('emailV', value);
     const hasError = !validator.isEmail(value) && !validator.isEmpty(value);
 
     if (hasError) {
