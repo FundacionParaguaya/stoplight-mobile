@@ -192,7 +192,9 @@ DraftListItem.propTypes = {
 const styles = StyleSheet.create({
   listItem: {
     height: 115,
-    padding: 25,
+    paddingVertical: 25,
+    paddingLeft:25,
+    paddingRight:10,
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
@@ -219,15 +221,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonsContainer: {
+
     height: 115,
     paddingBottom: 12,
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-end',
+    minWidth:30
   },
   iconContainer: {
-    paddingLeft: 25,
+    paddingLeft: 20,
     paddingRight: 15,
     paddingVertical: 40,
   },
