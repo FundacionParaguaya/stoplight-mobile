@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Keyboard} from 'react-native';
 import {Input} from 'react-native-elements';
 
 import validator from 'validator';
@@ -20,6 +20,12 @@ class TextInput extends Component {
   };
 
   onFocus = () => {
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        this.onEndEditing();
+      },
+    );
     this.setState({
       status: 'active',
     });
@@ -35,7 +41,7 @@ class TextInput extends Component {
     this.props.validation || this.props.required
       ? this.validateInput(text.trim())
       : '';
-
+    this.keyboardDidHideListener.remove();
     // this is the only place we change the actual redux state
     // this.props.onChangeText(this.state.text.trim(), this.props.id)
   };

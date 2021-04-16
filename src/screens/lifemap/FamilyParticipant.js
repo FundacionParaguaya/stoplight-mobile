@@ -18,6 +18,7 @@ import colors from '../../theme.json';
 import {generateNewDemoDraft, calculateProgressBar} from '../utils/helpers';
 import CallingCodes from './CallingCodes';
 import {getTotalScreens, setValidationSchema} from './helpers';
+import validator from 'validator';
 
 export class FamilyParticipant extends Component {
   survey = this.props.route.params.survey;
@@ -82,7 +83,33 @@ export class FamilyParticipant extends Component {
   };
 
   validateForm = () => {
-    if (this.state.errors.length) {
+    const draft = this.getDraft();
+
+    const {familyMembersList} = draft.familyData;
+
+    const firstParticipantPhoneNumber =
+      familyMembersList &&
+      familyMembersList.find((el) => el.firstParticipant).phoneNumber;
+    const firstParticipantEmail =
+      (familyMembersList &&
+        familyMembersList.find((el) => el.firstParticipant).email) ||
+      '';
+
+    const phoneNumberIsInvalid = !this.phoneValidation(
+      firstParticipantPhoneNumber,
+    );
+
+    const emailIsInvalid = !this.emailValidation(firstParticipantEmail);
+
+    if (phoneNumberIsInvalid) {
+      this.setError(true, 'phoneNumber');
+    }
+
+    if (emailIsInvalid) {
+      this.setError(true, 'email');
+    }
+
+    if (phoneNumberIsInvalid || emailIsInvalid || this.state.errors.length) {
       this.setState({
         showErrors: true,
       });
@@ -216,6 +243,15 @@ export class FamilyParticipant extends Component {
     }
   };
 
+  emailValidation = (value) => {
+    const hasError = !validator.isEmail(value) && !validator.isEmpty(value);
+
+    if (hasError) {
+      return false;
+    }
+    return true;
+  };
+
   updateParticipant = (value, field) => {
     if (this.readOnly || (!value && field == 'phoneCode')) {
       return;
@@ -263,7 +299,6 @@ export class FamilyParticipant extends Component {
     // and update the component and navigation with it
     this.draftId = draftId;
     this.props.navigation.setParams({draftId});
-
 
     const regularDraft = {
       draftId,
