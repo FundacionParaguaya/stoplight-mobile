@@ -153,7 +153,8 @@ class DraftListItem extends Component {
               name="file-upload"
               size={25}
               style={styles.iconContainer}
-              onPress={() => handleSyncDraft(item)}
+              onPress={() => handleSyncDraft(item) 
+              }
               disabled={disableSyncDraft}
               color={disableSyncDraft ? colors.lightgrey : colors.lightdark}
             />
