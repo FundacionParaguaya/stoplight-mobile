@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
+import React, {Component} from 'react';
+import {withNamespaces} from 'react-i18next';
 import {
   FlatList,
   Image,
@@ -14,8 +14,8 @@ import {
   findNodeHandle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { AndroidBackHandler } from 'react-navigation-backhandler';
-import { connect } from 'react-redux';
+import {AndroidBackHandler} from 'react-navigation-backhandler';
+import {connect} from 'react-redux';
 
 import arrow from '../../assets/images/selectArrow.png';
 import BottomModal from '../components/BottomModal';
@@ -25,7 +25,7 @@ import DraftListItem from '../components/DraftListItem';
 import FilterListItem from '../components/FilterListItem';
 import NotificationModal from '../components/NotificationModal';
 import RoundImage from '../components/RoundImage';
-import { supported_API_version, url } from '../config';
+import {supported_API_version, url} from '../config';
 import globalStyles from '../globalStyles';
 import {
   markVersionCheked,
@@ -36,14 +36,11 @@ import {
   manualSubmitDraftCommit,
   submitPictures,
   manualSubmitPicturesCommit,
-  updateSnapshotImages
+  updateSnapshotImages,
 } from '../redux/actions';
 import colors from '../theme.json';
 import DownloadPopup from '../screens/modals/DownloadModal';
-import { prepareDraftForSubmit } from './utils/helpers';
-
-
-
+import {prepareDraftForSubmit} from './utils/helpers';
 
 const TestFairy = require('react-native-testfairy');
 // get env
@@ -62,12 +59,12 @@ export class Dashboard extends Component {
     green: 0,
     yellow: 0,
     red: 0,
-    isOnline: false
+    isOnline: false,
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
   navigateToPendingSync = (draft) => {
-    const { firstName, lastName } = draft.familyData.familyMembersList[0];
+    const {firstName, lastName} = draft.familyData.familyMembersList[0];
 
     this.props.navigation.navigate('Families', {
       screen: 'Family',
@@ -80,7 +77,7 @@ export class Dashboard extends Component {
           (survey) => survey.id === draft.surveyId,
         ),
         activeTab: 'Details',
-        fromDashboard: true
+        fromDashboard: true,
       },
     });
   };
@@ -118,7 +115,7 @@ export class Dashboard extends Component {
     }
   };
   navigateToSynced = (item) => {
-    const { firstName, lastName } = item.familyData.familyMembersList[0]
+    const {firstName, lastName} = item.familyData.familyMembersList[0];
     this.props.navigation.navigate('Families', {
       screen: 'Family',
       params: {
@@ -129,7 +126,7 @@ export class Dashboard extends Component {
         survey: this.props.surveys.find((survey) =>
           item ? survey.id === item.surveyId : null,
         ),
-        fromDashboard: true
+        fromDashboard: true,
       },
     });
   };
@@ -153,7 +150,7 @@ export class Dashboard extends Component {
   };
 
   navigateToCreateLifemap = () => {
-    this.props.navigation.navigate('Surveys',{screen:'Surveys'});
+    this.props.navigation.navigate('Surveys', {screen: 'Surveys'});
   };
 
   toggleFilterModal = () => {
@@ -190,7 +187,7 @@ export class Dashboard extends Component {
   };
 
   checkAPIVersion() {
-    const { timestamp } = this.props.apiVersion;
+    const {timestamp} = this.props.apiVersion;
 
     // when this was last checked
     if (
@@ -233,10 +230,6 @@ export class Dashboard extends Component {
     }
   }
 
-
-
-
-
   componentDidMount() {
 
     if (!this.props.user.token) {
@@ -248,9 +241,9 @@ export class Dashboard extends Component {
 
       // // monitor for connection changes
       this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
-        this.setState({ isOnline: state.isConnected });
+        this.setState({isOnline: state.isConnected});
       });
-      
+
       this.checkAPIVersion();
 
       if (UIManager.AccessibilityEventTypes) {
@@ -265,99 +258,115 @@ export class Dashboard extends Component {
   }
 
   handleSyncDraft = (item) => {
-
     try {
       let draft = JSON.parse(JSON.stringify(item));
 
-      this.setState({ selectedDraftId: draft.draftId })
+      this.setState({selectedDraftId: draft.draftId});
 
       let survey = this.props.surveys.find((survey) =>
         item ? survey.id === item.surveyId : null,
       );
+      try {
+        draft = prepareDraftForSubmit(draft, survey);
 
-      draft = prepareDraftForSubmit(draft, survey);
-      delete draft.snapshotId;
-      let hasPictures = !!draft.pictures && draft.pictures.length > 0;
-      draft = {
-        ...draft,
-        pictures: []
-      };
+        delete draft.snapshotId;
+        let hasPictures = !!draft.pictures && draft.pictures.length > 0;
+        draft = {
+          ...draft,
+          pictures: [],
+        };
 
-      this.props.manualSubmitDraft(
-        url[this.props.env],
-        this.props.user.token,
-        draft,
-        hasPictures
-      ).then((data) => {
-
-        if (data.status !== 200) {
-          throw new Error();
-        } else return data.json();
-      }).
-        then((data) => {
-          this.setState({ selectedDraftId: null })
-          this.props.manualSubmitDraftCommit(draft.draftId, data.data.addSnapshot.snapshotId, hasPictures);
-        }).catch(error => {
-          console.log(error)
-          this.props.submitDraftError(draft.draftId);
-          this.setState({ selectedDraftId: null })
-        })
-
-    } catch (error) {
-      console.log(error)
-      this.props.submitDraftError(draft.draftId);
-      this.setState({ selectedDraftId: null })
-    }
-
-  }
-
-  handleSyncImages = (item) => {
-
-    this.setState({ selectedImagesId: item.draftId })
-
-    try {
-
-      this.props.submitPictures(
-        url[this.props.env],
-        this.props.user.token,
-        item.pictures).
-        then((data) => {
-          return data.json()
-        }).
-        then(pictures => {
-          this.props.updateSnapshotImages(
+        this.props
+          .manualSubmitDraft(
             url[this.props.env],
             this.props.user.token,
-            item.snapshotId,
-            pictures).
-            then((data) => {
+            draft,
+            hasPictures,
+          )
+          .then((data) => {
+            if (data.status !== 200) {
+              throw new Error();
+            } else return data.json();
+          })
+          .then((data) => {
+            this.setState({selectedDraftId: null});
+            this.props.manualSubmitDraftCommit(
+              draft.draftId,
+              data.data.addSnapshot.snapshotId,
+              hasPictures,
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+            this.props.submitDraftError(draft.draftId);
+            this.setState({selectedDraftId: null});
+          });
+      } catch (error) {
+        console.log(error);
+        this.props.submitDraftError(draft.draftId);
+        this.setState({selectedDraftId: null});
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  handleSyncImages = (item) => {
+    this.setState({selectedImagesId: item.draftId});
+
+    try {
+      this.props
+        .submitPictures(
+          url[this.props.env],
+          this.props.user.token,
+          item.pictures,
+        )
+        .then((data) => {
+          return data.json();
+        })
+        .then((pictures) => {
+          this.props
+            .updateSnapshotImages(
+              url[this.props.env],
+              this.props.user.token,
+              item.snapshotId,
+              pictures,
+            )
+            .then((data) => {
               if (data.status !== 200) {
                 this.props.submitImagesError(item.draftId);
 
                 throw new Error();
               } else return data.json();
-            }).
-            then((data) => {
-              this.setState({ selectedImagesId: null })
-              this.props.manualSubmitPicturesCommit(item.draftId);
-            }).catch(error => {
-              this.props.submitImagesError(item.draftId);
-              this.setState({ selectedImagesId: null })
             })
-        })
-
+            .then((data) => {
+              this.setState({selectedImagesId: null});
+              this.props.manualSubmitPicturesCommit(item.draftId);
+            })
+            .catch((error) => {
+              this.props.submitImagesError(item.draftId);
+              this.setState({selectedImagesId: null});
+            });
+        });
     } catch (error) {
       this.props.submitImagesError(item.draftId);
-      this.setState({ selectedImagesId: null })
+      this.setState({selectedImagesId: null});
     }
-
-  }
+  };
 
   render() {
-    const { t, families, drafts } = this.props;
-    const { filterModalIsOpen, openDownloadModal, selectedDraftId, selectedImagesId } = this.state;
+    const {t, families, drafts} = this.props;
+    const {
+      filterModalIsOpen,
+      openDownloadModal,
+      selectedDraftId,
+      selectedImagesId,
+    } = this.state;
     const allDraftFamilies = drafts.filter(
-      (d) => d.status === 'Draft' || d.status === 'Pending sync' || d.status === 'Pending images',
+      (d) =>
+        d.status === 'Draft' ||
+        d.status === 'Pending sync' ||
+        d.status === 'Pending images',
     ).length;
 
     const countFamilies = families.length + allDraftFamilies;
@@ -390,7 +399,7 @@ export class Dashboard extends Component {
                       : globalStyles.containerNoPadding
                   }>
                   <View
-                    style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Decoration>
                       <RoundImage source="family" />
                     </Decoration>
@@ -402,7 +411,7 @@ export class Dashboard extends Component {
                       />
                     </View>
                     {this.props.user.role !== 'ROLE_SURVEY_TAKER' && (
-                      <Text style={{ ...styles.familiesCount }}>
+                      <Text style={{...styles.familiesCount}}>
                         {countFamilies} {t('views.families')}
                       </Text>
                     )}
@@ -475,23 +484,21 @@ export class Dashboard extends Component {
                                 {this.state.renderLable}
                               </Text>
                             ) : (
-                                <Text style={globalStyles.subline}>
-                                  {t('filterLabels.lifeMaps')}
-                                </Text>
-                              )}
+                              <Text style={globalStyles.subline}>
+                                {t('filterLabels.lifeMaps')}
+                              </Text>
+                            )}
                           </View>
                           <Image source={arrow} style={styles.arrow} />
                         </View>
-
                       </TouchableHighlight>
-
                     </View>
                     {/* Filters modal */}
                     <BottomModal
                       isOpen={filterModalIsOpen}
                       onRequestClose={this.toggleFilterModal}
                       onEmptyClose={() =>
-                        this.setState({ filterModalIsOpen: false })
+                        this.setState({filterModalIsOpen: false})
                       }>
                       <View style={styles.dropdown}>
                         <FilterListItem
@@ -568,14 +575,14 @@ export class Dashboard extends Component {
                   </View>
                 ) : null}
                 <FlatList
-                  style={{ ...styles.background }}
+                  style={{...styles.background}}
                   data={
                     this.state.renderFiltered
                       ? this.state.filteredDrafts.slice().reverse()
                       : drafts.slice().reverse()
                   }
-                  keyExtractor={(item, index) => item.draftId}
-                  renderItem={({ item }) => (
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item}) => (
                     <DraftListItem
                       item={item}
                       handleClick={this.handleClickOnListItem}
@@ -587,8 +594,7 @@ export class Dashboard extends Component {
                       selectedImagesId={selectedImagesId}
                       isConnected={this.state.isOnline}
                     />
-                  )
-                  }
+                  )}
                 />
               </View>
             </View>
@@ -733,7 +739,7 @@ const mapDispatchToProps = {
   manualSubmitDraftCommit,
   submitPictures,
   manualSubmitPicturesCommit,
-  updateSnapshotImages
+  updateSnapshotImages,
 };
 
 export default withNamespaces()(

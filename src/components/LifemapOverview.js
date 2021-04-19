@@ -153,8 +153,8 @@ const LifemapOverview = ({
             indicatorText={indicatorText}
           />
         ) : null}
-        {[...new Set(dimensions)].map((item) => (
-          <View key={item}>
+        {[...new Set(dimensions)].map((item,index) => (
+          <View key={index}>
             {filterByDimension(item).length ? (
               <Text style={styles.dimension}>{item.toUpperCase()}</Text>
             ) : null}
