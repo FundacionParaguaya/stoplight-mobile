@@ -231,6 +231,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
+
     if (!this.props.user.token) {
       this.props.navigation.navigate('Login');
     } else {
