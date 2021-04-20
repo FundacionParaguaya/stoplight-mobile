@@ -30,9 +30,12 @@ export class IconButtonComponent extends Component {
     const syncErrors = drafts
       ? drafts.some(draft => draft.status === 'Sync error')
       : null
-    const syncAvailable = offline.outbox.filter(
-      item => item.type === 'SUBMIT_DRAFT'
-    )
+
+    const syncAvailable = drafts.filter(
+      draft => draft.status === 'Pending sync'
+    ).length + offline.outbox.filter(
+      item => item.type === 'SUBMIT_PRIORITY'
+    ).length
 
     return (
       <TouchableHighlight
@@ -56,7 +59,7 @@ export class IconButtonComponent extends Component {
             {icon &&
             !text &&
             badge &&
-            (syncAvailable.length > 0 || syncErrors) ? (
+            (syncAvailable > 0 || syncErrors) ? (
               <View style={styles.badgePoint} />
             ) : null}
           </View>
@@ -88,9 +91,9 @@ export class IconButtonComponent extends Component {
               {text}
             </Text>
           )}
-          {icon && text && badge && (syncAvailable.length > 0 || syncErrors) ? (
+          {icon && text && badge && (syncAvailable > 0 || syncErrors) ? (
             <Text style={styles.badge}>
-              {!syncErrors ? syncAvailable.length : '!'}
+              {!syncErrors ? syncAvailable : '!'}
             </Text>
           ) : null}
         </View>
