@@ -50,9 +50,12 @@ export class FamilyMembersNames extends Component {
         break;
       }
     }
+
     if (!error) {
       this.setState({
-        errors: errors.filter((item) => item.memberId !== memberId),
+       errors: errors.filter((item) => (
+         (item.memberId !== memberId ) 
+       || (item.memberId == memberId && item.field != field && field != null))),
       });
     } else if (error && !errorExists) {
       this.setState((previousState) => {
@@ -65,6 +68,7 @@ export class FamilyMembersNames extends Component {
   };
 
   validateForm = () => {
+    console.log('validateForm Error',this.state.errors.length)
     if (this.state.errors.length ) {
       this.setState({
         showErrors: true,
@@ -240,6 +244,7 @@ export class FamilyMembersNames extends Component {
   }
 
   render() {
+    console.log('render',this.state.errors)
     const {t} = this.props;
     const {showErrors} = this.state;
     const draft = this.getDraft();
