@@ -70,7 +70,6 @@ export class FamilyMembersNames extends Component {
         showErrors: true,
       });
     } else {
-      console.log('contineu');
       this.onContinue();
     }
   };
@@ -89,6 +88,8 @@ export class FamilyMembersNames extends Component {
     const draft = this.getDraft();
 
     let newArr = [...this.state.familyMembers];
+    const memberUUID = newArr[index].uuid;
+    this.setError(false,null,memberUUID)
     newArr.splice(index, 1);
     this.setState({
       familyMembers: newArr,
