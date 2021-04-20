@@ -68,7 +68,6 @@ export class FamilyMembersNames extends Component {
   };
 
   validateForm = () => {
-    console.log('validateForm Error',this.state.errors.length)
     if (this.state.errors.length ) {
       this.setState({
         showErrors: true,
@@ -244,7 +243,6 @@ export class FamilyMembersNames extends Component {
   }
 
   render() {
-    console.log('render',this.state.errors)
     const {t} = this.props;
     const {showErrors} = this.state;
     const draft = this.getDraft();
