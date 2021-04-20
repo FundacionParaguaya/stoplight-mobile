@@ -32,7 +32,7 @@ export class IconButtonComponent extends Component {
       : null
 
     const syncAvailable = drafts.filter(
-      draft => draft.status === 'Pending sync'
+      draft => draft.status === 'Pending sync' || draft.status === 'Pending images'
     ).length + offline.outbox.filter(
       item => item.type === 'SUBMIT_PRIORITY'
     ).length
