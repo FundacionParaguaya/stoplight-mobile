@@ -25,7 +25,8 @@ export class FamilyMembersNames extends Component {
   draftId = this.props.route.params.draftId;
 
   requiredFields =
-    (this.survey && this.survey.surveyConfig &&
+    (this.survey &&
+      this.survey.surveyConfig &&
       this.survey.surveyConfig.requiredFields &&
       this.survey.surveyConfig.requiredFields.primaryParticipant) ||
     null;
@@ -51,9 +52,13 @@ export class FamilyMembersNames extends Component {
       }
     }
     if (!error) {
-      this.setState({
-        errors: errors.filter((item) => item.memberId !== memberId),
-      });
+      this.setState(() => ({
+        errors: errors.filter(
+          (item) =>
+            item.memberId !== memberId ||
+            (item.memberId == memberId && item.field != field && field != null),
+        ),
+      }));
     } else if (error && !errorExists) {
       this.setState((previousState) => {
         return {
@@ -65,12 +70,18 @@ export class FamilyMembersNames extends Component {
   };
 
   validateForm = () => {
-    if (this.state.errors.length ) {
+    const sanitizedErrors = this.state.errors.filter((error) =>
+      this.state.familyMembers.find((member) => member.uuid == error.memberId),
+    );
+    this.setState(() => ({
+      errors: sanitizedErrors,
+    }));
+
+    if (sanitizedErrors.length) {
       this.setState({
         showErrors: true,
       });
     } else {
-      console.log('contineu');
       this.onContinue();
     }
   };
@@ -89,13 +100,16 @@ export class FamilyMembersNames extends Component {
     const draft = this.getDraft();
 
     let newArr = [...this.state.familyMembers];
-    newArr.splice(index, 1);
-    this.setState({
-      familyMembers: newArr,
-    });
+    const memberUUID = newArr[index].uuid;
+    this.setError(false, null, memberUUID);
 
     let familyMembersList = draft.familyData.familyMembersList;
     var newCount = draft.familyData.countFamilyMembers;
+
+    newArr.splice(index, 1);
+    this.setState(() => ({
+      familyMembers: newArr,
+    }));
 
     if (
       familyMembersList.length < draft.familyData.countFamilyMembers ||
@@ -138,14 +152,22 @@ export class FamilyMembersNames extends Component {
 
     let newArr = [...this.state.familyMembers];
     let newUUid = uuid();
-    newArr.push({firstParticipant: false, uuid: newUUid,socioEconomicAnswers: []});
+    newArr.push({
+      firstParticipant: false,
+      uuid: newUUid,
+      socioEconomicAnswers: [],
+    });
     this.setState({
       familyMembers: newArr,
     });
 
     let familyMembersList = draft.familyData.familyMembersList;
 
-    familyMembersList.push({firstParticipant: false, uuid: newUUid, socioEconomicAnswers: []});
+    familyMembersList.push({
+      firstParticipant: false,
+      uuid: newUUid,
+      socioEconomicAnswers: [],
+    });
     var familyMemberCount = draft.familyData.countFamilyMembers;
 
     if (
@@ -235,7 +257,7 @@ export class FamilyMembersNames extends Component {
 
     this.props.navigation.setParams({
       onPressBack: this.onPressBack,
-    })
+    });
   }
 
   render() {
@@ -243,13 +265,16 @@ export class FamilyMembersNames extends Component {
     const {showErrors} = this.state;
     const draft = this.getDraft();
     const {familyMembersList} = draft.familyData;
-
     return (
       <StickyFooter
         onContinue={this.validateForm}
         continueLabel={t('general.continue')}
         readOnly={!!this.readOnly}
-        progress={calculateProgressBar({readOnly:this.readOnly,draft:draft,screen:2})}>
+        progress={calculateProgressBar({
+          readOnly: this.readOnly,
+          draft: draft,
+          screen: 2,
+        })}>
         <Popup
           isOpen={this.state.isOpen}
           onClose={() => this.setState({isOpen: false})}>
@@ -381,7 +406,9 @@ export class FamilyMembersNames extends Component {
                     'birthDate',
                     false,
                   )}
-                  setError={(isError) => this.setError(isError, 'birthDate',item.uuid)}
+                  setError={(isError) =>
+                    this.setError(isError, 'birthDate', item.uuid)
+                  }
                   readOnly={!!this.readOnly}
                   showErrors={showErrors}
                 />
@@ -420,7 +447,7 @@ export class FamilyMembersNames extends Component {
               color: colors.green,
               marginLeft: 5,
             }}>
-              {t('views.family.addNewMember')}
+            {t('views.family.addNewMember')}
           </Text>
         </View>
       </StickyFooter>
