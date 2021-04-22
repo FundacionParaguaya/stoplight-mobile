@@ -11,6 +11,7 @@ import {
   UIManager,
   View,
   findNodeHandle,
+  TextInput,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,14 +35,21 @@ import {prepareDraftForSubmit, fakeSurvey} from './utils/helpers';
 import RNFetchBlob from 'rn-fetch-blob';
 import DownloadPopup from '../screens/modals/DownloadModal';
 import {PhoneNumberUtil} from 'google-libphonenumber';
+import Button from '../components/Button';
 
 import uuid from 'uuid/v1';
+
+
+// get env
+const nodeEnv = process.env;
+
 export class Sync extends Component {
   acessibleComponent = React.createRef();
   state = {
     loadingSync: false,
     surveysCount: null,
     openDownloadModal: false,
+    existPspFolder: false,
   };
   navigateToDraft = (draft) => {
     if (
@@ -197,7 +205,7 @@ export class Sync extends Component {
       const fileName = `BackupFile_${
         this.props.user ? this.props.user.username : 'user'
       }_${new Date().getTime() / 1000}`;
-      const filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.json`;
+      let filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.json`;
       const pendingDraft = this.props.drafts.filter(
         (draft) =>
           draft.status == 'Pending sync' || draft.status == 'Pending images',
@@ -205,6 +213,21 @@ export class Sync extends Component {
       const errorStatus = this.props.drafts.filter(
         (draft) => draft.status == 'Sync error',
       );
+
+      const rootDir = RNFetchBlob.fs.dirs.DownloadDir.replace('/Download', '');
+      const existPspFolder = await RNFetchBlob.fs.isDir(`${rootDir}/Psp`);
+      const existDownloadFolder = await RNFetchBlob.fs.isDir(
+        RNFetchBlob.fs.dirs.DownloadDir,
+      );
+
+      if (!existDownloadFolder && !existPspFolder) {
+        await RNFetchBlob.fs.mkdir(`${rootDir}/Psp`);
+        filePath = `${rootDir}/Psp/${fileName}.json`;
+      }
+
+      if (existPspFolder) {
+        filePath = `${rootDir}/Psp/${fileName}.json`;
+      }
 
       let sanitizedPendingDrafts = [];
       let sanitizedErrorDrafts = [];
@@ -252,6 +275,12 @@ export class Sync extends Component {
       };
       await RNFetchBlob.fs.createFile(filePath, JSON.stringify(json), 'utf8');
       this.toggleDownloadModal();
+      if ((!existDownloadFolder && !existPspFolder) || existPspFolder) {
+        this.setState({existPspFolder: true});
+      } else {
+        this.setState({existPspFolder: false});
+      }
+
       this.setState({loadingSync: false});
     } catch (error) {
       console.log(error);
@@ -353,8 +382,14 @@ export class Sync extends Component {
         <DownloadPopup
           isOpen={this.state.openDownloadModal}
           onClose={this.toggleDownloadModal}
+          title={t('views.modals.finishDownload')}
+          subtitle={
+            this.state.existPspFolder
+              ? t('views.modals.subtitleFinishPspFolder')
+              : t('views.modals.subtitleFinishDownload')
+          }
         />
-        {/*        {nodeEnv.NODE_ENV === 'development' && (
+        {nodeEnv.NODE_ENV === 'development' && (
           <View
             style={{
               height: 120,
@@ -366,7 +401,7 @@ export class Sync extends Component {
               keyboardType="numeric"
               style={styles.input}
               placeholder={'Surveys Count'}
-              onChangeText={(surveysCount) => this.setState({ surveysCount })}
+              onChangeText={(surveysCount) => this.setState({surveysCount})}
               style={{
                 ...styles.input,
                 borderColor: colors.palegreen,
@@ -386,7 +421,7 @@ export class Sync extends Component {
               handleClick={() => this.onClickGenerate()}
             />
           </View>
-        )} */}
+        )}
 
         <View
           ref={this.acessibleComponent}
