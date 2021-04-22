@@ -11,6 +11,7 @@ import {
   UIManager,
   View,
   findNodeHandle,
+  TextInput,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,8 +35,14 @@ import {prepareDraftForSubmit, fakeSurvey} from './utils/helpers';
 import RNFetchBlob from 'rn-fetch-blob';
 import DownloadPopup from '../screens/modals/DownloadModal';
 import {PhoneNumberUtil} from 'google-libphonenumber';
+import Button from '../components/Button';
 
 import uuid from 'uuid/v1';
+
+
+// get env
+const nodeEnv = process.env;
+
 export class Sync extends Component {
   acessibleComponent = React.createRef();
   state = {
