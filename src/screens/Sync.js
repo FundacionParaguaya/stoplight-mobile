@@ -39,7 +39,6 @@ import Button from '../components/Button';
 
 import uuid from 'uuid/v1';
 
-
 // get env
 const nodeEnv = process.env;
 
@@ -103,7 +102,6 @@ export class Sync extends Component {
   };
 
   getFamilyName = (snapshotStoplightId) => {
-    console.log('getFamilyName', snapshotStoplightId);
     let indicator;
     let familyName;
 
@@ -112,8 +110,6 @@ export class Sync extends Component {
         family.snapshotList.length > 0
           ? family.snapshotList[family.snapshotList.length - 1]
           : family.snapshotList[0];
-      console.log('snapShotData getFamilyName', snapShotData);
-
       !indicator
         ? (indicator = snapShotData.indicatorSurveyDataList.find(
             (item) => item.snapshotStoplightId === snapshotStoplightId,
@@ -130,8 +126,8 @@ export class Sync extends Component {
   };
 
   getIndicator = (snapshotStoplightId) => {
-    let indicator;
-    let surveyIndicator;
+    let indicator = null;
+    let surveyIndicator = null;
 
     this.props.families.forEach((family) => {
       let snapShotData =
@@ -139,22 +135,26 @@ export class Sync extends Component {
           ? family.snapshotList[family.snapshotList.length - 1]
           : family.snapshotList[0];
 
-      !indicator
-        ? (indicator = snapShotData.indicatorSurveyDataList.find(
-            (item) => item.snapshotStoplightId === snapshotStoplightId,
-          ))
-        : null;
+      if (!indicator) {
+        indicator = snapShotData.indicatorSurveyDataList.find(
+          (item) => item.snapshotStoplightId === snapshotStoplightId,
 
-      console.log('ind', indicator);
-    });
-    this.props.surveys.forEach((survey) => {
-      !surveyIndicator
-        ? (surveyIndicator = survey.surveyStoplightQuestions.find(
-            (item) => item.codeName == indicator.key,
-          ))
-        : null;
+        
+        );
+        indicator
+        ? (indicator = {...indicator, surveyId: snapShotData.surveyId})
+        : null
+      }
     });
 
+    const surveyData = this.props.surveys.find(
+      (survey) => survey.id == indicator.surveyId,
+    );
+    !surveyIndicator
+      ? surveyIndicator= surveyData.surveyStoplightQuestions.find(
+          (item) => item.codeName == indicator.key
+        )
+      : null;
     if (surveyIndicator) {
       return surveyIndicator.questionText;
     }
