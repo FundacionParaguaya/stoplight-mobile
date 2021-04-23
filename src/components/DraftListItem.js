@@ -14,7 +14,7 @@ class DraftListItem extends Component {
   getColor = (status) => {
     switch (status) {
       case 'Draft':
-        return colors.lightgrey;
+        return colors.darkgrey;
       case 'Synced':
         return colors.green;
       case 'Pending sync':
