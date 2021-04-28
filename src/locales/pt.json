@@ -241,8 +241,7 @@
       "chooseProjectSubtitle": "Escolha um projeto ao qual a família pertencerá.",
       "skipProject": "Pular projeto",
       "finishDownload": "O download está completo!",
-      "subtitleFinishDownload": "Você pode encontrar o arquivo na pasta Download.",
-      "subtitleFinishPspFolder":"Você pode encontrar o arquivo na pasta Psp na pasta raiz."
+      "subtitleFinishDownload": "Você pode encontrar o arquivo na pasta "
     },
     "pictures": {
       "limit": "*Você atingiu o limite de 10MB! Elimine uma imagem para continuar.",

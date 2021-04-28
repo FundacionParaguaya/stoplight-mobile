@@ -259,9 +259,7 @@
       "chooseProjectSubtitle": "Choose a project where the family will belong to...",
       "skipProject": "Skip Project",
       "finishDownload": "The download has finished!",
-      "subtitleFinishDownload": "You can find the file in the folder Download.",
-      "subtitleFinishPspFolder":"You can find the file in the folder Psp in the root folder."
-
+      "subtitleFinishDownload": "You can find the file in the folder"
     },
     "logout": {
       "logout": "Logout",

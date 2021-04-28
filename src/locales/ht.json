@@ -256,8 +256,7 @@
       "chooseProjectSubtitle": "Chwazi yon pwojè kote fanmi an ap fè pati...",
       "skipProject": "Sote pwojè",
       "finishDownload": "Download an fini!",
-      "subtitleFinishDownload": "Ou ka jwenn dosye a nan dosye a Download.",
-      "subtitleFinishPspFolder": "Ou ka jwenn dosye a nan katab Psp nan katab rasin lan."
+      "subtitleFinishDownload": "Ou ka jwenn dosye a nan dosye a "
     },
     "logout": {
       "logout": "Dekonekte",
