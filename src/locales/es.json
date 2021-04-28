@@ -254,8 +254,7 @@
       "chooseProjectSubtitle": "Elige un proyecto al que pertenecerá la familia ..",
       "skipProject": "Saltar proyecto",
       "finishDownload": "¡La descarga ha finalizado!",
-      "subtitleFinishDownload": "Puede encontrar el archivo en la carpeta Download.",
-      "subtitleFinishPspFolder": "Puede encontrar el archivo en la carpeta Psp en la carpeta raiz."
+      "subtitleFinishDownload": "Puede encontrar el archivo en la carpeta",
     },
     "logout": {
       "logout": "Cerrar sesión",

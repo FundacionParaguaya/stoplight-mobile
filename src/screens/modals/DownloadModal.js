@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../theme.json';
 import PropTypes from 'prop-types';
 
-const DownloadModal = ({isOpen, onClose,title, subtitle}) => {
+const DownloadModal = ({isOpen, onClose,title, subtitle, folder}) => {
   return (
     <Popup
       style={{alignItems: 'center', justifyContent: 'center'}}
@@ -23,6 +23,7 @@ const DownloadModal = ({isOpen, onClose,title, subtitle}) => {
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}> {subtitle}</Text>
+        <Text style={styles.subtitleBold}>{folder}</Text>
       </View>
     </Popup>
   );
@@ -67,6 +68,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'left',
   },
+  subtitleBold:{
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Poppins',
+        fontWeight: '600',
+      },
+      android: {
+        fontFamily: 'Poppins SemiBold',
+      },
+    }),
+    color: colors.lightdark,
+    fontWeight: 'normal',
+    marginBottom: 16,
+    textAlign: 'left',
+  }
 });
 
 DownloadModal.propTypes = {

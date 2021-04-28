@@ -1,5 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import React, {Component} from 'react';
 import {withNamespaces} from 'react-i18next';
 import {StackActions} from '@react-navigation/native';
@@ -312,7 +312,8 @@ export class Final extends Component {
           isOpen={this.state.openDownloadModal}
           onClose={this.toggleDownloadModal}
           title={t('views.modals.finishDownload')}
-          subtitle={t('views.modals.subtitleFinishPspFolder')}
+          subtitle={t('views.modals.subtitleFinishDownload')}
+          folder={"Psp"}
         />
         <View
           style={{

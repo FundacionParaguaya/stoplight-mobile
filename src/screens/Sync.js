@@ -384,10 +384,12 @@ export class Sync extends Component {
           onClose={this.toggleDownloadModal}
           title={t('views.modals.finishDownload')}
           subtitle={
-            this.state.existPspFolder
-              ? t('views.modals.subtitleFinishPspFolder')
-              : t('views.modals.subtitleFinishDownload')
+            
+              t('views.modals.subtitleFinishDownload')
           }
+          folder={ this.state.existPspFolder
+            ? "Psp"
+            : "Download"}
         />
         {nodeEnv.NODE_ENV === 'development' && (
           <View
