@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Platform,
   Text,
-  View,
+  View, Vibration,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNPrint from 'react-native-print';
@@ -33,6 +33,8 @@ import {
   buildPrintOptions,
   getReportTitle,
 } from '../utils/pdfs';
+
+const VIBRATION_DURATION = 120
 
 export class Final extends Component {
   unsubscribeNetChange;
@@ -85,7 +87,12 @@ export class Final extends Component {
     }
   };
 
+  vibrate = () => {
+    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null
+  }
+
   saveDraft = () => {
+    this.vibrate();
     this.setState({
       loading: true,
     });

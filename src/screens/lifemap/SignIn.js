@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {withNamespaces} from 'react-i18next';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, Vibration, View} from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 import {connect} from 'react-redux';
 
@@ -11,6 +11,8 @@ import {updateDraft} from '../../redux/actions';
 import {getTotalEconomicScreens} from './helpers';
 import colors from '../../theme.json';
 import {calculateProgressBar} from '../utils/helpers';
+
+const VIBRATION_DURATION = 120
 
 export class SigIn extends Component {
   survey = this.props.route.params.survey;
@@ -65,7 +67,12 @@ export class SigIn extends Component {
     });
   }
 
+  vibrate = () => {
+    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null
+  }
+
   handleContinue = () => {
+    this.vibrate();
     if (this.sign && !this.isEmpty) {
       this.sign.saveImage();
     }

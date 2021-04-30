@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {withNamespaces} from 'react-i18next';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, Vibration, View} from 'react-native';
 
 import Button from '../../components/Button';
 import Decoration from '../../components/decoration/Decoration';
@@ -20,6 +20,8 @@ const navigationRules = {
   },
 };
 
+const VIBRATION_DURATION = 120
+
 export class Terms extends Component {
   state = {
     open: false,
@@ -29,7 +31,12 @@ export class Terms extends Component {
   draftId = this.props.route.params.draftId;
   project = this.props.route.params.project;
 
+  vibrate = () => {
+    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null
+  }
+
   onClickAgree = () => {
+    this.vibrate();
     const {navigation} = this.props;
     navigation.navigate(navigationRules[this.page].nextPage, {
       page: navigationRules[this.page].param || null,
