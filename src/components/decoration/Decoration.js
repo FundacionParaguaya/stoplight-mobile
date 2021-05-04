@@ -25,7 +25,7 @@ export default class Decoration extends Component {
                 <Orb
                   size={25}
                   color={colors.palered}
-                  position={{ x: -93, y: -86 }}
+                  position={{ x: -93, y: -8 }}
                 />
                 <Orb
                   size={35}
@@ -74,7 +74,7 @@ export default class Decoration extends Component {
                 <Orb
                   size={20}
                   color={colors.palered}
-                  position={{ x: 130, y: 68 }}
+                  position={{ x: 130, y: 55 }}
                 />
                 <Orb
                   size={35}
