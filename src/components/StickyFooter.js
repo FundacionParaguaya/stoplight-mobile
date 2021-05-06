@@ -86,11 +86,11 @@ export default class StickyFooter extends Component {
                   colored
                   text={this.props.continueLabel || ''}
                   handleClick={
-                    (() => {
+                    ( !!this.props.onContinue ? () => {
                       this.vibrate();
                       this.props.onContinue();
-                    }
-                    ) || (() => {})}
+                    } : () => {}
+                    )}
                 />
               </View>
             ) : (
