@@ -1,4 +1,4 @@
-import {Keyboard, ScrollView, StyleSheet, View} from 'react-native';
+import {Keyboard, ScrollView, StyleSheet, Vibration, View} from 'react-native';
 import React, {Component} from 'react';
 
 import Button from './Button';
@@ -6,6 +6,7 @@ import ProgressBar from './ProgressBar';
 import PropTypes from 'prop-types';
 import Tip from './Tip';
 import globalStyles from '../globalStyles';
+const VIBRATION_DURATION = 120
 
 export default class StickyFooter extends Component {
   state = {
@@ -39,6 +40,10 @@ export default class StickyFooter extends Component {
     }
     return marginTop;
   };
+
+  vibrate = () => {
+    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null
+  }
 
   render() {
     return (
@@ -80,7 +85,12 @@ export default class StickyFooter extends Component {
                   id="continue"
                   colored
                   text={this.props.continueLabel || ''}
-                  handleClick={this.props.onContinue || (() => {})}
+                  handleClick={
+                    ( !!this.props.onContinue ? () => {
+                      this.vibrate();
+                      this.props.onContinue();
+                    } : () => {}
+                    )}
                 />
               </View>
             ) : (
