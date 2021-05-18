@@ -7,6 +7,7 @@ import {
   View,
   Platform,
   NativeModules,
+  I18nManager
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {withNamespaces} from 'react-i18next';
@@ -36,7 +37,17 @@ export class DrawerContent extends Component {
   };
 
   changeLanguage = (lng) => {
-    i18n.changeLanguage(lng); // change the currently uses i18n language
+    console.log('lng',lng)
+   
+    i18n.changeLanguage(lng).then(()=> {
+      if(i18n.language === 'ar' && this.props.lang !== 'ar' ) {
+        console.log('true')
+        I18nManager.forceRTL(true)
+      }else {
+        console.log('false')
+        I18nManager.forceRTL(false)
+      }
+    }); // change the currently uses i18n language
     this.props.switchLanguage(lng); // set the redux language for next app use
     this.props.navigation.closeDrawer(); // close drawer
   };
@@ -170,6 +181,20 @@ export class DrawerContent extends Component {
               ]}
               accessible={true}
               accessibilityLabel={'change to Creole'}
+            />
+              <Text style={[globalStyles.h3, styles.whiteText]}>
+            {'  '}|{'  '}
+            </Text>
+            <IconButton
+              id="ar"
+              onPress={()=> this.changeLanguage('ar')}
+              text="AR"
+              textStyle={[
+                globalStyles.h3,
+                lng === 'ar' ? styles.whiteText : styles.greyText,
+              ]}
+              accessible={true}
+              accessibilityLabel={'change to Arabic'}
             />
           </View>
           <Text

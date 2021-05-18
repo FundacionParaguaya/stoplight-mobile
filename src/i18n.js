@@ -5,6 +5,7 @@ import en from './locales/en.json'
 import es from './locales/es.json'
 import pt from './locales/pt.json'
 import ht from './locales/ht.json'
+import ar from './locales/ar.json'
 import store from './redux/store'
 import { getDeviceLanguage } from './utils'
 
@@ -20,6 +21,9 @@ const resources = {
   },
   ht: {
     translation: ht
+  },
+  ar:{
+    translation: ar
   }
 }
 

@@ -20,9 +20,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.bugsnag.android.Bugsnag;
 import com.emekalites.react.compress.image.ImageCompressPackage;
+import com.facebook.react.modules.i18nmanager.I18nUtil;
 
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
+
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -56,6 +58,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   @Override
   public void onCreate() {
     super.onCreate();
+    I18nUtil sharedI18nUtilInstance = I18nUtil.getInstance();
+    sharedI18nUtilInstance.allowRTL(getApplicationContext(), true);
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     Bugsnag.start(this);
