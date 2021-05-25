@@ -434,6 +434,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     marginBottom: 15,
     marginLeft: 16,
+    textAlign:'left'
   },
   buttonSmall: {
     alignSelf: 'center',

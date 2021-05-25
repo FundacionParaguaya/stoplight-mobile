@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
   },
-  dimension: { ...globalStyles.h3, marginHorizontal: 20, marginVertical: 10 },
+  dimension: { ...globalStyles.h3, marginHorizontal: 20, marginVertical: 10, textAlign:'left' },
 });
 
 const LifemapOverview = ({

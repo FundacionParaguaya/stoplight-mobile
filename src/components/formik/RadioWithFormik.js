@@ -10,6 +10,7 @@ import {getErrorLabelForPath, pathHasError} from './utils/form-utils';
 import globalStyles from '../../globalStyles';
 
 import colors from '../../theme.json';
+import {I18nManager} from 'react-native';
 
 const RadioWithFormik = ({
   onChange,
@@ -98,7 +99,7 @@ const RadioWithFormik = ({
                       color: '#4a4a4a',
                     }}
                     labelWrapStyle={{
-                      marginLeft: -4,
+                      marginLeft: I18nManager.isRTL ? 4 : -4,
                     }}
                   />
                 </RadioButton>
@@ -152,6 +153,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     minHeight: 50,
     fontSize: 16,
+    textAlign:'left'
   },
   withoutValue: {
     backgroundColor: colors.primary,

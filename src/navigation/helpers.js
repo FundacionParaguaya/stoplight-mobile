@@ -5,6 +5,7 @@ import IconButton from '../components/IconButton';
 
 import BackButton from './BackButton';
 import i18n from '../i18n';
+import { I18nManager } from 'react-native';
 
 // Each of the major views has a stack that needs the same nav options.
 // These options handle the header styles and menu icon.
@@ -41,14 +42,14 @@ export const generateNavStyles = ({
     marginLeft: 19,
   },
   headerRightContainerStyle: {
-    marginRight: -16,
+    marginRight: I18nManager.isRTL ? 16 : -16 ,
   },
   headerLeft: () => {
     return (
       <BackButton
         navigation={navigation}
         route={route}
-        style={styles.touchable}
+        style={[styles.touchable,{transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]}]}
       />
     );
   },

@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
-import { Platform, StyleSheet, Text, View, Button } from 'react-native';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {withNamespaces} from 'react-i18next';
+import {Platform, StyleSheet, Text, View, Button, I18nManager } from 'react-native';
+import {connect} from 'react-redux';
 import * as _ from 'lodash';
-import { Formik, Form } from 'formik';
+import {Formik, Form} from 'formik';
 import * as Yup from 'yup';
 
-import { calculateProgressBar } from '../utils/helpers';
+import {calculateProgressBar} from '../utils/helpers';
 import SelectWithFormik from '../../components/formik/SelectWithFormik';
 import RadioWithFormik from '../../components/formik/RadioWithFormik';
 import InputWithFormik from '../../components/formik/InputWithFormik';
 import InputWithDep from '../../components/formik/InputWithDep';
 import CheckboxWithFormik from '../../components/formik/CheckboxWithFormik';
 import StickyFooter from '../../components/StickyFooter';
-import { updateDraft } from '../../redux/actions';
+import {updateDraft} from '../../redux/actions';
 import colors from '../../theme.json';
 import {
   getConditionalOptions,
@@ -26,7 +26,7 @@ import {
   familyMemberWillHaveQuestions,
   shouldShowQuestion,
 } from '../utils/conditional_logic';
-import { getTotalScreens, setScreen } from './helpers';
+import {getTotalScreens, setScreen} from './helpers';
 import i18n from '../../i18n';
 import Audio from '../../components/Audio';
 import globalStyles from '../../globalStyles';
@@ -140,7 +140,7 @@ export class SocioEconomicQuestion extends Component {
       ? socioEconomics.questionsPerScreen[socioEconomics.currentScreen - 1]
       : null;
 
-    const { forFamily = [], forFamilyMember = [] } = questions;
+    const {forFamily = [], forFamilyMember = []} = questions;
     let isPresent = false;
     const lookIn = question.forFamilyMember ? forFamilyMember : forFamily;
 
@@ -163,7 +163,7 @@ export class SocioEconomicQuestion extends Component {
       ? this.getDraft()
       : this.readOnlyDraft;
 
-    const { conditionalQuestions, questionsWithConditionsOnThem } = this.state;
+    const {conditionalQuestions, questionsWithConditionsOnThem} = this.state;
     const hasOtherOption = question.codeName.match(/^custom/g);
 
     // // We get a draft with updated answer
@@ -173,7 +173,7 @@ export class SocioEconomicQuestion extends Component {
     let hasOtherValue;
     if (Array.isArray(value)) {
       keyName = 'multipleValue';
-      hasOtherValue = !!question.options.find(o => o.otherOption);
+      hasOtherValue = !!question.options.find((o) => o.otherOption);
     }
 
     let newAnswer = {
@@ -183,19 +183,19 @@ export class SocioEconomicQuestion extends Component {
 
     let selectedValues;
     let answer;
-    let answers = !question.forFamilyMember ?
-      draftFromProps.economicSurveyDataList
+    let answers = !question.forFamilyMember
+      ? draftFromProps.economicSurveyDataList
       : draftFromProps.familyData.familyMembersList[memberIndex]
-        .socioEconomicAnswers;
-    answer = (answers || []).find(ans => ans.key === key);
+          .socioEconomicAnswers;
+    answer = (answers || []).find((ans) => ans.key === key);
     if (hasOtherOption) {
       key = _.camelCase(question.codeName.replace(/^custom/g, ''));
 
-      answer = answers.find(ans => ans.key === key);
+      answer = answers.find((ans) => ans.key === key);
       if (question.answerType === 'checkbox') {
         selectedValues = !!answer ? answer.multipleValue : [];
       } else {
-        selectedValues = question.options.find(o => o.otherOption).value
+        selectedValues = question.options.find((o) => o.otherOption).value;
       }
 
       keyName = !Array.isArray(selectedValues) ? 'value' : 'multipleValue';
@@ -211,7 +211,7 @@ export class SocioEconomicQuestion extends Component {
       newAnswer = {
         key,
         [keyName]: value,
-        other: answer.other
+        other: answer.other,
       };
     }
 
@@ -265,8 +265,8 @@ export class SocioEconomicQuestion extends Component {
   };
 
   setSocioEconomicsParam() {
-    const { navigation } = this.props;
-    const { params } = this.props.route;
+    const {navigation} = this.props;
+    const {params} = this.props.route;
 
     // If this is the first socio economics screen set the whole process
     // in the navigation. On every next screen it will know which questions
@@ -407,7 +407,7 @@ export class SocioEconomicQuestion extends Component {
       });
 
       this.props.navigation.setParams({
-        onPressBack: this.onPressBack
+        onPressBack: this.onPressBack,
       });
     }
   }
@@ -473,9 +473,8 @@ export class SocioEconomicQuestion extends Component {
         ) || {};
 
       if (question.options.find((o) => o.otherOption)) {
-        forFamilyInitial[
-          `custom${this.capitalize(question.codeName)}`
-        ] = draftQuestion.hasOwnProperty('other') && !!draftQuestion.other
+        forFamilyInitial[`custom${this.capitalize(question.codeName)}`] =
+          draftQuestion.hasOwnProperty('other') && !!draftQuestion.other
             ? draftQuestion.other
             : '';
       }
@@ -499,13 +498,12 @@ export class SocioEconomicQuestion extends Component {
       familyMemberQuestions.forEach((question) => {
         const draftQuestion =
           socioEconomicAnswers.find((e) => e.key === question.codeName) || {};
-        if (question.options.find(o => o.otherOption)) {
+        if (question.options.find((o) => o.otherOption)) {
           memberInitial[`custom${capitalize(question.codeName)}`] =
             draftQuestion.hasOwnProperty('other') && !!draftQuestion.other
               ? draftQuestion.other
               : '';
         }
-
 
         memberInitial[question.codeName] =
           (draftQuestion.hasOwnProperty('value') && !!draftQuestion.value
@@ -522,7 +520,7 @@ export class SocioEconomicQuestion extends Component {
   };
 
   render() {
-    const { t, user } = this.props;
+    const {t, user} = this.props;
 
     const socioEconomics = this.props.route.params.socioEconomics;
 
@@ -584,16 +582,31 @@ export class SocioEconomicQuestion extends Component {
             }}
             continueLabel={i18n.t('general.continue')}
             readOnly={!!this.readOnly}
-            progress={
-              calculateProgressBar({ readOnly: this.readOnly, draft: draft, screen: socioEconomics ? socioEconomics.currentScreen + 4 : 4 })}>
+            progress={calculateProgressBar({
+              readOnly: this.readOnly,
+              draft: draft,
+              screen: socioEconomics ? socioEconomics.currentScreen + 4 : 4,
+            })}>
             {/* <Decoration variation="socioEconomicQuestion" /> */}
-            {user.interactive_help && topicAudio &&
-              <Audio label={t('views.lifemap.audioHelp')} audioId={topicAudio} url={topicAudio}
-                containerStyles={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center', width: '100%', paddingBottom: 10 }}
-                styles={{ color: colors.palegreen }}
+            {user.interactive_help && topicAudio && (
+              <Audio
+                label={t('views.lifemap.audioHelp')}
+                audioId={topicAudio}
+                url={topicAudio}
+                containerStyles={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  width: '100%',
+                  paddingBottom: 10,
+                }}
+                styles={{
+                  color: colors.palegreen,
+                  transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+                }}
                 labelStyle={globalStyles.h4}
               />
-            }
+            )}
             {/* questions for entire family */}
             {questions &&
               questions.forFamily &&
@@ -605,9 +618,9 @@ export class SocioEconomicQuestion extends Component {
 
                 const modifiedQuestion = hasOtherOption
                   ? {
-                    ...question,
-                    codeName: `custom${this.capitalize(question.codeName)}`,
-                  }
+                      ...question,
+                      codeName: `custom${this.capitalize(question.codeName)}`,
+                    }
                   : null;
 
                 const cleanUp = (value) => {
@@ -623,14 +636,11 @@ export class SocioEconomicQuestion extends Component {
                   );
                 };
                 const cleanUpMultipleValue = () => {
-
                   this.updateEconomicAnswerCascading(
                     modifiedQuestion,
                     '',
-                    formik.setFieldValue
+                    formik.setFieldValue,
                   );
-
-
                 };
 
                 if (!shouldShowQuestion(question, draft)) {
@@ -737,7 +747,7 @@ export class SocioEconomicQuestion extends Component {
                 }
                 if (question.answerType === 'checkbox') {
                   return (
-                    <React.Fragment key={question.codeName} >
+                    <React.Fragment key={question.codeName}>
                       <CheckboxWithFormik
                         rawOptions={getConditionalOptions(question, draft)}
                         t={t}
@@ -828,11 +838,11 @@ export class SocioEconomicQuestion extends Component {
                         );
                         const modifiedQuestion = hasOtherOption
                           ? {
-                            ...question,
-                            codeName: `custom${capitalize(
-                              question.codeName,
-                            )}`,
-                          }
+                              ...question,
+                              codeName: `custom${capitalize(
+                                question.codeName,
+                              )}`,
+                            }
                           : null;
                         const cleanUp = (value) => {
                           this.updateEconomicAnswerCascading(
@@ -854,7 +864,7 @@ export class SocioEconomicQuestion extends Component {
                             modifiedQuestion,
                             '',
                             formik.setFieldValue,
-                            index || 0
+                            index || 0,
                           );
                         };
 
@@ -877,8 +887,8 @@ export class SocioEconomicQuestion extends Component {
                                 value={
                                   formik.values.forFamilyMember
                                     ? formik.values.forFamilyMember[index][
-                                    question.codeName
-                                    ]
+                                        question.codeName
+                                      ]
                                     : ''
                                 }
                                 question={question}
@@ -979,7 +989,7 @@ export class SocioEconomicQuestion extends Component {
                         }
                         if (question.answerType === 'checkbox') {
                           return (
-                            <React.Fragment key={question.codeName}>                                                 
+                            <React.Fragment key={question.codeName}>
                               <CheckboxWithFormik
                                 rawOptions={getConditionalOptions(
                                   question,
@@ -1029,7 +1039,7 @@ export class SocioEconomicQuestion extends Component {
                                 }}
                                 cleanUp={cleanUpMultipleValue}
                               />
-                          </React.Fragment>
+                            </React.Fragment>
                           );
                         }
                         return (
@@ -1111,10 +1121,10 @@ const mapDispatchToProps = {
   updateDraft,
 };
 
-const mapStateToProps = ({ drafts, language, user }) => ({
+const mapStateToProps = ({drafts, language, user}) => ({
   drafts,
   language,
-  user
+  user,
 });
 
 export default withNamespaces()(

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, I18nManager} from 'react-native';
 import ListItem from './ListItem';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colors from '../theme.json';
@@ -23,7 +23,7 @@ class FamilyListItem extends Component {
             {this.props.text}
           </Text>
         </View>
-        <Icon name="navigate-next" size={23} color={colors.grey} />
+        <Icon style={{transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]}} name="navigate-next" size={23} color={colors.grey} />
       </ListItem>
     );
   }

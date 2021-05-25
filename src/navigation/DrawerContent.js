@@ -10,6 +10,7 @@ import {
   I18nManager
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import RNRestart from 'react-native-restart';
 import {withNamespaces} from 'react-i18next';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -37,19 +38,10 @@ export class DrawerContent extends Component {
   };
 
   changeLanguage = (lng) => {
-    console.log('lng',lng)
-   
-    i18n.changeLanguage(lng).then(()=> {
-      if(i18n.language === 'ar' && this.props.lang !== 'ar' ) {
-        console.log('true')
-        I18nManager.forceRTL(true)
-      }else {
-        console.log('false')
-        I18nManager.forceRTL(false)
-      }
-    }); // change the currently uses i18n language
+    i18n.changeLanguage(lng); // change the currently uses i18n language
     this.props.switchLanguage(lng); // set the redux language for next app use
     this.props.navigation.closeDrawer(); // close drawer
+    
   };
   logUserOut = () => {
     const {checkboxesVisible, ckeckedBoxes} = this.state;
@@ -102,6 +94,25 @@ export class DrawerContent extends Component {
       logoutModalOpen: false,
     });
   };
+
+  componentDidUpdate(prevProps){
+    console.log('componentDidUpdate',this.props.lng)
+    console.log('Prev: componentDidUpdate',prevProps.lng)
+    if(this.props.lng=== 'ar' && prevProps.lng !== 'ar'){
+      I18nManager.forceRTL(true)
+      setTimeout(() => {
+        RNRestart.Restart()
+      },1000)
+     // RNRestart.Restart();
+    }
+    if(this.props.lng !== 'ar' && prevProps.lng === 'ar') {
+      I18nManager.forceRTL(false)
+      setTimeout(() => {
+        RNRestart.Restart()
+      },1000)
+     // RNRestart.Restart();
+    }
+  }
 
   render() {
     const {lng, user, navigation, dimensions} = this.props;

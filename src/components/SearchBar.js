@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { TextInput, StyleSheet, View } from 'react-native'
+import { TextInput, StyleSheet, View, I18nManager } from 'react-native'
 
 import colors from '../theme.json'
 
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 16,
     lineHeight: 21,
-    color: colors.lightdark
+    color: colors.lightdark,
+    textAlign:I18nManager.isRTL ? 'right': 'left'
   }
 })

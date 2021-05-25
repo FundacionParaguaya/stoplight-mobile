@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, I18nManager} from 'react-native';
 import ListItem from './ListItem';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -185,7 +185,7 @@ class LifemapOverviewListItem extends Component {
           </View>
 
           {!disabledButton ? (
-            <Icon name="navigate-next" size={23} color={colors.lightdark} />
+            <Icon name="navigate-next" style={{transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]}} size={23} color={colors.lightdark} />
           ) : (
             <View />
           )}

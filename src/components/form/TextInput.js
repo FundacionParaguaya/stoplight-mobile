@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+import { I18nManager } from 'react-native';
 import {StyleSheet, Text, View, Keyboard} from 'react-native';
 import {Input} from 'react-native-elements';
 
@@ -224,6 +225,7 @@ class TextInput extends Component {
               fontWeight: 'normal',
               marginLeft: 15,
               borderBottomColor: colors.black,
+              textAlign:'left'
             }}
             autoFocus={autoFocus}
             keyboardType={showPlaceholder ? null : this.props.keyboardType}
@@ -266,7 +268,7 @@ class TextInput extends Component {
           <View
             id="errorWrapper"
             style={{marginLeft: 30, marginBottom: 12, marginTop: -12}}>
-            <Text style={{color: colors.red}}>{errorMsg}</Text>
+            <Text style={{color: colors.red, textAlign:'left'}}>{errorMsg}</Text>
           </View>
         )}
       </View>
@@ -294,6 +296,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     paddingRight: 30,
     fontSize: 14,
+    textAlign: I18nManager.isRTL ? 'right': 'left'
   },
   inputTextUpperCase: {
     textTransform: 'capitalize',

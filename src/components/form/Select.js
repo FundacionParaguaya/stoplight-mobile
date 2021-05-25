@@ -298,6 +298,7 @@ class Select extends Component {
                               labelStyle={{
                                 fontSize: 17,
                                 color: '#4a4a4a',
+                                textAlign:'left'
                               }}
                               labelWrapStyle={{
                                 marginLeft: -4,
@@ -421,7 +422,7 @@ class Select extends Component {
             {/* Error message */}
             {!!errorMsg && (
               <View style={{marginLeft: 30}}>
-                <Text style={{color: colors.red}}>{errorMsg}</Text>
+                <Text style={{color: colors.red, textAlign:'left'}}>{errorMsg}</Text>
               </View>
             )}
           </View>
@@ -475,6 +476,7 @@ const styles = StyleSheet.create({
     // lineHeight: 50,
     paddingTop: 20,
     minHeight: 50,
+    textAlign:'left'
   },
   withoutValue: {
     backgroundColor: colors.primary,
@@ -496,6 +498,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 25,
     color: '#4a4a4a',
+    textAlign:'left'
   },
   arrow: {
     width: 10,
@@ -511,6 +514,7 @@ const styles = StyleSheet.create({
   error: {
     backgroundColor: colors.white,
     borderBottomColor: colors.red,
+    textAlign:'left'
   },
   selected: {
     backgroundColor: colors.lightgrey,
@@ -521,6 +525,7 @@ const styles = StyleSheet.create({
     color: colors.palegrey,
     // marginBottom: 10,
     zIndex: 100,
+    textAlign:'left'
   },
 });
 

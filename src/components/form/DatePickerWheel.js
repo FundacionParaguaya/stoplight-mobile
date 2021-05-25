@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     ...globalStyles.subline,
     lineHeight: 50,
-    height: 50
+    height: 50,
+    textAlign:'left'
   },
   withoutValue: {
     backgroundColor: colors.primary,
@@ -275,7 +276,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.palegrey,
     // marginBottom: 10,
-    zIndex: 100
+    zIndex: 100,
+    textAlign:'left'
   },
   wheelPicker: {
     width: '33%',

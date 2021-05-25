@@ -11,6 +11,9 @@ import {
 } from './assets';
 
 import {getLocaleForLanguage} from '../../utils';
+import 'moment/locale/ar';
+
+moment.locale('ar')
 
 const MAX_COLS = 5;
 
@@ -51,7 +54,7 @@ const createTableRow = (
   previousIndicatorPriorities,
   previousIndicatorAchievements,
 ) => {
-  return `<tr style="${styles.tableRow}">
+  return `<tr dir='rtl' style="${styles.tableRow}">
               ${indicatorsArray
                 .map((indicator) => {
                   const color = getColor(indicator.value);
@@ -138,11 +141,11 @@ const createTableRow = (
 
 /* PRIORITIES TABLE */
 const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => `
-  <div style="${styles.wrapperHeader};page-break-before: always;">
+  <div dir='rtl' style="${styles.wrapperHeader};page-break-before: always;">
   <div style="${styles.titleWrapper}">
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myPriorities',
-)} ${priorityIconWithoutStyles}</h2>
+)}  ${priorityIconWithoutStyles}</h2>
 <h2 style="${styles.date};">${dateCreated.format('MMMM D, YYYY')}</h2>
 </div>         
   ${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
@@ -172,7 +175,7 @@ const generatePrioritiesTable = (
   existLogo,
 ) => {
   return `
-          <table cellspacing="0" style="${
+          <table dir='rtl' cellspacing="0" style="${
             styles.tableWithHeader
           };page-break-after: always;">
             ${generateTableHeaderForPriorities(dateCreated, logo, existLogo)}
@@ -190,7 +193,7 @@ const generatePrioritiesTable = (
                 const dateForReview = dateForReviewWithLocale
                   .add(estimatedDate, 'months')
                   .format('DD MMM, YYYY');
-                return `<tr style="${
+                return `<tr  style="${
                   stripe ? 'background-color:rgb(238,238,238)' : ''
                 }">
                           <td style="${styles.tData}">
@@ -220,7 +223,7 @@ const generatePrioritiesTable = (
 
 /* ACHIEVEMENTS TABLE */
 const generateTableHeaderForAchievements = (dateCreated, logo, existLogo) => `
-  <div style="${styles.wrapperHeader};page-break-before: always;">
+  <div dir='rtl' style="${styles.wrapperHeader};page-break-before: always;">
   <div style="${styles.titleWrapper}">
               <h2 style="${styles.title}">${i18n.t(
   'views.lifemap.myAchievements',
@@ -254,7 +257,7 @@ const generateAchievementsTable = (
   existLogo,
 ) => {
   return `
-              <table cellspacing="0" style="${
+              <table dir='rtl' cellspacing="0" style="${
                 styles.tableWithHeader
               };page-break-after: always;">
                 ${generateTableHeaderForAchievements(
@@ -310,7 +313,7 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
 
   const reportTitle = getReportTitle(draft);
 
-  return `<div style="${styles.wrapper}">
+  return `<div dir='rtl' style="${styles.wrapper}">
   <div style="${styles.titleWrapper}">
             <h2 style="${styles.title}">${reportTitle}, ${i18n.t(
     'views.lifemap.lifeMap',

@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativerestart.RestartPackage;
 import com.reactnativecommunity.androidprogressbar.RNCProgressBarPackage;
 import com.delightfulstudio.wheelpicker.WheelPickerPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;

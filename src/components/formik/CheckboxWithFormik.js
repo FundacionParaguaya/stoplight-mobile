@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: -9,
     paddingTop: 20,
     minHeight: 50,
+    textAlign:'left'
   },
   containerStyle: {
     backgroundColor: 'transparent',

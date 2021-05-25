@@ -8,6 +8,7 @@ import ht from './locales/ht.json'
 import ar from './locales/ar.json'
 import store from './redux/store'
 import { getDeviceLanguage } from './utils'
+import { I18nManager } from 'react-native'
 
 const resources = {
   en: {
@@ -31,8 +32,10 @@ const resources = {
 
 // set language after store rehydration
 export const setLanguage = () => {
+  console.log('setLang')
   const reduxLanguage = store.getState().language
   let lng
+  console.log('reduxLanguage',reduxLanguage)
 
   // check if the app store has a set language from the user,
   // if not check the device language
@@ -47,7 +50,7 @@ export const setLanguage = () => {
 
 i18n.use(reactI18nextModule).init({
   resources,
-  lng: 'en',
+  lng: I18nManager.isRTL ? 'ar': 'en',
   interpolation: {
     escapeValue: false // react already safes from xss
   }

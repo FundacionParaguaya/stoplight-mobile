@@ -749,6 +749,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: -10,
     zIndex: 10,
+    textAlign:'left'
   },
   fakeMarker: {
     zIndex: 2,

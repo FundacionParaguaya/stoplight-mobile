@@ -249,10 +249,10 @@ export class Priorities extends Component {
               indicators={draft.indicatorSurveyDataList}
             />
             <View style={styles.subheading}>
-              <Text textAlign="left" style={globalStyles.h3}>
+              <Text style={[globalStyles.h3,{textAlign:'left'}]}>
                 {t('views.lifemap.toCompleteLifemap')}
               </Text>
-              <Text style={globalStyles.h3}>
+              <Text style={[globalStyles.h3,{textAlign:'left'}]}>
                 {this.getTipDescription(mandatoryPrioritiesCount)}
               </Text>
 
@@ -454,6 +454,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     marginBottom: 15,
     marginLeft: 16,
+    textAlign:'left'
   },
 });
 

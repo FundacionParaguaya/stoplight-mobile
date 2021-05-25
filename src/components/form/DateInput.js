@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'normal', 
     color:colors.grey },
-  error: { marginBottom: 10, marginTop: -10 }
+  error: { marginBottom: 10, marginTop: -10, textAlign:'left' }
 })
 
 DateInputComponent.propTypes = {

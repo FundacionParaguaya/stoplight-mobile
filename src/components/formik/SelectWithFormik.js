@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     ...globalStyles.subline2,
     paddingTop: 20,
     minHeight: 50,
+    textAlign:'left'
   },
   withoutValue: {
     backgroundColor: colors.primary,
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     color: colors.palegrey,
     // marginBottom: 10,
     zIndex: 100,
+    textAlign:'left'
   },
 });
 

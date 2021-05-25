@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, I18nManager } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 
@@ -237,6 +237,7 @@ export class Question extends Component {
                 id="definition"
                 style={{
                   fontSize: 16,
+                  textAlign:'left'
                 }}>
                 {this.indicator.definition || null}
               </Text>
@@ -279,6 +280,7 @@ export class Question extends Component {
             }}
               styles={{
                 color: colors.palegreen,
+                transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]
               }}
               labelStyle={globalStyles.h4}
             />

@@ -131,12 +131,15 @@ const InputWithFormik = ({
           borderBottomColor: styles[status].borderBottomColor,
           paddingLeft: 11,
           paddingTop: 2,
+          
         }}
         inputStyle={{
           ...globalStyles.subline2,
           fontFamily: 'Roboto',
           paddingRight: 30,
           minHeight: 58,
+          textAlign: 'right'
+          
         }}
         editable={!readOnly}
         multiline={true}
