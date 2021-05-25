@@ -34,6 +34,7 @@ import {updateDraft} from '../../redux/actions';
 import colors from '../../theme.json';
 import {getTotalScreens} from './helpers';
 import {calculateProgressBar} from '../utils/helpers';
+import { I18nManager } from 'react-native';
 
 const GOOGLE_GEO_API_KEY = 'AIzaSyBLGYYy86_7QPT-dKgUnFMIJyhUE6AGVwM';
 Geocoder.init(GOOGLE_GEO_API_KEY);
@@ -956,6 +957,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 21,
     color: colors.grey,
+    textAlign: I18nManager.isRTL ? 'right':'left'
   },
   autoCompleteListView: {
     backgroundColor: colors.white,

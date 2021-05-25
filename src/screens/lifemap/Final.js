@@ -9,7 +9,9 @@ import {
   StyleSheet,
   Platform,
   Text,
-  View, Vibration,
+  View,
+  Vibration,
+  I18nManager
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNPrint from 'react-native-print';
@@ -143,6 +145,7 @@ export class Final extends Component {
 
   async exportPDF() {
     this.setState({downloading: true});
+    
     const permissionsGranted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
@@ -177,6 +180,7 @@ export class Final extends Component {
           }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
         ),
         existLogo,
+        dir
       );
       const pdf = await RNHTMLtoPDF.convert(pdfOptions);
 

@@ -12,8 +12,12 @@ import {
 
 import {getLocaleForLanguage} from '../../utils';
 import 'moment/locale/ar';
+import {I18nManager} from 'react-native';
 
-moment.locale('ar')
+
+if(I18nManager.isRTL) {
+  moment.locale('ar');
+}
 
 const MAX_COLS = 5;
 
@@ -54,7 +58,8 @@ const createTableRow = (
   previousIndicatorPriorities,
   previousIndicatorAchievements,
 ) => {
-  return `<tr dir='rtl' style="${styles.tableRow}">
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
+  return `<tr dir='${dir}' style="${styles.tableRow}">
               ${indicatorsArray
                 .map((indicator) => {
                   const color = getColor(indicator.value);
@@ -140,12 +145,14 @@ const createTableRow = (
 };
 
 /* PRIORITIES TABLE */
-const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => `
-  <div dir='rtl' style="${styles.wrapperHeader};page-break-before: always;">
+const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => {
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
+  return `
+  <div dir='${dir}' style="${styles.wrapperHeader};page-break-before: always;">
   <div style="${styles.titleWrapper}">
               <h2 style="${styles.title}">${i18n.t(
-  'views.lifemap.myPriorities',
-)}  ${priorityIconWithoutStyles}</h2>
+    'views.lifemap.myPriorities',
+  )}  ${priorityIconWithoutStyles}</h2>
 <h2 style="${styles.date};">${dateCreated.format('MMMM D, YYYY')}</h2>
 </div>         
   ${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
@@ -153,17 +160,18 @@ const generateTableHeaderForPriorities = (dateCreated, logo, existLogo) => `
   <tr>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.status')}</th>
     <th style="${styles.tHeader};text-align:left;">${i18n.t(
-  'views.lifemap.indicator',
-)}</th>
+    'views.lifemap.indicator',
+  )}</th>
     <th style="${styles.tHeader}">${i18n.t(
-  'views.lifemap.whyDontYouHaveIt',
-)}</th>
+    'views.lifemap.whyDontYouHaveIt',
+  )}</th>
     <th style="${styles.tHeader}">${i18n.t(
-  'views.lifemap.whatWillYouDoToGetIt',
-)}</th>
+    'views.lifemap.whatWillYouDoToGetIt',
+  )}</th>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.monthsRequired')}</th>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.reviewDate')}</th>
     </tr>`;
+};
 
 const generatePrioritiesTable = (
   priorities,
@@ -174,10 +182,11 @@ const generatePrioritiesTable = (
   logo,
   existLogo,
 ) => {
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
   return `
-          <table dir='rtl' cellspacing="0" style="${
-            styles.tableWithHeader
-          };page-break-after: always;">
+          <table dir='${dir}' cellspacing="0" style="${
+    styles.tableWithHeader
+  };page-break-after: always;">
             ${generateTableHeaderForPriorities(dateCreated, logo, existLogo)}
             ${priorities
               .map((priority, index) => {
@@ -222,12 +231,14 @@ const generatePrioritiesTable = (
 /* END PRIORITIES TABLE */
 
 /* ACHIEVEMENTS TABLE */
-const generateTableHeaderForAchievements = (dateCreated, logo, existLogo) => `
-  <div dir='rtl' style="${styles.wrapperHeader};page-break-before: always;">
+const generateTableHeaderForAchievements = (dateCreated, logo, existLogo) => {
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
+  return `
+  <div dir='${dir}' style="${styles.wrapperHeader};page-break-before: always;">
   <div style="${styles.titleWrapper}">
               <h2 style="${styles.title}">${i18n.t(
-  'views.lifemap.myAchievements',
-)} ${achievementIconWithoutStyles}</h2>
+    'views.lifemap.myAchievements',
+  )} ${achievementIconWithoutStyles}</h2>
 <h2 style="${styles.date};">${dateCreated.format('MMMM D, YYYY')}</h2>
 </div>
 
@@ -239,13 +250,14 @@ ${existLogo ? `<img src=${logo}  alt=" " style="${styles.logoImage}" />` : ''}
   <tr>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.status')}</th>
     <th style="${styles.tHeader};text-align:left;">${i18n.t(
-  'views.lifemap.indicator',
-)}</th>
+    'views.lifemap.indicator',
+  )}</th>
     <th style="${styles.tHeader}">${i18n.t('views.lifemap.howDidYouGetIt')}</th>
     <th style="${styles.tHeader}">${i18n.t(
-  'views.lifemap.whatDidItTakeToAchieveThis',
-)}</th>
+    'views.lifemap.whatDidItTakeToAchieveThis',
+  )}</th>
     </tr>`;
+};
 
 const generateAchievementsTable = (
   achievements,
@@ -256,8 +268,9 @@ const generateAchievementsTable = (
   logo,
   existLogo,
 ) => {
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
   return `
-              <table dir='rtl' cellspacing="0" style="${
+              <table dir='${dir}' cellspacing="0" style="${
                 styles.tableWithHeader
               };page-break-after: always;">
                 ${generateTableHeaderForAchievements(
@@ -312,8 +325,9 @@ const generateLifeMapHtmlTemplate = (draft, survey, lng, logo, existLogo) => {
   dateCreated.locale(getLocaleForLanguage(lng));
 
   const reportTitle = getReportTitle(draft);
+  const dir = I18nManager.isRTL ? 'rtl' : 'ltr';
 
-  return `<div dir='rtl' style="${styles.wrapper}">
+  return `<div dir='${dir}' style="${styles.wrapper}">
   <div style="${styles.titleWrapper}">
             <h2 style="${styles.title}">${reportTitle}, ${i18n.t(
     'views.lifemap.lifeMap',
