@@ -39,6 +39,9 @@ import {
   SET_VALIDATE,
   LOAD_PROJECTS_ROLLBACK,
   LOAD_PROJECTS_COMMIT,
+  LOAD_INTERVENTION_DEFINITION,
+  LOAD_INTERVENTION_DEFINITION_COMMIT,
+  LOAD_INTERVENTION_DEFINITION_ROLLBACK,
   ADD_PRIORITY,
   SUBMIT_PRIORITY,
   SUBMIT_PRIORITY_COMMIT,
@@ -143,6 +146,16 @@ export const projects = (state = [], action) => {
   switch (action.type) {
     case LOAD_PROJECTS_COMMIT:
       return action.payload.data.projectsByOrganization;
+    default:
+      return state;
+  }
+};
+
+// Intervention Definition
+export const interventionDefinition = (state=[], action) => {
+  switch(action.type) {
+    case LOAD_INTERVENTION_DEFINITION_COMMIT:
+      return state;
     default:
       return state;
   }

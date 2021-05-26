@@ -155,6 +155,37 @@ export const loadProjectsByOrganization = (env, token, orgId) => ({
   }
 })
 
+// Interventions
+
+export const LOAD_INTERVENTION_DEFINITION = 'LOAD_INTERVENTION_DEFINITION';
+export const LOAD_INTERVENTION_DEFINITION_COMMIT = 'LOAD_INTERVENTION_DEFINITION_COMMIT';
+export const LOAD_INTERVENTION_DEFINITION_ROLLBACK = 'LOAD_INTERVENTION_DEFINITION_ROLLBACK';
+
+export const loadInterventionDefinition = (env, token, orgId) => ({
+  type: LOAD_INTERVENTION_DEFINITION,
+  env,
+  token,
+  meta: {
+    offline:{
+      effect: {
+        url:`${env}/graphql`,
+        method:'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body:JSON.stringify({
+          query:`query interventionDefinitionByOrg( $organization: Long!) { interventionDefinitionByOrg( organization: $organization){ id title active questions { id codeName shortName answerType coreQuestion required options {value text otherOption}}`,
+          variables: {
+            organization: orgId
+          }
+        })
+      },
+      commit: { type:LOAD_INTERVENTION_DEFINITION_COMMIT},
+      rollback: { type:LOAD_INTERVENTION_DEFINITION_ROLLBACK},
+    }
+  }
+});
+
 // Surveys
 
 export const LOAD_SURVEYS = 'LOAD_SURVEYS';
