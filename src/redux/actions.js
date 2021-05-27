@@ -174,7 +174,7 @@ export const loadInterventionDefinition = (env, token, orgId) => ({
           Authorization: `Bearer ${token}`
         },
         body:JSON.stringify({
-          query:`query interventionDefinitionByOrg( $organization: Long!) { interventionDefinitionByOrg( organization: $organization){ id title active questions { id codeName shortName answerType coreQuestion required options {value text otherOption}}`,
+          query:`query interventionDefinitionByOrg( $organization: Long!) { interventionDefinitionByOrg( organization: $organization){ id title active questions { id codeName shortName answerType coreQuestion required options {value text otherOption}} }}`,
           variables: {
             organization: orgId
           }
@@ -237,7 +237,7 @@ export const loadFamilies = (env, token) => ({
         },
         body: JSON.stringify({
           query:
-            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } } } }',
+            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName interventionDate } } } }'
         }),
       },
       commit: { type: LOAD_FAMILIES_COMMIT },

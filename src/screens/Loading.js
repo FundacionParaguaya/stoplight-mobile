@@ -345,7 +345,7 @@ export class Loading extends Component {
     }
 
     // start syncing families once intervention definition is synced
-    if (!prevProps.sync.projects && this.props.sync.projects && this.props.sync.interventionDefinition) {
+    if (!prevProps.sync.interventionDefinition && this.props.sync.interventionDefinition) {
       this.syncFamilies();
     }
 
@@ -513,11 +513,29 @@ export class Loading extends Component {
                     </View>
                   )}
 
+                {/*   {!sync.projects ? (
+                    <Text style={styles.colorDark}>{t('views.interventionDefinition')}</Text>
+                  ):null} */}
+
+                  {sync.projects && sync.interventionDefinition && (
+                    <View style={styles.syncingItem}>
+                        {sync.interventionDefinition && interventionDefinition !== null && (<>
+                      <Text style={sync.interventionDefinition ? styles.colorGreen : styles.colorDark}>
+                        {t('views.loading.interventionDefinitionCached')}
+                      </Text>
+                      <Icon
+                        name="check"
+                        color={colors.palegreen}
+                        size={23}
+                      /></>)}
+                    </View>
+                  )}
+
                 
-                  {!sync.projects ? (
+                  {!sync.interventionDefinition ? (
                     <Text style={styles.colorDark}>{t('views.families')}</Text>
                   ) : null}
-                  {sync.projects && (
+                  {sync.interventionDefinition && (
                     <View style={styles.syncingItem}>
                       <Text
                         style={
@@ -798,6 +816,7 @@ export const mapStateToProps = ({
   offline,
   families,
   projects,
+  interventionDefinition,
   maps,
   hydration,
   downloadMapsAndImages,
@@ -809,6 +828,7 @@ export const mapStateToProps = ({
   offline,
   families,
   projects,
+  interventionDefinition,
   maps,
   hydration,
   downloadMapsAndImages,

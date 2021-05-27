@@ -39,7 +39,6 @@ import {
   SET_VALIDATE,
   LOAD_PROJECTS_ROLLBACK,
   LOAD_PROJECTS_COMMIT,
-  LOAD_INTERVENTION_DEFINITION,
   LOAD_INTERVENTION_DEFINITION_COMMIT,
   LOAD_INTERVENTION_DEFINITION_ROLLBACK,
   ADD_PRIORITY,
@@ -155,7 +154,7 @@ export const projects = (state = [], action) => {
 export const interventionDefinition = (state=[], action) => {
   switch(action.type) {
     case LOAD_INTERVENTION_DEFINITION_COMMIT:
-      return state;
+      return action.payload.data.interventionDefinitionByOrg;
     default:
       return state;
   }
@@ -494,6 +493,8 @@ export const sync = (
     familiesError: false,
     projects: false,
     projectsError: false,
+    interventionDefinition:false,
+    interventionDefinitionError:false,
     images: {
       total: 0,
       synced: 0,
@@ -542,6 +543,11 @@ export const sync = (
         ...state,
         projectsError: true,
       };
+    case LOAD_INTERVENTION_DEFINITION_ROLLBACK:
+      return {
+        ...state,
+        interventionDefinitionError:true
+      }
     case LOAD_MAPS_ROLLBACK:
       return {
         ...state,
@@ -557,6 +563,8 @@ export const sync = (
         familiesError: false,
         projects: false,
         projectsError: false,
+        interventionDefinition:false,
+        interventionDefinitionError:false,
         images: {
           total: 0,
           synced: 0,
@@ -604,6 +612,7 @@ const appReducer = combineReducers({
   surveys,
   families,
   projects,
+  interventionDefinition,
   syncStatus,
   drafts,
   language,
@@ -648,6 +657,16 @@ export const rootReducer = (state, action) => {
     }
   }
 
+  // note that intervention definition is synced in the store
+  if(action.type === LOAD_INTERVENTION_DEFINITION_COMMIT) {
+    state = {
+      ...state,
+      sync:{
+        ...state.sync,
+        interventionDefinition: true,
+      }
+    }
+  }
   // if there are no images to cache, make it so the loading screen can continue
   if (action.type === SET_SYNCED_ITEM_TOTAL && !action.amount) {
     state = {
