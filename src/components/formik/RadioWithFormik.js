@@ -12,6 +12,7 @@ import globalStyles from '../../globalStyles';
 import colors from '../../theme.json';
 
 const RadioWithFormik = ({
+  label,
   onChange,
   name,
   readOnly,
@@ -40,7 +41,7 @@ const RadioWithFormik = ({
         style={[
           styles.placeholder,
           error ? {color: colors.red} : {},
-        ]}>{`${questionText}${required && !readOnly ? ' *' : ''}`}</Text>
+        ]}>{`${label ? label : questionText}${required && !readOnly ? ' *' : ''}`}</Text>
 
       <RadioForm formHorizontal={true} animation={false}>
         <View

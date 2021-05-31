@@ -26,6 +26,7 @@ const SelectWithFormik = ({
   value,
   formik,
   name,
+  label,
   readOnly,
   question,
   onChange,
@@ -72,10 +73,10 @@ const SelectWithFormik = ({
                   !error && {
                     color: colors.palegreen,
                   },
-              ]}>{`${questionText}${required && !readOnly ? ' *' : ''}`}</Text>
+              ]}>{`${label ? label : questionText}${required && !readOnly ? ' *' : ''}`}</Text>
           )}
           <Text style={[styles.placeholder, error ? {color: colors.red} : {}]}>
-            {value ? text : `${questionText}${required ? ' *' : ''}`}
+            {value ? text : `${label ? label : questionText}${required ? ' *' : ''}`}
           </Text>
           {!readOnly ? <Image source={arrow} style={styles.arrow} /> : null}
 

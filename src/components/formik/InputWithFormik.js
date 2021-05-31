@@ -18,7 +18,7 @@ const InputWithFormik = ({
   onChange,
 }) => {
   const [status, setStatus] = useState('blur');
-  const {required, questionText} = question;
+  const {required, questionText} = question || {};
   const value = _.get(formik.values, name) || '';
   const error = pathHasError(name, formik.touched, formik.errors);
   const helperText = getErrorLabelForPath(

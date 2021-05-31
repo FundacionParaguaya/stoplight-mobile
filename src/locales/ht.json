@@ -89,7 +89,7 @@
     "projects": "Pwojè yo",
     "project": "Pwojè",
     "createLifemap": "Kòmanse ankèt Stoplight la",
-    "noSurveys":"Pa gen okenn sondaj ki disponib",
+    "noSurveys": "Pa gen okenn sondaj ki disponib",
     "latestDrafts": "Dènye kat lavi",
     "noDrafts": "Pa gen bwouyon pou montre",
     "termsConditions": "Tèm ak Kondisyon",
@@ -118,7 +118,7 @@
       "projectsCached": "Pwojè an mòd kache",
       "downloadingProjects": "Telechajman pwojè...",
       "familiesCached": "Families cached",
-      "interventionDefinitionCached":"Definisyon entèvansyon",
+      "interventionDefinitionCached": "Definisyon entèvansyon",
       "downloadingFamilies": "Telechajman fanmi...",
       "mapsCached": "Kat an mòd kache",
       "mapsDownloading": "Telechajman kat yo...",
@@ -194,7 +194,9 @@
       "female": "",
       "male": "",
       "noAnswer": "",
-      "other": ""
+      "other": "",
+      "interventions": "Entèvansyon",
+      "addIntervention": "Ajoute entèvansyon"
     },
     "lifemap": {
       "indicatorDefinition": "Definisyon endikatè",

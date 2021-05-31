@@ -194,7 +194,9 @@
       "other": "Otro",
       "noAnswer": "Prefiero no contestar",
       "pictures": "Imágenes",
-      "sign": "Firma"
+      "sign": "Firma",
+      "interventions": "Intervenciones",
+      "addIntervention": "Agregar intervención"
     },
     "lifemap": {
       "indicatorDefinition": "Definición del indicador",

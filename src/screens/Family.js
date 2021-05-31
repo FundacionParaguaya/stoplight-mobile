@@ -114,6 +114,17 @@ export class Family extends Component {
       Linking.openURL(url);
     }
   };
+
+  getDraft = () =>
+    this.props.drafts.find((draft) => draft.draftId === this.draftId);
+
+  handleClickOnAddIntervention = () => {
+    const { navigation } = this.props;
+    navigation.navigate('AddIntervention',{
+      draft: this.props.familyLifemap,
+    });
+  };
+
   handleResumeClick = () => {
     const {navigation} = this.props;
 
@@ -288,7 +299,7 @@ export class Family extends Component {
   };
   render() {
     const {activeTab} = this.state;
-    const {t, navigation} = this.props;
+    const {t, navigation, interventionDefinition} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
     const stoplightSkipped = this.familyLifemap.stoplightSkipped;
     const {width, height} = Dimensions.get('window');
@@ -338,13 +349,21 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            full={stoplightSkipped ? true : false}
+            full={stoplightSkipped && interventionDefinition == null ? true : false}
           />
           {!stoplightSkipped && (
             <FamilyTab
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
+            />
+          )}
+
+          {interventionDefinition !== null && (
+            <FamilyTab
+              title={t('views.family.interventions')}
+              onPress={()=> this.setState({activeTab:'Interventions'})}
+              active={activeTab === 'Interventions'}
             />
           )}
         </View>
@@ -643,6 +662,21 @@ export class Family extends Component {
             )}
           </ScrollView>
         ) : null}
+
+      {/* Intervention tab */}
+
+      {activeTab === 'Interventions' ? (
+        <ScrollView id="intervention">
+          <View style={styles.buttonContainer}>
+            <Button
+              style={styles.buttonSmall}
+              text={t('views.family.addIntervention')}
+              handleClick={this.handleClickOnAddIntervention}
+            />
+          </View>
+        </ScrollView>
+      ):null}
+
       </ScrollView>
     );
   }
@@ -793,6 +827,8 @@ const mapStateToProps = ({
   syncStatus,
   projects,
   priorities,
+  drafts,
+  interventionDefinition
 }) => ({
   surveys,
   env,
@@ -800,6 +836,8 @@ const mapStateToProps = ({
   syncStatus,
   projects,
   priorities,
+  drafts,
+  interventionDefinition
 });
 
 export default withNamespaces()(

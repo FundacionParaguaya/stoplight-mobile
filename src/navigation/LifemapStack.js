@@ -19,12 +19,14 @@ import FinalView from '../screens/lifemap/Final';
 import OverviewView from '../screens/lifemap/Overview';
 import PrioritiesView from '../screens/lifemap/Priorities';
 import SkippedView from '../screens/lifemap/Skipped';
+import AddIntervention from '../screens/interventions/AddIntervention';
 
 import CloseButton from './CloseButton';
 import Title from './Title';
 import CustomHeaderSurvey from './CustomHeaderSurvey';
 import {generateNavStyles, addMenuIcon} from './helpers';
 import SelectIndicatorPriorityView from '../screens/lifemap/SelectIndicatorPriority';
+
 
 const Stack = createStackNavigator();
 export default LifemapStack = ({navigation}) => (
@@ -480,6 +482,22 @@ export const FamiliesStack = (propz) => (
         ...generateNavStyles({navigation, route })
       })}
 
+    />
+
+    <Stack.Screen
+      name="AddIntervention"
+      component={AddIntervention}
+      options = {({ route, navigation }) =>({
+        headerTitle: (props) => {
+          return(
+            <Title
+              title={route && route.params && route.params.familyName ? route.params.familyName: '' }
+              accessibilityAssertiveType="none"
+            />
+          )
+        },
+        ...generateNavStyles({navigation, route})
+      })}
     />
     <Stack.Screen
       name="Surveys"

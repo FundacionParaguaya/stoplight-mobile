@@ -10,7 +10,7 @@ class FamilyTab extends Component {
       <TouchableHighlight
         style={{
           ...styles.tab,
-          width: this.props.full ? '100%' : '50%',
+          width: this.props.full ? '100%' : '33%',
           ...(this.props.active ? styles.activeTab : {})
         }}
         onPress={this.props.onPress}

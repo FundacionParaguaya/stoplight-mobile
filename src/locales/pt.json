@@ -75,7 +75,7 @@
     "home": "Início",
     "completeStoplight": "Seu Semáforo",
     "createLifemap": "Realize seu Semáforo",
-    "noSurveys":"Não há pesquisas disponíveis",
+    "noSurveys": "Não há pesquisas disponíveis",
     "latestDrafts": "Últimas instantâneas",
     "noDrafts": "Não há rascunhos para mostrar",
     "termsConditions": "Termos & Condições",
@@ -103,7 +103,7 @@
       "projectsCached": "Projetos",
       "downloadingProjects": "Baixando projetos ...",
       "familiesCached": "Famílias sincronizadas",
-      "interventionDefinitionCached":"Definição de intervenção",
+      "interventionDefinitionCached": "Definição de intervenção",
       "downloadingFamilies": "Carregando famílias",
       "mapsCached": "Mapas sincronizados",
       "mapsDownloading": "Carregando mapas",
@@ -179,7 +179,9 @@
       "male": "",
       "membersDontMatch": "",
       "noAnswer": "",
-      "other": ""
+      "other": "",
+      "interventions": "Intervenções",
+      "addIntervention": "Adicionar intervenção"
     },
     "lifemap": {
       "indicatorDefinition": "Definição do indicador",
