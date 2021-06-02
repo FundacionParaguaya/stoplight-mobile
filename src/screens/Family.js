@@ -122,6 +122,7 @@ export class Family extends Component {
     const { navigation } = this.props;
     navigation.navigate('AddIntervention',{
       draft: this.props.familyLifemap,
+      survey:this.survey
     });
   };
 

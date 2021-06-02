@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {Form, Formik} from 'formik';
 import StickyFooter from '../../components/StickyFooter';
@@ -15,8 +15,11 @@ import InputWithDep from '../../components/formik/InputWithDep';
 import RadioWithFormik from '../../components/formik/RadioWithFormik';
 import OtherOptionInput from '../../components/OtherOptionInput';
 import {capitalize} from 'lodash';
+import MultiSelectWithFormik from '../../components/formik/MultiSelectWithFormik';
 
-const AddIntervention = ({t, interventionDefinition}) => {
+const AddIntervention = ({t, interventionDefinition,route }) => {
+  const [questions, setQuestions] = useState([]);
+  const survey= route.params.survey;
   const buildInitialValuesForForm = (questions) => {
     const initialValue = {};
     questions.forEach((question) => {
@@ -28,6 +31,25 @@ const AddIntervention = ({t, interventionDefinition}) => {
     });
     return initialValue;
   };
+
+  useEffect(() => {
+    let questions = interventionDefinition.questions;
+    let indicators = survey.surveyStoplightQuestions || [];
+    if(indicators && Array.isArray(indicators)) {
+      console.log('ind', indicators)
+      let indicatorsOptions = indicators.map(ind => ({ value: ind.codeName, text: ind.questionText })) || [];
+      questions = questions.map(question => {
+        if(question.codeName === 'stoplightIndicator') {
+          question.options = indicatorsOptions;
+        }
+        return question;
+      })
+    }
+    setQuestions(questions);
+   
+  },[])
+
+
 
   return (
     <Formik
@@ -43,7 +65,7 @@ const AddIntervention = ({t, interventionDefinition}) => {
       {(formik) => {
         return (
           <StickyFooter continueLabel={i18n.t('general.continue')}>
-            {interventionDefinition.questions.map((question, index) => {
+            {questions.map((question, index) => {
               if (question.answerType === 'select') {
                 return (
                   <React.Fragment key={question.codeName}>
@@ -81,13 +103,23 @@ const AddIntervention = ({t, interventionDefinition}) => {
                 );
               }
 
-              if(question.answerType === 'multiselect') {
-                return(
+              if (question.answerType === 'multiselect') {
+                return (
                   <React.Fragment key={question.codeName}>
-                    
-
+                    <MultiSelectWithFormik
+                      t={t}
+                      name={question.codeName}
+                      label={question.shortName}
+                      formik={formik}
+                      rawOptions={question.options || []}
+                      values={
+                        !!formik.values[question.codeName]
+                          ? formik.values[question.codeName]
+                          : []
+                      }
+                    />
                   </React.Fragment>
-                )
+                );
               }
 
               if (question.answerType === 'checkbox') {
@@ -178,8 +210,8 @@ const AddIntervention = ({t, interventionDefinition}) => {
                         )
                       }>
                       {(otherOption, value, formik, question) => {
-                        console.log('otherOption',otherOption)
-                        console.log('value',value)
+                        console.log('otherOption', otherOption);
+                        console.log('value', value);
                         if (otherOption === value) {
                           return (
                             <InputWithFormik
@@ -197,8 +229,8 @@ const AddIntervention = ({t, interventionDefinition}) => {
                               name={`custom${capitalize(question.codeName)}`}
                             />
                           );
-                        }else {
-                          return null
+                        } else {
+                          return null;
                         }
                       }}
                     </OtherOptionInput>
@@ -207,14 +239,15 @@ const AddIntervention = ({t, interventionDefinition}) => {
               }
 
               if (question.answerType === 'boolean') {
-                return <BooleanWithFormik
-                  key= { question.codeName}
-                  formik = {formik}
-                  label={question.shortName}
-                  name={question.codeName}
-                  question={question}
-
-                />;
+                return (
+                  <BooleanWithFormik
+                    key={question.codeName}
+                    formik={formik}
+                    label={question.shortName}
+                    name={question.codeName}
+                    question={question}
+                  />
+                );
               }
               if (question.answerType === 'text') {
                 return (
