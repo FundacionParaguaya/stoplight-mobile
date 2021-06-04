@@ -32,7 +32,7 @@ import {
 } from '../redux/actions';
 import {screenSyncScreenContent} from '../screens/utils/accessibilityHelpers';
 import {prepareDraftForSubmit, fakeSurvey} from './utils/helpers';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import DownloadPopup from '../screens/modals/DownloadModal';
 import {PhoneNumberUtil} from 'google-libphonenumber';
 import Button from '../components/Button';
@@ -205,7 +205,7 @@ export class Sync extends Component {
       const fileName = `BackupFile_${
         this.props.user ? this.props.user.username : 'user'
       }_${new Date().getTime() / 1000}`;
-      let filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.json`;
+      let filePath = `${ReactNativeBlobUtil.fs.dirs.DownloadDir}/${fileName}.json`;
       const pendingDraft = this.props.drafts.filter(
         (draft) =>
           draft.status == 'Pending sync' || draft.status == 'Pending images',
@@ -214,14 +214,14 @@ export class Sync extends Component {
         (draft) => draft.status == 'Sync error',
       );
 
-      const rootDir = RNFetchBlob.fs.dirs.DownloadDir.replace('/Download', '');
-      const existPspFolder = await RNFetchBlob.fs.isDir(`${rootDir}/Psp`);
-      const existDownloadFolder = await RNFetchBlob.fs.isDir(
-        RNFetchBlob.fs.dirs.DownloadDir,
+      const rootDir = ReactNativeBlobUtil.fs.dirs.DownloadDir.replace('/Download', '');
+      const existPspFolder = await ReactNativeBlobUtil.fs.isDir(`${rootDir}/Psp`);
+      const existDownloadFolder = await ReactNativeBlobUtil.fs.isDir(
+        ReactNativeBlobUtil.fs.dirs.DownloadDir,
       );
 
       if (!existDownloadFolder && !existPspFolder) {
-        await RNFetchBlob.fs.mkdir(`${rootDir}/Psp`);
+        await ReactNativeBlobUtil.fs.mkdir(`${rootDir}/Psp`);
         filePath = `${rootDir}/Psp/${fileName}.json`;
       }
 
@@ -273,7 +273,7 @@ export class Sync extends Component {
         errorStatus: sanitizedErrorDrafts,
         env: this.props.env,
       };
-      await RNFetchBlob.fs.createFile(filePath, JSON.stringify(json), 'utf8');
+      await ReactNativeBlobUtil.fs.createFile(filePath, JSON.stringify(json), 'utf8');
       this.toggleDownloadModal();
       if ((!existDownloadFolder && !existPspFolder) || existPspFolder) {
         this.setState({existPspFolder: true});

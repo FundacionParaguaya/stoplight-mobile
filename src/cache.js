@@ -1,7 +1,7 @@
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import store from './redux/store'
 import { setSyncedItemTotal, setSyncedItemAmount } from './redux/actions'
-let dirs = RNFetchBlob.fs.dirs
+let dirs = ReactNativeBlobUtil.fs.dirs
 
 export const getSurveys = () => store.getState().surveys
 export const getUser = () => store.getState().user
@@ -36,11 +36,11 @@ export const cacheImages = async imageURLs => {
   store.dispatch(setSyncedItemAmount('images', 0))
 
   await asyncForEach(imageURLs, async source => {
-    RNFetchBlob.fs
+    ReactNativeBlobUtil.fs
       .exists(`${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`)
       .then(exist => {
         if (!exist && isOnline) {
-          RNFetchBlob.config({
+          ReactNativeBlobUtil.config({
             fileCache: true,
             appendExt: 'jpg',
             path: `${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`
@@ -97,41 +97,44 @@ export const cacheAudios = async audioURLS => {
   }
 
   store.dispatch(setSyncedItemAmount('audios', 0))
-  try {
-    await asyncForEach(audioURLS, async source => {
-      RNFetchBlob.fs.
-        exists(`${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`)
-        .then(exist => {
-          if (!exist && isOnline) {
-            RNFetchBlob.config({
-              fileCache: true,
-              appendExt: 'mp3',
-              path: `${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`
-            })
-              .fetch('GET', source)
-              .then(() => {
-                store.dispatch(
-                  setSyncedItemAmount('audios',
-                    store.getState().sync.audios.synced + 1
+  setTimeout(async() =>{
+    try {
+      await asyncForEach(audioURLS, async source => {
+        ReactNativeBlobUtil.fs.
+          exists(`${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`)
+          .then(exist => {
+            if (!exist && isOnline) {
+              ReactNativeBlobUtil.config({
+                fileCache: true,
+                appendExt: 'mp3',
+                path: `${dirs.DocumentDir}/${source.replace(/https?:\/\//, '')}`
+              })
+                .fetch('GET', source)
+                .then(() => {
+                  store.dispatch(
+                    setSyncedItemAmount('audios',
+                      store.getState().sync.audios.synced + 1
+                    )
                   )
-                )
-              })
-              .catch((errorMessage, statusCode) => {
-                console.log(errorMessage);
-                console.log(statusCode);
-              })
-          } else if (exist) {
-            store.dispatch(setSyncedItemAmount('audios', store.getState().sync.audios.synced + 1))
-          }
-        }).catch((errorMessage, statusCode) => {
-          console.log(errorMessage);
-          console.log(statusCode);
-        })
+                })
+                .catch((errorMessage, statusCode) => {
+                  console.log(errorMessage);
+                  console.log(statusCode);
+                })
+            } else if (exist) {
+              store.dispatch(setSyncedItemAmount('audios', store.getState().sync.audios.synced + 1))
+            }
+          }).catch((errorMessage, statusCode) => {
+            console.log(errorMessage);
+            console.log(statusCode);
+          })
+  
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },3000)
 
-    })
-  } catch (err) {
-    console.log(err)
-  }
 
 }
 

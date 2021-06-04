@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Platform } from 'react-native'
 import FullWidthImage from 'react-native-fullwidth-image'
 import PropTypes from 'prop-types'
-import RNFetchBlob from 'rn-fetch-blob'
 
-let dirs = RNFetchBlob.fs.dirs
+import ReactNativeBlobUtil from 'react-native-blob-util'
+
+let dirs = ReactNativeBlobUtil.fs.dirs
 
 export class CachedImage extends Component {
   getProperSourceForOS(source) {

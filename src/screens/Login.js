@@ -17,7 +17,7 @@ import {
 import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { connect } from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util'
 
 import logo from '../../assets/images/logo.png';
 import Button from '../components/Button';
@@ -170,7 +170,7 @@ export class Login extends Component {
     this.setState({ appState: nextAppState });
 
   isStorageSpaceEnough = async () => {
-    const freeSpace = await RNFetchBlob.fs.df();
+    const freeSpace = await ReactNativeBlobUtil.fs.df();
 
     return (
       Number(freeSpace.internal_free) > MINIMUM_REQUIRED_STORAGE_SPACE_500_MB

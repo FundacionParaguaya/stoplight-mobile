@@ -3,13 +3,13 @@ import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNamespaces } from 'react-i18next';
 import TrackPlayer from 'react-native-track-player';
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import PropTypes from 'prop-types';
 
 
 
 
-let dirs = RNFetchBlob.fs.dirs
+let dirs = ReactNativeBlobUtil.fs.dirs
 
 
 

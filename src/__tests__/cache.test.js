@@ -1,6 +1,6 @@
 import { cacheImages, getSurveys, filterURLsFromSurveys } from '../cache'
 import * as store from '../redux/store'
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util'
 
 const surveyTestData = [
   {
@@ -35,6 +35,6 @@ describe('image cache', () => {
   })
   it('cacheImages checks every image if it exists in the cache first', () => {
     cacheImages(['url1.jpg', 'url2.jpg'])
-    expect(RNFetchBlob.fs.exists).toHaveBeenCalledTimes(1)
+    expect(ReactNativeBlobUtil.fs.exists).toHaveBeenCalledTimes(1)
   })
 })

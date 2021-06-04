@@ -14,7 +14,7 @@ import CompressImage from 'react-native-compress-image';
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import Button from '../../components/Button';
 import Decoration from '../../components/decoration/Decoration';
 import RoundImage from '../../components/RoundImage';
@@ -89,7 +89,7 @@ export class Picture extends Component {
 
         await CompressImage.createCompressedImage(
           response.path,
-          RNFetchBlob.fs.dirs.DownloadDir,
+          ReactNativeBlobUtil.fs.dirs.DownloadDir,
         )
           .then((compressedImage) => {
             processedImage = {
@@ -204,7 +204,7 @@ export class Picture extends Component {
 
             await CompressImage.createCompressedImage(
               response.path,
-              RNFetchBlob.fs.dirs.DownloadDir,
+              ReactNativeBlobUtil.fs.dirs.DownloadDir,
             )
               .then((compressedImage) => {
                 processedImage = {

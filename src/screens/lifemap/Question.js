@@ -14,10 +14,10 @@ import colors from '../../theme.json';
 import { getTotalEconomicScreens } from './helpers';
 import {calculateProgressBar} from '../utils/helpers';
 import globalStyles from '../../globalStyles';
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import Audio from '../../components/Audio';
 
-let dirs = RNFetchBlob.fs.dirs
+let dirs = ReactNativeBlobUtil.fs.dirs
 
 export class Question extends Component {
   step = this.props.route.params.step;

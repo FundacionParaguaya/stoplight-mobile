@@ -10,7 +10,6 @@ import com.reactnativecommunity.androidprogressbar.RNCProgressBarPackage;
 import com.delightfulstudio.wheelpicker.WheelPickerPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.rssignaturecapture.RSSignatureCapturePackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.delightfulstudio.wheelpicker.WheelPickerPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;

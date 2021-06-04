@@ -14,7 +14,8 @@ import {
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNPrint from 'react-native-print';
 import {connect} from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+
 
 import Button from '../../components/Button';
 import LifemapVisual from '../../components/LifemapVisual';
@@ -161,10 +162,10 @@ export class Final extends Component {
 
     try {
       const fileName = getReportTitle(this.draft);
-      let filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.pdf`;
-      const existLogo = await RNFetchBlob.fs.exists(
+      let filePath = `${ReactNativeBlobUtil.fs.dirs.DownloadDir}/${fileName}.pdf`;
+      const existLogo = await ReactNativeBlobUtil.fs.exists(
         `${
-          RNFetchBlob.fs.dirs.DocumentDir
+          ReactNativeBlobUtil.fs.dirs.DocumentDir
         }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
       );
       const pdfOptions = buildPDFOptions(
@@ -173,21 +174,21 @@ export class Final extends Component {
         this.props.lng || 'en',
         this.getProperSourceForOS(
           `${
-            RNFetchBlob.fs.dirs.DocumentDir
+            ReactNativeBlobUtil.fs.dirs.DocumentDir
           }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
         ),
         existLogo,
       );
       const pdf = await RNHTMLtoPDF.convert(pdfOptions);
 
-      const rootDir = RNFetchBlob.fs.dirs.DownloadDir.replace('/Download', '');
-      const existPspFolder = await RNFetchBlob.fs.isDir(`${rootDir}/Psp`);
-      const existDownloadFolder = await RNFetchBlob.fs.isDir(
-        RNFetchBlob.fs.dirs.DownloadDir,
+      const rootDir = ReactNativeBlobUtil.fs.dirs.DownloadDir.replace('/Download', '');
+      const existPspFolder = await ReactNativeBlobUtil.fs.isDir(`${rootDir}/Psp`);
+      const existDownloadFolder = await ReactNativeBlobUtil.fs.isDir(
+        ReactNativeBlobUtil.fs.dirs.DownloadDir,
       );
 
       if (!existDownloadFolder && !existPspFolder) {
-        await RNFetchBlob.fs.mkdir(`${rootDir}/Psp`);
+        await ReactNativeBlobUtil.fs.mkdir(`${rootDir}/Psp`);
         filePath = `${rootDir}/Psp/${fileName}.pdf`;
         this.toggleDownloadModal();
       }
@@ -197,10 +198,10 @@ export class Final extends Component {
         filePath = `${rootDir}/Psp/${fileName}.pdf`;
       }
 
-      RNFetchBlob.fs
+      ReactNativeBlobUtil.fs
         .cp(pdf.filePath, filePath)
         .then(() =>
-          RNFetchBlob.android.addCompleteDownload({
+        ReactNativeBlobUtil.android.addCompleteDownload({
             title: `${fileName}.pdf`,
             description: 'Download complete',
             mime: 'application/pdf',
@@ -209,7 +210,7 @@ export class Final extends Component {
           }),
         )
         .then(() =>
-          RNFetchBlob.fs.scanFile([{path: filePath, mime: 'application/pdf'}]),
+        ReactNativeBlobUtil.fs.scanFile([{path: filePath, mime: 'application/pdf'}]),
         );
 
       this.setState({downloading: false, filePath: pdf.filePath});
@@ -219,9 +220,9 @@ export class Final extends Component {
   }
 
   async print() {
-    const existLogo = await RNFetchBlob.fs.exists(
+    const existLogo = await ReactNativeBlobUtil.fs.exists(
       `${
-        RNFetchBlob.fs.dirs.DocumentDir
+        ReactNativeBlobUtil.fs.dirs.DocumentDir
       }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
     );
     this.setState({printing: true});
@@ -231,7 +232,7 @@ export class Final extends Component {
       this.props.lng || 'en',
       this.getProperSourceForOS(
         `${
-          RNFetchBlob.fs.dirs.DocumentDir
+          ReactNativeBlobUtil.fs.dirs.DocumentDir
         }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
       ),
       existLogo,
