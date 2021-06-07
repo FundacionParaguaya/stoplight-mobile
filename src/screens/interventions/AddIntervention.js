@@ -1,25 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
-import {Form, Formik} from 'formik';
-import StickyFooter from '../../components/StickyFooter';
-import i18n from '../../i18n';
+import * as Yup from 'yup';
 
-import {connect} from 'react-redux';
-import InputWithFormik from '../../components/formik/InputWithFormik';
-import SelectWithFormik from '../../components/formik/SelectWithFormik';
-import {withNamespaces} from 'react-i18next';
-import DateInput from '../../components/form/DateInput';
+import {Form, Formik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {Text, View} from 'react-native';
+import {capitalize, values} from 'lodash';
+
 import BooleanWithFormik from '../../components/formik/BooleanWithFormik';
 import CheckboxWithFormik from '../../components/formik/CheckboxWithFormik';
+import DateInput from '../../components/form/DateInput';
 import InputWithDep from '../../components/formik/InputWithDep';
-import RadioWithFormik from '../../components/formik/RadioWithFormik';
-import OtherOptionInput from '../../components/OtherOptionInput';
-import {capitalize} from 'lodash';
+import InputWithFormik from '../../components/formik/InputWithFormik';
 import MultiSelectWithFormik from '../../components/formik/MultiSelectWithFormik';
+import OtherOptionInput from '../../components/OtherOptionInput';
+import RadioWithFormik from '../../components/formik/RadioWithFormik';
+import SelectWithFormik from '../../components/formik/SelectWithFormik';
+import StickyFooter from '../../components/StickyFooter';
+import {connect} from 'react-redux';
+import {drafts} from '../../redux/reducer';
+import i18n from '../../i18n';
+import moment from 'moment';
+import {submitIntervention} from '../../redux/actions';
+import {url} from '../../config.json';
+import {withNamespaces} from 'react-i18next';
 
-const AddIntervention = ({t, interventionDefinition,route }) => {
+const AddIntervention = ({
+  t,
+  env,
+  user,
+  interventionDefinition,
+  route,
+  intervention,
+  submitIntervention,
+}) => {
   const [questions, setQuestions] = useState([]);
-  const survey= route.params.survey;
+  const survey = route.params.survey;
   const buildInitialValuesForForm = (questions) => {
     const initialValue = {};
     questions.forEach((question) => {
@@ -32,24 +46,144 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
     return initialValue;
   };
 
+  const buildValidationSchemaForForm = (questions) => {
+    const schema = {};
+    let validation = Yup.string();
+    let dateValidation = Yup.date();
+    const validDate = 'validation.validDate';
+    const fieldIsRequired = 'validation.fieldIsRequired';
+
+    questions.forEach((question) => {
+      if (question.codeName === 'stoplightIndicator') {
+        schema[question.codeName] = Yup.string().when(
+          'generalIntervention',
+          (generalIntervention, schema) => {
+            return schema.test(
+              'stoplightIndicator',
+              fieldIsRequired,
+              (value) => {
+                return (
+                  (!!value && !generalIntervention) ||
+                  (!value && generalIntervention)
+                );
+              },
+            );
+          },
+        );
+      } else if (question.answerType === 'date' && question.coreQuestion) {
+        schema[question.codeName] = dateValidation
+          .typeError(fieldIsRequired)
+          .transform((_value, originalValue) => {
+            return originalValue
+              ? moment.unix(originalValue).toDate()
+              : new Date('');
+          })
+          .required(validDate)
+          .test({
+            name: 'test-date-range',
+            test: function (date) {
+              if (Date.parse(date) / 1000 > moment().unix()) {
+                return this.createError({
+                  message: validDate,
+                  path: question.codeName,
+                });
+              }
+              return true;
+            },
+          });
+      } else if (
+        question.required &&
+        question.codeName !== 'generalIntervention'
+      ) {
+        schema[question.codeName] = validation.required(fieldIsRequired);
+      }
+    });
+
+    const validationSchema = Yup.object().shape(schema);
+    return validationSchema;
+  };
+
   useEffect(() => {
     let questions = interventionDefinition.questions;
     let indicators = survey.surveyStoplightQuestions || [];
-    if(indicators && Array.isArray(indicators)) {
-      console.log('ind', indicators)
-      let indicatorsOptions = indicators.map(ind => ({ value: ind.codeName, text: ind.questionText })) || [];
-      questions = questions.map(question => {
-        if(question.codeName === 'stoplightIndicator') {
+    if (indicators && Array.isArray(indicators)) {
+      let indicatorsOptions =
+        indicators.map((ind) => ({
+          value: ind.codeName,
+          label: ind.questionText,
+        })) || [];
+      questions = questions.map((question) => {
+        if (question.codeName === 'stoplightIndicator') {
           question.options = indicatorsOptions;
         }
         return question;
-      })
+      });
     }
     setQuestions(questions);
-   
-  },[])
+  }, []);
 
+  const onSubmit = (values) => {
+    console.log('values', values);
+    let keys = Object.keys(values);
 
+    let answers = [];
+    keys.forEach((key) => {
+      const otherQuestion = !!key.match(/^custom/g);
+      const otherValue = values[`custom${capitalize(key)}`];
+      let answer;
+
+      if (otherQuestion) {
+      } else if (Array.isArray(values[key])) {
+        answer = {
+          codeName: key,
+          multipleValue: values[key].map((v) => v.value || v),
+          multipleText: values[key].map((v) => v.label || v),
+        };
+      } else {
+        answer = {
+          codeName: key,
+          value: values[key],
+        };
+      }
+
+      if (otherValue) {
+        answer = {
+          ...answer,
+          other: otherValue,
+        };
+      }
+
+      if (
+        !otherQuestion &&
+        (answer.value || answer.multipleValue || answer.value === false)
+      ) {
+        answers[key] = answer;
+      }
+    });
+
+    let finalAnswers = [];
+    keys.forEach((key) => {
+      const otherQuestion = !!key.match(/^custom/g);
+      let answer = answers[key];
+      !otherQuestion && finalAnswers.push(answer);
+    });
+
+    let params = '';
+    interventionDefinition.questions.forEach((question) => {
+      params += `${question.codeName} `;
+    });
+
+    console.log('submit', finalAnswers);
+    const payload = {
+      values: finalAnswers,
+      interventionDefinition: interventionDefinition.id,
+      snapshot: 2300,
+      relatedIntervention: intervention,
+      params,
+    };
+
+    submitIntervention(url[env], user.token, payload);
+  };
 
   return (
     <Formik
@@ -58,13 +192,14 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
       )}
       //initualValues={buildInitialValuesForForm(question, draft)}
       enableReinitialize
+      validationSchema={buildValidationSchemaForForm(questions)}
       //validationSchema={buildValidationSchemaForForm(questions)}
-      onSubmit={(values) => {
-        //onSubmit(values);
-      }}>
+      onSubmit={onSubmit}>
       {(formik) => {
         return (
-          <StickyFooter continueLabel={i18n.t('general.continue')}>
+          <StickyFooter
+            onContinue={formik.handleSubmit}
+            continueLabel={i18n.t('general.continue')}>
             {questions.map((question, index) => {
               if (question.answerType === 'select') {
                 return (
@@ -89,17 +224,20 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
 
               if (question.answerType === 'date') {
                 return (
+                  <React.Fragment key={question.codeName}>
                   <DateInput
                     required={true}
+                    validFutureDates={!question.coreQuestion}
                     label={question.shortName}
                     name={question.codeName}
-                    // showErrors = {showErrors}
-                    // setError={(isError) => setError(isError,question.codeName)}
-                    onValidDate={(unix, id) => formik.setFieldValue(id, unix)}
+                    onValidDate={(unix, id) =>
+                      formik.setFieldValue(question.codeName, unix)
+                    }
                     setError={(isError) =>
-                      formik.setFieldError(question.codeName)
+                      formik.setFieldError(question.codeName, isError)
                     }
                   />
+                   </React.Fragment>
                 );
               }
 
@@ -111,7 +249,12 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
                       name={question.codeName}
                       label={question.shortName}
                       formik={formik}
+                      question={question}
                       rawOptions={question.options || []}
+                      isDisabled={
+                        question.codeName === 'stoplightIndicator' &&
+                        formik.values.generalIntervention
+                      }
                       values={
                         !!formik.values[question.codeName]
                           ? formik.values[question.codeName]
@@ -127,6 +270,7 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
                   //<React.Fragment key={question.codeName}>
                   <>
                     <CheckboxWithFormik
+                      t={t}
                       key={question.codeName}
                       label={question.shortName}
                       name={question.codeName}
@@ -187,6 +331,7 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
                 return (
                   <React.Fragment key={question.codeName}>
                     <RadioWithFormik
+                      t={t}
                       key={question.codeName}
                       label={question.shortName}
                       name={question.codeName}
@@ -210,8 +355,6 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
                         )
                       }>
                       {(otherOption, value, formik, question) => {
-                        console.log('otherOption', otherOption);
-                        console.log('value', value);
                         if (otherOption === value) {
                           return (
                             <InputWithFormik
@@ -241,17 +384,24 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
               if (question.answerType === 'boolean') {
                 return (
                   <BooleanWithFormik
+                    t={t}
                     key={question.codeName}
                     formik={formik}
                     label={question.shortName}
                     name={question.codeName}
                     question={question}
+                    cleanUp={() => {
+                      if (question.codeName === 'generalIntervention') {
+                        formik.setFieldValue('stoplightIndicator', []);
+                      }
+                    }}
                   />
                 );
               }
               if (question.answerType === 'text') {
                 return (
                   <InputWithFormik
+                    t={t}
                     key={question.codeName}
                     label={question.shortName}
                     formik={formik}
@@ -264,6 +414,20 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
                   />
                 );
               }
+
+              return (
+                <InputWithFormik
+                  t={t}
+                  key={question.codeName}
+                  label={question.shortName}
+                  formik={formik}
+                  name={question.codeName}
+                  question={question}
+                  onChange={(e) => {
+                    formik.setFieldValue(question.codeName, e);
+                  }}
+                />
+              );
             })}
           </StickyFooter>
         );
@@ -271,8 +435,15 @@ const AddIntervention = ({t, interventionDefinition,route }) => {
     </Formik>
   );
 };
-const mapStateToProps = ({interventionDefinition}) => ({
+const mapStateToProps = ({user, env, interventionDefinition}) => ({
+  user,
+  env,
   interventionDefinition,
 });
+const mapDispatchToProps = {
+  submitIntervention,
+};
 
-export default withNamespaces()(connect(mapStateToProps)(AddIntervention));
+export default withNamespaces()(
+  connect(mapStateToProps, mapDispatchToProps)(AddIntervention),
+);

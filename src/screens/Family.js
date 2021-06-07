@@ -1,10 +1,5 @@
-import NetInfo from '@react-native-community/netinfo';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
 import {
+  Dimensions,
   FlatList,
   Image,
   Linking,
@@ -13,33 +8,38 @@ import {
   Text,
   TouchableHighlight,
   View,
-  Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {connect} from 'react-redux';
-import uuid from 'uuid/v1';
-
-import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
-import marker from '../../assets/images/marker.png';
-import Button from '../components/Button';
-import FamilyListItem from '../components/FamilyListItem';
-import FamilyTab from '../components/FamilyTab';
-import RoundImage from '../components/RoundImage';
-import {url} from '../config';
-import globalStyles from '../globalStyles';
+import React, {Component} from 'react';
 import {
   createDraft,
   submitDraft,
   submitDraftWithImages,
   submitPriority,
 } from '../redux/actions';
-import {getTotalScreens} from '../screens/lifemap/helpers';
-import colors from '../theme.json';
+
+import Button from '../components/Button';
+import FamilyListItem from '../components/FamilyListItem';
+import FamilyTab from '../components/FamilyTab';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import NetInfo from '@react-native-community/netinfo';
 import OverviewComponent from './lifemap/Overview';
-import {prepareDraftForSubmit} from './utils/helpers';
-import ProjectsPopup from '../components/ProjectsPopup';
 import ProfileImages from '../components/ProfileImages';
+import ProjectsPopup from '../components/ProjectsPopup';
+import PropTypes from 'prop-types';
+import RoundImage from '../components/RoundImage';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
 import {getLocaleForLanguage} from '../utils';
+import {getTotalScreens} from '../screens/lifemap/helpers';
+import globalStyles from '../globalStyles';
+import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
+import marker from '../../assets/images/marker.png';
+import moment from 'moment';
+import {prepareDraftForSubmit} from './utils/helpers';
+import {url} from '../config';
+import uuid from 'uuid/v1';
+import {withNamespaces} from 'react-i18next';
 
 export class Family extends Component {
   unsubscribeNetChange;
@@ -121,7 +121,7 @@ export class Family extends Component {
   handleClickOnAddIntervention = () => {
     const { navigation } = this.props;
     navigation.navigate('AddIntervention',{
-      draft: this.props.familyLifemap,
+      draft: this.familyLifemap,
       survey:this.survey
     });
   };

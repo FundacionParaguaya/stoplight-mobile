@@ -21,14 +21,10 @@ const OtherOptionInput = ({
 }) => {
     const otherOption = getOtherOption(fieldOptions);
     const values = formik.values[dep] || [];
-    console.log('dep',dep)
-    console.log('formik',formik)
-    console.log('fquestion',question)
-    console.log('otherOption',otherOption)
-    console.log('values',values)
-    /* console.log('values',!!values.find(v => v === otherOption)) */
+
+
     if(!isMultiValue) {
-        console.log('entro en No multivalue')
+
         const value = formik.values[dep];
 
         if(otherOption !== value && !!get(formik.values, target)) {
@@ -36,8 +32,7 @@ const OtherOptionInput = ({
         }
 
         if(otherOption && value && !!question && !!formik  ) {
-       /*      console.log('otherOption',otherOption)
-            console.log('value',value) */
+
             return children(otherOption, value, formik, question);
         }
         return null
@@ -47,8 +42,7 @@ const OtherOptionInput = ({
         if(!values.find(v => v=== otherOption) && !!get(formik.values, target)) {
             cleanUp();
         }else {
-         /*    console.log('values 2', values)
-           console.log('check',otherOption && !!values.find(v => v === otherOption) && !!formik && !!question) */
+      
             if(otherOption && !!values.find(v => v === otherOption) && !!formik && !!question) {
                
                 return children(

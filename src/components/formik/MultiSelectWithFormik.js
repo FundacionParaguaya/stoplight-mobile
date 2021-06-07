@@ -1,21 +1,23 @@
-import React, {useState} from 'react';
 import {
-  View,
-  StyleSheet,
+  FlatList,
   Image,
   ScrollView,
-  TouchableHighlight,
-  FlatList,
+  StyleSheet,
   Text,
+  TouchableHighlight,
+  View,
 } from 'react-native';
-import colors from '../../theme.json';
-import BottomModal from '../BottomModal';
-import ListItem from '../ListItem';
+import React, {useState} from 'react';
 import {getErrorLabelForPath, pathHasError} from './utils/form-utils';
-import arrow from '../../../assets/images/selectArrow.png';
-import globalStyles from '../../globalStyles';
+
+import BottomModal from '../BottomModal';
 import {Chip} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ListItem from '../ListItem';
+import arrow from '../../../assets/images/selectArrow.png';
+import colors from '../../theme.json';
+import {element} from 'prop-types';
+import globalStyles from '../../globalStyles';
 
 const MultiSelectWithFormik = ({
   values,
@@ -25,9 +27,9 @@ const MultiSelectWithFormik = ({
   question,
   onChange,
   rawOptions,
+  isDisabled,
   t,
 }) => {
-  console.log('rawOptions', rawOptions);
   const error = pathHasError(name, formik.touched, formik.errors);
   const helperText = getErrorLabelForPath(
     name,
@@ -35,16 +37,28 @@ const MultiSelectWithFormik = ({
     formik.errors,
     t,
   );
+  const {required} = question;
   const [isOpen, setIsOpen] = useState(false);
+
+  const selectableElements =  formik.values[name] ? rawOptions.filter(
+    (option) => !formik.values[name].find((el) => el.value == option.value),
+  ): rawOptions;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleChange = (e) => {
-    console.log('objeto', e);
     formik.setFieldValue(name, [...formik.values[name], e]);
   };
+
+  const removeElement = (e) => {
+    const elements = formik.values[name].filter(
+      (data) => data.value !== e.value,
+    );
+    formik.setFieldValue(name, elements);
+  };
+
   return (
     <View style={styles.wrapper}>
       <View style={[styles.container, !values.lenght && styles.withoutValue]}>
@@ -53,28 +67,29 @@ const MultiSelectWithFormik = ({
         )}
 
         <View style={[styles.placeholder, error ? {color: colors.red} : {}]}>
-          {!!formik.values[name] && formik.values[name].map(el => (
-            <Chip
-            title={el.text}
-
-            buttonStyle={{
-              backgroundColor:colors.grey,
-              marginBottom:5
-            }}
-            icon={{
-              name: 'close',
-              type: 'font-awesome',
-              size: 20,
-              color: 'white',
-            }}
-            iconRight
-          />
-          ))}
-          
-          
+          {}
+          {values.length ?
+            values.map((el) => (
+              <Chip
+                title={el.label}
+                buttonStyle={{
+                  backgroundColor: colors.grey,
+                  marginBottom: 5,
+                }}
+                icon={{
+                  name: 'close',
+                  type: 'font-awesome',
+                  size: 20,
+                  color: 'white',
+                }}
+                iconRight
+                onPress={() => removeElement(el)}
+              />
+            )): <Text style={[styles.placeholderText,  error ? {color: colors.red} : {}]}> {`${label}${required ? ' *' : ''}`}</Text>}
         </View>
         <TouchableHighlight
           underlay={'transparent'}
+          disabled={isDisabled}
           activeOpacity={1}
           onPress={toggleDropdown}
           accessible={true}
@@ -100,7 +115,7 @@ const MultiSelectWithFormik = ({
             <ScrollView>
               <FlatList
                 style={styles.list}
-                data={rawOptions}
+                data={selectableElements}
                 keyExtractor={(item, index) => index.toString()}
                 initialNumToRender={6}
                 renderItem={({item}) => (
@@ -110,20 +125,22 @@ const MultiSelectWithFormik = ({
                     key={item.value}
                     onPress={() => {
                       handleChange(item);
+                      toggleDropdown();
                     }}>
-                    <Text style={[styles.option]}>{item.text}</Text>
+                    <Text style={[styles.option]}>{item.label}</Text>
                   </ListItem>
                 )}
               />
             </ScrollView>
           </View>
         </BottomModal>
-        {!!helperText && (
-          <View style={{marginLeft: 30}}>
+        
+      </View>
+      {!!helperText && (
+          <View style={{marginLeft: 30, marginTop:10}}>
             <Text style={{color: colors.red}}>{helperText}</Text>
           </View>
         )}
-      </View>
     </View>
   );
 };
@@ -163,11 +180,15 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 20,
     minHeight: 50,
-    width:'80%',
+    width: '80%',
+
     flexDirection: 'row',
-    flex:1,
-    flexWrap:'wrap'
+    flex: 1,
+    flexWrap: 'wrap',
   },
+  placeholderText: {
+    ...globalStyles.subline2,
+  }, 
   option: {
     paddingHorizontal: 25,
     paddingVertical: 12,
