@@ -219,7 +219,17 @@ export const submitIntervention = (env, token, payload) => ({
     commit: {
       type:SUBMIT_INTERVENTION_COMMIT,
       meta: {
+        id:payload.values[0].value,
         payload
+      }
+    },
+    rollback: {
+      type:SUBMIT_INTERVENTION_ROLLBACK,
+      meta: {
+        id: {
+          id:payload.values[0].value,
+          payload
+        }
       }
     }
   }
@@ -277,7 +287,7 @@ export const loadFamilies = (env, token) => ({
         },
         body: JSON.stringify({
           query:
-            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName interventionDate } } } }'
+            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { id surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName interventionDate } } } }'
         }),
       },
       commit: { type: LOAD_FAMILIES_COMMIT },

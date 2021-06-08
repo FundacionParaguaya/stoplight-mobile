@@ -39,7 +39,7 @@ export class DateInputComponent extends React.Component {
       (this.props.required && !date) ||
       (this.props.required && !this.props.initialValue) ||
       (!this.props.required && !!date) || (this.props.required && !!date)
-        ? (!moment(`${date}`, 'D MMMM YYYY', true).isValid()) ||  (!this.props.validFutureDates ?  (!moment(`${date}`).isSameOrBefore(moment(new Date()).format("DD MMMM YYYY"))): false)
+        ? (!moment(`${date}`, 'D MMMM YYYY', true).isValid()) ||  (this.props.validFutureDates ? false  :(!moment(`${date}`).isSameOrBefore(moment(new Date()).format("DD MMMM YYYY"))))
         : false
     if (this.props.setError) {
       if (error) {
@@ -148,7 +148,7 @@ export class DateInputComponent extends React.Component {
             />
           </View>
         </View>
-        {this.state.error ? (
+        {this.state.error && !this.props.formikHandleError ? (
           <Text style={{ ...styles.text, color: colors.red, ...styles.error }}>
             {t('views.family.selectValidDate')}
           </Text>

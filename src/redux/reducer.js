@@ -1,51 +1,54 @@
-import { combineReducers } from 'redux';
-
-import { getDeviceLanguage } from '../utils';
 import {
+  ADD_PRIORITY,
   ADD_SURVEY_DATA,
   CREATE_DRAFT,
   DELETE_DRAFT,
   LOAD_FAMILIES_COMMIT,
   LOAD_FAMILIES_ROLLBACK,
+  LOAD_IMAGES,
+  LOAD_IMAGES_COMMIT,
+  LOAD_IMAGES_ROLLBACK,
+  LOAD_INTERVENTION_DEFINITION_COMMIT,
+  LOAD_INTERVENTION_DEFINITION_ROLLBACK,
   LOAD_MAPS_COMMIT,
   LOAD_MAPS_ROLLBACK,
+  LOAD_PROJECTS_COMMIT,
+  LOAD_PROJECTS_ROLLBACK,
   LOAD_SURVEYS_COMMIT,
   LOAD_SURVEYS_ROLLBACK,
+  MANUAL_SUBMIT_DRAFT_COMMIT,
+  MANUAL_SUBMIT_PICTURES_COMMIT,
   MARK_VERSION_CHECKED,
   RESET_SYNCED_STATE,
   SET_DIMENSIONS,
   SET_DOWNLOADMAPSIMAGES,
+  SET_DRAFT_PENDING,
   SET_ENV,
   SET_HYDRATED,
   SET_LOGIN_STATE,
   SET_SYNCED_ITEM_AMOUNT,
   SET_SYNCED_ITEM_TOTAL,
   SET_SYNCED_STATE,
-  SET_DRAFT_PENDING,
+  SET_VALIDATE,
   SUBMIT_DRAFT,
   SUBMIT_DRAFT_COMMIT,
-  MANUAL_SUBMIT_DRAFT_COMMIT,
-  MANUAL_SUBMIT_PICTURES_COMMIT,
+  SUBMIT_DRAFT_ROLLBACK,
   SUBMIT_ERROR_DRAFT,
   SUBMIT_ERROR_IMAGES,
-  SUBMIT_DRAFT_ROLLBACK,
+  SUBMIT_INTERVENTION,
+  SUBMIT_INTERVENTION_COMMIT,
+  SUBMIT_INTERVENTION_ROLLBACK,
+  SUBMIT_PRIORITY,
+  SUBMIT_PRIORITY_COMMIT,
+  SUBMIT_PRIORITY_ROLLBACK,
   SWITCH_LANGUAGE,
   TOGGLE_API_VERSION_MODAL,
   UPDATE_DRAFT,
-  USER_LOGOUT,
-  LOAD_IMAGES,
-  LOAD_IMAGES_ROLLBACK,
-  LOAD_IMAGES_COMMIT,
-  SET_VALIDATE,
-  LOAD_PROJECTS_ROLLBACK,
-  LOAD_PROJECTS_COMMIT,
-  LOAD_INTERVENTION_DEFINITION_COMMIT,
-  LOAD_INTERVENTION_DEFINITION_ROLLBACK,
-  ADD_PRIORITY,
-  SUBMIT_PRIORITY,
-  SUBMIT_PRIORITY_COMMIT,
-  SUBMIT_PRIORITY_ROLLBACK
+  USER_LOGOUT
 } from './actions';
+
+import { combineReducers } from 'redux';
+import { getDeviceLanguage } from '../utils';
 
 const defaultLanguage = getDeviceLanguage();
 //Login
@@ -159,6 +162,36 @@ export const interventionDefinition = (state=[], action) => {
       return state;
   }
 };
+
+// Interventions
+
+export const interventions = (state=[], action) => {
+  switch(action.type) {
+    case SUBMIT_INTERVENTION: 
+      return [
+        ...state,
+        {
+          ...action.payload,
+          status: 'Pending Status'
+        }
+      ]
+    case SUBMIT_INTERVENTION_COMMIT:
+      return state.map(intervention => intervention.values[0].value == action.meta.id ? {
+        ...intervention,
+        status: 'Synced',
+        syncedAt: Date.now()
+      }: intervention);
+
+    case SUBMIT_INTERVENTION_ROLLBACK:
+      return state.map(intervention => intervention.values[0].value == action.meta.id ? {
+        ...intervention,
+        status: 'Sync Error',
+      }: intervention)
+
+    default:
+      return state;
+  }
+}
 
 //Families
 export const families = (state = [], action) => {
@@ -613,6 +646,7 @@ const appReducer = combineReducers({
   families,
   projects,
   interventionDefinition,
+  interventions,
   syncStatus,
   drafts,
   language,

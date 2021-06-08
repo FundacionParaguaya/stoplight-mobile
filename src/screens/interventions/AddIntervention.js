@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import {Form, Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
-import {capitalize, values} from 'lodash';
+import {capitalize, uniqueId, values} from 'lodash';
 
 import BooleanWithFormik from '../../components/formik/BooleanWithFormik';
 import CheckboxWithFormik from '../../components/formik/CheckboxWithFormik';
@@ -15,12 +15,15 @@ import OtherOptionInput from '../../components/OtherOptionInput';
 import RadioWithFormik from '../../components/formik/RadioWithFormik';
 import SelectWithFormik from '../../components/formik/SelectWithFormik';
 import StickyFooter from '../../components/StickyFooter';
+import colors from '../../theme.json';
 import {connect} from 'react-redux';
 import {drafts} from '../../redux/reducer';
 import i18n from '../../i18n';
 import moment from 'moment';
+import { pathHasError } from '../../components/formik/utils/form-utils';
 import {submitIntervention} from '../../redux/actions';
 import {url} from '../../config.json';
+import uuid from 'uuid/v1';
 import {withNamespaces} from 'react-i18next';
 
 const AddIntervention = ({
@@ -34,6 +37,7 @@ const AddIntervention = ({
 }) => {
   const [questions, setQuestions] = useState([]);
   const survey = route.params.survey;
+  const snapshot = route.params.draft;
   const buildInitialValuesForForm = (questions) => {
     const initialValue = {};
     questions.forEach((question) => {
@@ -123,7 +127,6 @@ const AddIntervention = ({
   }, []);
 
   const onSubmit = (values) => {
-    console.log('values', values);
     let keys = Object.keys(values);
 
     let answers = [];
@@ -153,12 +156,7 @@ const AddIntervention = ({
         };
       }
 
-      if (
-        !otherQuestion &&
-        (answer.value || answer.multipleValue || answer.value === false)
-      ) {
-        answers[key] = answer;
-      }
+      answers[key] = answer;
     });
 
     let finalAnswers = [];
@@ -175,12 +173,14 @@ const AddIntervention = ({
 
     console.log('submit', finalAnswers);
     const payload = {
+      id: finalAnswers[0].value,
       values: finalAnswers,
       interventionDefinition: interventionDefinition.id,
-      snapshot: 2300,
+      snapshot: snapshot.id,
       relatedIntervention: intervention,
       params,
     };
+    console.log('payload', payload);
 
     submitIntervention(url[env], user.token, payload);
   };
@@ -190,10 +190,8 @@ const AddIntervention = ({
       initialValues={buildInitialValuesForForm(
         interventionDefinition.questions,
       )}
-      //initualValues={buildInitialValuesForForm(question, draft)}
       enableReinitialize
       validationSchema={buildValidationSchemaForForm(questions)}
-      //validationSchema={buildValidationSchemaForForm(questions)}
       onSubmit={onSubmit}>
       {(formik) => {
         return (
@@ -225,19 +223,40 @@ const AddIntervention = ({
               if (question.answerType === 'date') {
                 return (
                   <React.Fragment key={question.codeName}>
-                  <DateInput
-                    required={true}
-                    validFutureDates={!question.coreQuestion}
-                    label={question.shortName}
-                    name={question.codeName}
-                    onValidDate={(unix, id) =>
-                      formik.setFieldValue(question.codeName, unix)
-                    }
-                    setError={(isError) =>
-                      formik.setFieldError(question.codeName, isError)
-                    }
-                  />
-                   </React.Fragment>
+                    <DateInput
+                      required={question.required}
+                      formikHandleError
+                      validFutureDates={!question.coreQuestion}
+                      label={question.shortName}
+                      name={question.codeName}
+                      onValidDate={(unix, id) => {
+                        console.log('unix',unix)
+                        console.log('id',question.codeName)
+                        formik.setFieldValue(question.codeName, unix)
+                      }
+                        
+                      }
+                      setError={(isError) => {
+                        console.log('isError',isError)
+                        console.log('id',question.codeName)
+                        formik.setFieldError(question.codeName, isError)
+                      }
+                      
+                      }
+                    />
+                    {pathHasError(
+                      question.codeName,
+                      formik.touched,
+                      formik.errors,
+                    ) && (
+                      <View style={{marginLeft: 30, marginTop: 10}}>
+                        <Text style={{color: colors.red}}>
+                          {' '}
+                          {t('views.family.selectValidDate')}
+                        </Text>
+                      </View>
+                    )}
+                  </React.Fragment>
                 );
               }
 
@@ -267,8 +286,7 @@ const AddIntervention = ({
 
               if (question.answerType === 'checkbox') {
                 return (
-                  //<React.Fragment key={question.codeName}>
-                  <>
+                  <React.Fragment key={question.codeName}>
                     <CheckboxWithFormik
                       t={t}
                       key={question.codeName}
@@ -323,7 +341,7 @@ const AddIntervention = ({
                         }
                       }}
                     </OtherOptionInput>
-                  </>
+                  </React.Fragment>
                 );
               }
 
