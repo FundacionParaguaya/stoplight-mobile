@@ -181,7 +181,10 @@
       "noAnswer": "",
       "other": "",
       "interventions": "Intervenções",
-      "addIntervention": "Adicionar intervenção"
+      "addIntervention": "Adicionar intervenção",
+      "syncErrorIntervention":"Erro de Sincronização",
+      "syncPendingIntervention": "Sincronização de intervenção pendente",
+      "syncComplete": "intervenção sincronizada"
     },
     "lifemap": {
       "indicatorDefinition": "Definição do indicador",

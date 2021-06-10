@@ -21,6 +21,7 @@ import Button from '../components/Button';
 import FamilyListItem from '../components/FamilyListItem';
 import FamilyTab from '../components/FamilyTab';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import InterventionList from '../components/InterventionList';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import NetInfo from '@react-native-community/netinfo';
 import OverviewComponent from './lifemap/Overview';
@@ -118,13 +119,19 @@ export class Family extends Component {
   getDraft = () =>
     this.props.drafts.find((draft) => draft.draftId === this.draftId);
 
-  handleClickOnAddIntervention = () => {
+  handleClickOnAddIntervention = (id) => {
     const { navigation } = this.props;
     navigation.navigate('AddIntervention',{
       draft: this.familyLifemap,
-      survey:this.survey
+      survey:this.survey,
+      interventionId: typeof id == 'number' ? id: null,
+      navigation: this.props.navigation
     });
   };
+
+  handleGoIntervention = () => {
+    console.log('ir a la intervention')
+  }
 
   handleResumeClick = () => {
     const {navigation} = this.props;
@@ -299,6 +306,7 @@ export class Family extends Component {
     );
   };
   render() {
+    console.log('Render Family');
     const {activeTab} = this.state;
     const {t, navigation, interventionDefinition} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
@@ -675,6 +683,14 @@ export class Family extends Component {
               handleClick={this.handleClickOnAddIntervention}
             />
           </View>
+          <InterventionList 
+            interventionsData = {this.familyLifemap.interventions}
+            handleAddIntervention = {this.handleClickOnAddIntervention}
+            handleGoIntervention = {this.handleGoIntervention}
+            syncInterventions= {this.props.interventions}
+            snapshot={this.familyLifemap && this.familyLifemap.id}
+            
+           />
         </ScrollView>
       ):null}
 
@@ -829,7 +845,8 @@ const mapStateToProps = ({
   projects,
   priorities,
   drafts,
-  interventionDefinition
+  interventionDefinition,
+  interventions
 }) => ({
   surveys,
   env,
@@ -838,7 +855,8 @@ const mapStateToProps = ({
   projects,
   priorities,
   drafts,
-  interventionDefinition
+  interventionDefinition,
+  interventions
 });
 
 export default withNamespaces()(

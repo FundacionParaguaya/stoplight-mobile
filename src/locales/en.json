@@ -197,6 +197,9 @@
       "sign": "Signature",
       "interventions": "Interventions",
       "addIntervention": "Add an intervention",
+      "syncErrorIntervention":"Sync Error",
+      "syncPendingIntervention": "Intervention sync pending",
+      "syncComplete": "Intervention synced"
     },
     "lifemap": {
       "indicatorDefinition": "Indicator Definition",

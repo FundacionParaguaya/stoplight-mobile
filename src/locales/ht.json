@@ -196,7 +196,10 @@
       "noAnswer": "",
       "other": "",
       "interventions": "Entèvansyon",
-      "addIntervention": "Ajoute entèvansyon"
+      "addIntervention": "Ajoute entèvansyon",
+      "syncErrorIntervention":"Senkro Erè",
+      "syncPendingIntervention": "Entèvansyon senk annatant",
+      "syncComplete": "Entèvansyon senkronize"
     },
     "lifemap": {
       "indicatorDefinition": "Definisyon endikatè",

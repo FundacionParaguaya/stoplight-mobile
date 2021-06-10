@@ -32,12 +32,13 @@ const AddIntervention = ({
   user,
   interventionDefinition,
   route,
-  intervention,
   submitIntervention,
 }) => {
   const [questions, setQuestions] = useState([]);
   const survey = route.params.survey;
   const snapshot = route.params.draft;
+  const intervention = route.params.interventionId;
+  const navigation = route.params.navigation;
   const buildInitialValuesForForm = (questions) => {
     const initialValue = {};
     questions.forEach((question) => {
@@ -177,12 +178,13 @@ const AddIntervention = ({
       values: finalAnswers,
       interventionDefinition: interventionDefinition.id,
       snapshot: snapshot.id,
-      relatedIntervention: intervention,
+      relatedIntervention: intervention ? intervention:null,
       params,
     };
     console.log('payload', payload);
 
     submitIntervention(url[env], user.token, payload);
+    navigation.goBack();
   };
 
   return (

@@ -272,7 +272,7 @@ export const LOAD_FAMILIES = 'LOAD_FAMILIES';
 export const LOAD_FAMILIES_COMMIT = 'LOAD_FAMILIES_COMMIT';
 export const LOAD_FAMILIES_ROLLBACK = 'LOAD_FAMILIES_ROLLBACK';
 
-export const loadFamilies = (env, token) => ({
+export const loadFamilies = (env, token, params) => ({
   type: LOAD_FAMILIES,
   env,
   token,
@@ -287,7 +287,7 @@ export const loadFamilies = (env, token) => ({
         },
         body: JSON.stringify({
           query:
-            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { id surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName interventionDate } } } }'
+            `query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { id surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName id interventionDate intervention{id}  ${params} } } } }`
         }),
       },
       commit: { type: LOAD_FAMILIES_COMMIT },

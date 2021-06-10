@@ -196,7 +196,10 @@
       "pictures": "Imágenes",
       "sign": "Firma",
       "interventions": "Intervenciones",
-      "addIntervention": "Agregar intervención"
+      "addIntervention": "Agregar intervención",
+      "syncErrorIntervention":"Error de sincronización",
+      "syncPendingIntervention": "Sincronización de intervención pendiente",
+      "syncComplete": "Intervención sincronizada"
     },
     "lifemap": {
       "indicatorDefinition": "Definición del indicador",

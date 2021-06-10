@@ -1,36 +1,37 @@
-import NetInfo from '@react-native-community/netinfo';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { AndroidBackHandler } from 'react-navigation-backhandler';
-import { connect } from 'react-redux';
+import * as _ from 'lodash';
 
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 import { initAudioCaching, initImageCaching } from '../cache';
-import Button from '../components/Button';
-import Decoration from '../components/decoration/Decoration';
-import ProgressBar from '../components/ProgressBar';
-import { url } from '../config';
-import globalStyles from '../globalStyles';
 import {
   loadFamilies,
-  loadMaps,
-  loadSurveys,
-  loadProjectsByOrganization,
   loadInterventionDefinition,
+  loadMaps,
+  loadProjectsByOrganization,
+  loadSurveys,
   logout,
   resetSyncState,
   setAppVersion,
   setSyncedState,
   validate
 } from '../redux/actions';
-import * as _ from 'lodash';
-import colors from '../theme.json';
+
+import { AndroidBackHandler } from 'react-navigation-backhandler';
 import Bugsnag from '@bugsnag/react-native';
+import Button from '../components/Button';
+import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Decoration from '../components/decoration/Decoration';
+import DeviceInfo from 'react-native-device-info';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import NetInfo from '@react-native-community/netinfo';
+import ProgressBar from '../components/ProgressBar';
+import PropTypes from 'prop-types';
+import colors from '../theme.json';
+import { connect } from 'react-redux';
+import globalStyles from '../globalStyles';
+import { url } from '../config';
+import { withNamespaces } from 'react-i18next';
 
 export class Loading extends Component {
   state = {
@@ -87,7 +88,14 @@ export class Loading extends Component {
     if (this.props.sync.families) {
       this.checkOfflineMaps();
     } else {
-      this.props.loadFamilies(url[this.props.env], this.props.user.token);
+      let params = '';
+      if(!!this.props.interventionDefinition) {
+        this.props.interventionDefinition.questions.forEach(question => {
+          params +=`${question.codeName} `;
+        })
+      }
+      console.log('')
+      this.props.loadFamilies(url[this.props.env], this.props.user.token, params);
     }
   };
 
