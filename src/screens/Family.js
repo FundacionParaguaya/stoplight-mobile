@@ -121,7 +121,7 @@ export class Family extends Component {
 
   handleClickOnAddIntervention = (id) => {
     const { navigation } = this.props;
-    navigation.navigate('AddIntervention',{
+    navigation.navigate('Intervention',{
       draft: this.familyLifemap,
       survey:this.survey,
       interventionId: typeof id == 'number' ? id: null,
@@ -129,8 +129,24 @@ export class Family extends Component {
     });
   };
 
-  handleGoIntervention = () => {
+  handleGoIntervention = (intervention) => {
     console.log('ir a la intervention')
+    const { navigation } = this.props;
+
+    navigation.navigate('InterventionView',{
+      survey:this.survey,
+      intervention:intervention,
+      draft: this.familyLifemap,
+    })
+
+    /* navigation.navigate('Intervention',{
+      draft: this.familyLifemap,
+      survey:this.survey,
+      navigation: this.props.navigation,
+      intervention: intervention,
+      readOnly: true
+    });
+ */
   }
 
   handleResumeClick = () => {

@@ -74,7 +74,6 @@ const InterventionList = ({
 
   let originalInterventions = [];
   interventionsData.forEach((intervention) => {
-    console.log('i', intervention);
     //if the intervention it's not associated with another it's an original one
     if (!intervention.intervention) {
       originalInterventions.push({
@@ -133,7 +132,7 @@ const InterventionList = ({
     <View style={styles.content}>
       {interventions.map((intervention, index) => (
         <>
-          <ListItem style={styles.listItem} onPress={handleGoIntervention}>
+          <ListItem key={index} style={styles.listItem} onPress={() => handleGoIntervention(intervention)}>
             <View style={styles.listItemContainer}>
               <Text style={{...globalStyles.p}}>
                 {intervention.interventionName ? intervention.interventionName: intervention.id}
@@ -191,8 +190,8 @@ const InterventionList = ({
           </ListItem>
           {expandedIndex === index && (
             <>
-              {intervention.relatedInterventions.map((intervention) => (
-                <ListItem style={styles.listItem}>
+              {intervention.relatedInterventions.map((intervention ,index) => (
+                <ListItem key={index} style={styles.listItem}>
                   <View style={{...styles.listItemContainer, paddingLeft: 20}}>
                     <Text style={{...globalStyles.p}}>
                       {intervention.interventionName

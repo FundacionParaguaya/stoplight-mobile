@@ -26,7 +26,7 @@ import {url} from '../../config.json';
 import uuid from 'uuid/v1';
 import {withNamespaces} from 'react-i18next';
 
-const AddIntervention = ({
+const Intervention = ({
   t,
   env,
   user,
@@ -37,10 +37,14 @@ const AddIntervention = ({
   const [questions, setQuestions] = useState([]);
   const survey = route.params.survey;
   const snapshot = route.params.draft;
-  const intervention = route.params.interventionId;
+  const interventionId = route.params.interventionId;
   const navigation = route.params.navigation;
-  const buildInitialValuesForForm = (questions) => {
+  const intervention = route.params.intervention;
+  const readonly = route.params.readonly;
+  const buildInitialValuesForForm = (questions,intervention) => {
+    console.log('i',intervention)
     const initialValue = {};
+
     questions.forEach((question) => {
       initialValue[question.codeName] = '';
 
@@ -178,7 +182,7 @@ const AddIntervention = ({
       values: finalAnswers,
       interventionDefinition: interventionDefinition.id,
       snapshot: snapshot.id,
-      relatedIntervention: intervention ? intervention:null,
+      relatedIntervention: interventionId ? interventionId:null,
       params,
     };
     console.log('payload', payload);
@@ -191,6 +195,7 @@ const AddIntervention = ({
     <Formik
       initialValues={buildInitialValuesForForm(
         interventionDefinition.questions,
+        intervention
       )}
       enableReinitialize
       validationSchema={buildValidationSchemaForForm(questions)}
@@ -465,5 +470,5 @@ const mapDispatchToProps = {
 };
 
 export default withNamespaces()(
-  connect(mapStateToProps, mapDispatchToProps)(AddIntervention),
+  connect(mapStateToProps, mapDispatchToProps)(Intervention),
 );

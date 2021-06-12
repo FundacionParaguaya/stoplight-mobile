@@ -1,32 +1,32 @@
-import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
-import colors from '../theme.json';
-import FamilyView from '../screens/Family';
-import FamiliesView from '../screens/Families';
-import FamilyParticipantView from '../screens/lifemap/FamilyParticipant';
-import FamilyMembersNamesView from '../screens/lifemap/FamilyMembersNames';
-import LocationView from '../screens/lifemap/Location';
-import SurveysView from '../screens/Surveys';
+import {StyleSheet, Text, View} from 'react-native';
+import {addMenuIcon, generateNavStyles} from './helpers';
+
 import BeginLifemapView from '../screens/lifemap/BeginLifemap';
-import TermsView from '../screens/lifemap/Terms';
-import SocioEconomicQuestionView from '../screens/lifemap/SocioEconomicQuestion';
-import QuestionView from '../screens/lifemap/Question';
-import SignIn from '../screens/lifemap/SignIn';
-import Picture from '../screens/lifemap/Picture';
-import FamilyMemberView from '../screens/lifemap/FamilyMember';
-import FinalView from '../screens/lifemap/Final';
-import OverviewView from '../screens/lifemap/Overview';
-import PrioritiesView from '../screens/lifemap/Priorities';
-import SkippedView from '../screens/lifemap/Skipped';
-import AddIntervention from '../screens/interventions/AddIntervention';
-
 import CloseButton from './CloseButton';
-import Title from './Title';
 import CustomHeaderSurvey from './CustomHeaderSurvey';
-import {generateNavStyles, addMenuIcon} from './helpers';
+import FamiliesView from '../screens/Families';
+import FamilyMemberView from '../screens/lifemap/FamilyMember';
+import FamilyMembersNamesView from '../screens/lifemap/FamilyMembersNames';
+import FamilyParticipantView from '../screens/lifemap/FamilyParticipant';
+import FamilyView from '../screens/Family';
+import FinalView from '../screens/lifemap/Final';
+import Intervention from '../screens/interventions/Intervention';
+import InterventionView from '../screens/interventions/InterventionView';
+import LocationView from '../screens/lifemap/Location';
+import OverviewView from '../screens/lifemap/Overview';
+import Picture from '../screens/lifemap/Picture';
+import PrioritiesView from '../screens/lifemap/Priorities';
+import QuestionView from '../screens/lifemap/Question';
+import React from 'react';
 import SelectIndicatorPriorityView from '../screens/lifemap/SelectIndicatorPriority';
-
+import SignIn from '../screens/lifemap/SignIn';
+import SkippedView from '../screens/lifemap/Skipped';
+import SocioEconomicQuestionView from '../screens/lifemap/SocioEconomicQuestion';
+import SurveysView from '../screens/Surveys';
+import TermsView from '../screens/lifemap/Terms';
+import Title from './Title';
+import colors from '../theme.json';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 export default LifemapStack = ({navigation}) => (
@@ -485,13 +485,29 @@ export const FamiliesStack = (propz) => (
     />
 
     <Stack.Screen
-      name="AddIntervention"
-      component={AddIntervention}
+      name="Intervention"
+      component={Intervention}
       options = {({ route, navigation }) =>({
         headerTitle: (props) => {
           return(
             <Title
               title={route && route.params && route.params.familyName ? route.params.familyName: '' }
+              accessibilityAssertiveType="none"
+            />
+          )
+        },
+        ...generateNavStyles({navigation, route})
+      })}
+    />
+
+    <Stack.Screen
+      name="InterventionView"
+      component={InterventionView}
+      options = {({ route, navigation }) => ({
+        headerTitle: (props) => {
+          return (
+            <Title
+              title={''}
               accessibilityAssertiveType="none"
             />
           )
