@@ -176,14 +176,14 @@ export const interventions = (state=[], action) => {
         }
       ]
     case SUBMIT_INTERVENTION_COMMIT:
-      return state.map(intervention => intervention.values[0].value == action.meta.id ? {
+      return state.map(intervention => intervention.id == action.meta.id ? {
         ...intervention,
         status: 'Synced',
         syncedAt: Date.now()
       }: intervention);
 
     case SUBMIT_INTERVENTION_ROLLBACK:
-      return state.map(intervention => intervention.values[0].value == action.meta.id ? {
+      return state.map(intervention => intervention.id == action.meta.id ? {
         ...intervention,
         status: 'Sync Error',
       }: intervention)

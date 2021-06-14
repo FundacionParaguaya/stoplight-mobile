@@ -226,10 +226,8 @@ export const submitIntervention = (env, token, payload) => ({
     rollback: {
       type:SUBMIT_INTERVENTION_ROLLBACK,
       meta: {
-        id: {
           id:payload.values[0].value,
           payload
-        }
       }
     }
   }

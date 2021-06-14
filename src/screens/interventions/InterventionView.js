@@ -50,41 +50,98 @@ const InterventionView = ({route, interventionDefinition}) => {
     let survey = route.params.survey;
     //let draft = route.params.
     console.log('data', interventionData);
-    console.log('snap', snapshot);
-    console.log('survey', survey);
+    /*     console.log('snap', snapshot);
+    console.log('survey', survey); */
     let values = [];
-    interventionDefinition.questions.forEach((question) => {
-      console.log('q', question);
-      //vaules = intervention[question.codeName] ? {codeName: question.codeName,value:intervention[question.codeName],answerType:question.answerType}:null
-      if (interventionData[question.codeName]) {
+
+    console.log('type', typeof interventionData.id == 'string');
+
+    if (typeof interventionData.id == 'string') {
+      interventionDefinition.questions.forEach((question) => {
         let item;
-        if (
+
+        const element = interventionData.values.find(
+          (el) => el.codeName === question.codeName,
+        );
+
+        let valueToAdd = '';
+
+        if (question.answerType === 'checkbox') {
+          //console.log('antes de cargado', element.multipleText.slice())
+          let preJoinedArray = element.multipleText.slice();
+          if (element.other) {
+            preJoinedArray.push(element.other);
+            console.log('cargado', preJoinedArray);
+          }
+          valueToAdd = preJoinedArray.join(',');
+        }else if (question.answerType == 'radio') {
+            valueToAdd =  element.other ? element.other : element.value;
+        
+        } else if (
           question.answerType === 'multiselect' &&
           question.codeName === 'stoplightIndicator' &&
-          !interventionData['generalIntervention']
+          interventionData.values.find(
+            (el) => el.codeName === 'generalIntervention',
+          ) &&
+          interventionData.values.find(
+            (el) => el.codeName === 'generalIntervention',
+          ).value === false
         ) {
-          const indicators = interventionData[question.codeName].map((el) => {
-            const option = question.options.find((e) => e.value === el);
-            return option;
+          console.log('entre aca');
+          let preJoinedArray = element.multipleText.slice().map((e, index) => {
+            return {value: element.multipleValue[index], label: e};
           });
-          item = {
-            codeName: question.codeName,
-            shortName: question.shortName,
-            value: indicators,
-            answerType: question.answerType,
-          };
+          valueToAdd = preJoinedArray;
         } else {
-          item = {
-            codeName: question.codeName,
-            shortName: question.shortName,
-            value: interventionData[question.codeName],
-            answerType: question.answerType,
-          };
+          if (element.value) {
+            valueToAdd = element.value;
+          }
         }
+        item = {
+          codeName: question.codeName,
+          shortName: question.shortName,
+          value: valueToAdd,
+          answerType: question.answerType,
+        };
 
         values.push(item);
-      }
-    });
+      });
+    }
+
+    if (typeof interventionData.id === 'number')
+      interventionDefinition.questions.forEach((question) => {
+        /*       console.log('q', question); */
+        //vaules = intervention[question.codeName] ? {codeName: question.codeName,value:intervention[question.codeName],answerType:question.answerType}:null
+        if (interventionData[question.codeName]) {
+          let item;
+          if (
+            question.answerType === 'multiselect' &&
+            question.codeName === 'stoplightIndicator' &&
+            !interventionData['generalIntervention']
+          ) {
+            const indicators = interventionData[question.codeName].map((el) => {
+              const option = question.options.find((e) => e.value === el);
+              return option;
+            });
+            item = {
+              codeName: question.codeName,
+              shortName: question.shortName,
+              value: indicators,
+              answerType: question.answerType,
+            };
+          } else {
+            item = {
+              codeName: question.codeName,
+              shortName: question.shortName,
+              value: interventionData[question.codeName],
+              answerType: question.answerType,
+            };
+          }
+
+          values.push(item);
+        }
+      });
+    console.log('values', values);
     setValues(values);
   }, []);
   return (
