@@ -130,7 +130,6 @@ export class Family extends Component {
   };
 
   handleGoIntervention = (intervention) => {
-    console.log('ir a la intervention')
     const { navigation } = this.props;
 
     navigation.navigate('InterventionView',{
@@ -138,15 +137,6 @@ export class Family extends Component {
       intervention:intervention,
       draft: this.familyLifemap,
     })
-
-    /* navigation.navigate('Intervention',{
-      draft: this.familyLifemap,
-      survey:this.survey,
-      navigation: this.props.navigation,
-      intervention: intervention,
-      readOnly: true
-    });
- */
   }
 
   handleResumeClick = () => {
@@ -322,7 +312,6 @@ export class Family extends Component {
     );
   };
   render() {
-    console.log('Render Family');
     const {activeTab} = this.state;
     const {t, navigation, interventionDefinition} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
@@ -374,7 +363,8 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            full={stoplightSkipped && interventionDefinition == null ? true : false}
+            interventionSkipped = {interventionDefinition == null}
+            full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
             <FamilyTab
@@ -705,6 +695,7 @@ export class Family extends Component {
             handleGoIntervention = {this.handleGoIntervention}
             syncInterventions= {this.props.interventions}
             snapshot={this.familyLifemap && this.familyLifemap.id}
+            lang={this.props.language}
             
            />
         </ScrollView>
@@ -862,7 +853,8 @@ const mapStateToProps = ({
   priorities,
   drafts,
   interventionDefinition,
-  interventions
+  interventions,
+  language
 }) => ({
   surveys,
   env,
@@ -872,7 +864,8 @@ const mapStateToProps = ({
   priorities,
   drafts,
   interventionDefinition,
-  interventions
+  interventions,
+  language
 });
 
 export default withNamespaces()(

@@ -1,16 +1,25 @@
 import React, { Component } from 'react'
+import { StyleSheet, Text, TouchableHighlight } from 'react-native'
+
 import PropTypes from 'prop-types'
-import { TouchableHighlight, StyleSheet, Text } from 'react-native'
 import colors from '../theme.json'
 import globalStyles from '../globalStyles'
 
 class FamilyTab extends Component {
   render() {
+    let width = '33%'
+    if(this.props.full && this.props.interventionSkipped){
+      width = '100%'
+    }else if (!this.props.full && this.props.interventionSkipped ){
+      width= '50%'
+    }
+    
+
     return (
       <TouchableHighlight
         style={{
           ...styles.tab,
-          width: this.props.full ? '100%' : '33%',
+          width: width,
           ...(this.props.active ? styles.activeTab : {})
         }}
         onPress={this.props.onPress}

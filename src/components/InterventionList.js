@@ -1,10 +1,16 @@
+import 'moment/locale/es'
+import 'moment/locale/pt'
+import 'moment/locale/fr'
+
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListItem from '../components/ListItem';
 import colors from '../theme.json';
+import { getLocaleForLanguage } from '../utils';
 import globalStyles from '../globalStyles';
+import moment from 'moment';
 import {withNamespaces} from 'react-i18next';
 
 const styles = StyleSheet.create({
@@ -12,7 +18,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 25,
     marginTop: 30,
-    flex: 1
+    flex: 1,
   },
   listItem: {
     height: 70,
@@ -26,6 +32,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
     flex: 1,
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   p: {
     paddingRight: 20,
@@ -49,14 +60,29 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'flex-start',
   },
-  errorLabel: {
-    marginTop: 5,
-    backgroundColor: colors.red,
-    paddingHorizontal: 10,
-    marginHorizontal: 2,
-    borderRadius: 10,
-    color: 'white',
+  label: {
+    borderRadius: 5,
     alignSelf: 'flex-start',
+    height: 25,
+    paddingLeft: 5,
+    paddingRight: 5,
+    lineHeight: 25,
+    textAlign: 'center',
+    marginTop: 5,
+    marginRight: 5,
+  },
+  errorLabel: {
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    height: 25,
+    paddingLeft: 5,
+    paddingRight: 5,
+    lineHeight: 25,
+    textAlign: 'center',
+    marginTop: 5,
+    marginRight: 5,
+    backgroundColor: colors.red,
+    color: 'white',
   },
 });
 
@@ -67,13 +93,40 @@ const InterventionList = ({
   syncInterventions,
   snapshot,
   t,
+  lang
 }) => {
   const [expandedIndex, setExpandedIndex] = useState();
 
-  let interventions = []
+  let interventions = [];
+
+  const setStatusTitle = (status) => {
+    switch (status) {
+      case 'Pending Status':
+        return t('views.family.syncPendingIntervention');
+      case 'Sync Error':
+        return t('views.family.syncErrorIntervention');
+      case 'Synced':
+        return t('views.family.syncComplete');
+      default:
+        return '';
+    }
+  };
+
+  const getColor = (status) => {
+    switch (status) {
+      case 'Pending Status':
+        return colors.palegold;
+      case 'Sync Error':
+        return colors.error;
+      case 'Synced':
+        return colors.green;
+      default:
+        return colors.palegrey;
+    }
+  };
 
   let originalInterventions = [];
-  interventionsData.forEach((intervention) => {
+  interventionsData && interventionsData.forEach((intervention) => {
     //if the intervention it's not associated with another it's an original one
     if (!intervention.intervention) {
       originalInterventions.push({
@@ -89,7 +142,7 @@ const InterventionList = ({
       // it was originally possible thought that interventions could have a tree format
       while (ogId < 0) {
         // eslint-disable-next-line no-loop-func
-        inter = interventionsData.find(
+        inter =  interventionsData && interventionsData.find(
           (int) => int.id === inter.intervention.id,
         );
         // eslint-disable-next-line no-loop-func
@@ -107,7 +160,13 @@ const InterventionList = ({
   });
 
   syncInterventions
-    .filter((syncIntervention) => (syncIntervention.snapshot === snapshot ) && (interventionsData.findIndex( i => i.interventionName === syncIntervention.id) < 0))
+    .filter(
+      (syncIntervention) =>
+        syncIntervention.snapshot === snapshot &&
+        interventionsData && interventionsData.findIndex(
+          (i) => i.interventionName === syncIntervention.id,
+        ) < 0,
+    )
     .forEach((intervention) => {
       if (!intervention.relatedIntervention) {
         originalInterventions.push({
@@ -119,79 +178,120 @@ const InterventionList = ({
           (oi) => oi.id === intervention.relatedIntervention,
         );
         if (ogId >= 0) {
-          originalInterventions[ogId].relatedInterventions.push(
-            intervention,
-          );
+          originalInterventions[ogId].relatedInterventions.push(intervention);
         }
       }
     });
 
-  interventions =  originalInterventions || [];
+  interventions = originalInterventions || [];
+
+  console.log('log',lang)
+
 
   return (
     <View style={styles.content}>
       {interventions.map((intervention, index) => (
-        <>
-          <ListItem key={index} style={styles.listItem} onPress={() => handleGoIntervention(intervention)}>
+        <React.Fragment key={index}>
+          <ListItem
+            key={index}
+            style={styles.listItem}
+            onPress={() => handleGoIntervention(intervention)}>
             <View style={styles.listItemContainer}>
               <Text style={{...globalStyles.p}}>
-                {intervention.interventionName ? intervention.interventionName: intervention.id}
+                {intervention.interventionName
+                  ? intervention.interventionName
+                  : intervention.id}
               </Text>
-              {intervention.status === 'Sync Error' && (
-                <Text style={styles.errorLabel}>
-                  {t('views.family.syncErrorIntervention')}
-                </Text>
-              )}
-              {intervention.status === 'Pending Status' && (
-                <Text style={styles.pendingLabel}>
-                  {t('views.family.syncPendingIntervention')}
+
+              {intervention.status && intervention.status != 'Synced' && (
+                <Text
+                  style={{
+                    ...styles.label,
+                    backgroundColor: getColor(intervention.status),
+                    color:
+                      intervention.status === 'Pending Status'
+                        ? colors.black
+                        : colors.white,
+                  }}>
+                  {setStatusTitle(intervention.status)}
                 </Text>
               )}
 
-              {intervention.status === 'Synced' && (
-                <Text style={styles.completeLabel}>
-                  {' '}
-                  {t('views.family.syncComplete')}
-                </Text>
+              {intervention.status == 'Synced' && (
+                <View style={{...styles.container, marginTop: 10}}>
+                  <Icon name="check" size={20} color={colors.green} />
+                  <Text id="completed" style={{color: colors.green}}>
+                    {t('views.family.syncComplete')}
+                  </Text>
+                </View>
               )}
             </View>
-            {(!intervention.status) && (
-              <Icon
-                name="playlist-add"
-                size={23}
-                color={colors.grey}
-                onPress={() => {
-                  handleAddIntervention(intervention.id);
-                }}
-              />
-            )}
+            <View>
+              <Text>
+           {/*      {moment
+                  .unix(
+                    intervention.interventionDate
+                      ? intervention.interventionDate
+                      : intervention.values.find(
+                          (e) => e.codeName === 'interventionDate',
+                        ).value,
+                  ).locale(getLocaleForLanguage(lang))
+                  .utc()
+                  .format('D MMMM YYYY')} */}
 
-            {intervention.relatedInterventions.length > 0 && (
-              <>
-                {expandedIndex === index ? (
+          {moment.unix( intervention.interventionDate
+                      ? intervention.interventionDate
+                      : intervention.values.find(
+                          (e) => e.codeName === 'interventionDate',
+                        ).value)
+          .locale(getLocaleForLanguage(lang))
+          .format('MMM DD, YYYY')}
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  marginTop: 5,
+                }}>
+                {!intervention.status && (
                   <Icon
-                    name="expand-less"
+                    name="playlist-add"
                     size={23}
                     color={colors.grey}
                     onPress={() => {
-                      setExpandedIndex(null);
+                      handleAddIntervention(intervention.id);
                     }}
                   />
-                ) : (
-                  <Icon
-                    name="expand-more"
-                    size={23}
-                    color={colors.grey}
-                    onPress={() => setExpandedIndex(index)}
-                  />
                 )}
-              </>
-            )}
+
+                {intervention.relatedInterventions.length > 0 && (
+                  <>
+                    {expandedIndex === index ? (
+                      <Icon
+                        name="expand-less"
+                        size={23}
+                        color={colors.grey}
+                        onPress={() => {
+                          setExpandedIndex(null);
+                        }}
+                      />
+                    ) : (
+                      <Icon
+                        name="expand-more"
+                        size={23}
+                        color={colors.grey}
+                        onPress={() => setExpandedIndex(index)}
+                      />
+                    )}
+                  </>
+                )}
+              </View>
+            </View>
           </ListItem>
           {expandedIndex === index && (
             <>
-              {intervention.relatedInterventions.map((intervention ,index) => (
-                <ListItem key={index} style={styles.listItem}>
+              {intervention.relatedInterventions.map((intervention, index) => (
+                <ListItem key={index} style={styles.listItem} onPress={() =>{}}>
                   <View style={{...styles.listItemContainer, paddingLeft: 20}}>
                     <Text style={{...globalStyles.p}}>
                       {intervention.interventionName
@@ -219,7 +319,7 @@ const InterventionList = ({
               ))}
             </>
           )}
-        </>
+        </React.Fragment>
       ))}
     </View>
   );
