@@ -1,14 +1,15 @@
-import 'moment/locale/es'
-import 'moment/locale/pt'
-import 'moment/locale/fr'
+import 'moment/locale/es';
+import 'moment/locale/pt';
+import 'moment/locale/fr';
 
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListItem from '../components/ListItem';
+import PropTypes from 'prop-types';
 import colors from '../theme.json';
-import { getLocaleForLanguage } from '../utils';
+import {getLocaleForLanguage} from '../utils';
 import globalStyles from '../globalStyles';
 import moment from 'moment';
 import {withNamespaces} from 'react-i18next';
@@ -93,7 +94,7 @@ const InterventionList = ({
   syncInterventions,
   snapshot,
   t,
-  lang
+  lang,
 }) => {
   const [expandedIndex, setExpandedIndex] = useState();
 
@@ -126,44 +127,46 @@ const InterventionList = ({
   };
 
   let originalInterventions = [];
-  interventionsData && interventionsData.forEach((intervention) => {
-    //if the intervention it's not associated with another it's an original one
-    if (!intervention.intervention) {
-      originalInterventions.push({
-        ...intervention,
-        relatedInterventions: [],
-      });
-    } else {
-      let inter = intervention;
-      let ogId = originalInterventions.findIndex(
-        (oi) => !!oi.intervention && oi.intervention.id === inter.id,
-      );
-      // cycle used to associated a related intervention with it's original one
-      // it was originally possible thought that interventions could have a tree format
-      while (ogId < 0) {
-        // eslint-disable-next-line no-loop-func
-        inter =  interventionsData && interventionsData.find(
-          (int) => int.id === inter.intervention.id,
+  interventionsData &&
+    interventionsData.forEach((intervention) => {
+      //if the intervention it's not associated with another it's an original one
+      if (!intervention.intervention) {
+        originalInterventions.push({
+          ...intervention,
+          relatedInterventions: [],
+        });
+      } else {
+        let inter = intervention;
+        let ogId = originalInterventions.findIndex(
+          (oi) => !!oi.intervention && oi.intervention.id === inter.id,
         );
-        // eslint-disable-next-line no-loop-func
-        ogId = originalInterventions.findIndex(
+        // cycle used to associated a related intervention with it's original one
+        // it was originally possible thought that interventions could have a tree format
+        while (ogId < 0) {
           // eslint-disable-next-line no-loop-func
-          (oi) =>
-            (inter.intervention && oi.id === inter.intervention.id) ||
-            oi.id === inter.id,
-        );
-        if (!inter) break;
+          inter =
+            interventionsData &&
+            interventionsData.find((int) => int.id === inter.intervention.id);
+          // eslint-disable-next-line no-loop-func
+          ogId = originalInterventions.findIndex(
+            // eslint-disable-next-line no-loop-func
+            (oi) =>
+              (inter.intervention && oi.id === inter.intervention.id) ||
+              oi.id === inter.id,
+          );
+          if (!inter) break;
+        }
+        if (ogId >= 0)
+          originalInterventions[ogId].relatedInterventions.push(intervention);
       }
-      if (ogId >= 0)
-        originalInterventions[ogId].relatedInterventions.push(intervention);
-    }
-  });
+    });
 
   syncInterventions
     .filter(
       (syncIntervention) =>
         syncIntervention.snapshot === snapshot &&
-        interventionsData && interventionsData.findIndex(
+        interventionsData &&
+        interventionsData.findIndex(
           (i) => i.interventionName === syncIntervention.id,
         ) < 0,
     )
@@ -184,9 +187,6 @@ const InterventionList = ({
     });
 
   interventions = originalInterventions || [];
-
-  console.log('log',lang)
-
 
   return (
     <View style={styles.content}>
@@ -228,24 +228,16 @@ const InterventionList = ({
             </View>
             <View>
               <Text>
-           {/*      {moment
+                {moment
                   .unix(
                     intervention.interventionDate
                       ? intervention.interventionDate
                       : intervention.values.find(
                           (e) => e.codeName === 'interventionDate',
                         ).value,
-                  ).locale(getLocaleForLanguage(lang))
-                  .utc()
-                  .format('D MMMM YYYY')} */}
-
-          {moment.unix( intervention.interventionDate
-                      ? intervention.interventionDate
-                      : intervention.values.find(
-                          (e) => e.codeName === 'interventionDate',
-                        ).value)
-          .locale(getLocaleForLanguage(lang))
-          .format('MMM DD, YYYY')}
+                  )
+                  .locale(getLocaleForLanguage(lang))
+                  .format('MMM DD, YYYY')}
               </Text>
               <View
                 style={{
@@ -291,7 +283,10 @@ const InterventionList = ({
           {expandedIndex === index && (
             <>
               {intervention.relatedInterventions.map((intervention, index) => (
-                <ListItem key={index} style={styles.listItem} onPress={() =>{}}>
+                <ListItem
+                  key={index}
+                  style={styles.listItem}
+                  onPress={() => {}}>
                   <View style={{...styles.listItemContainer, paddingLeft: 20}}>
                     <Text style={{...globalStyles.p}}>
                       {intervention.interventionName
@@ -323,6 +318,16 @@ const InterventionList = ({
       ))}
     </View>
   );
+};
+
+InterventionList.propTypes = {
+  interventionsData: PropTypes.array,
+  handleGoIntervention: PropTypes.func,
+  handleAddIntervention: PropTypes.func,
+  syncInterventions: PropTypes.array,
+  snapshot: PropTypes.number,
+  t: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 export default withNamespaces()(InterventionList);

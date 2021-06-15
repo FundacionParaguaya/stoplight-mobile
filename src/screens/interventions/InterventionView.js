@@ -4,6 +4,7 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {CheckBox} from 'react-native-elements';
 import {Chip} from 'react-native-elements/dist/buttons/Chip';
 import DateInput from '../../components/form/DateInput';
+import PropTypes from 'prop-types';
 import TextInput from '../../components/form/TextInput';
 import colors from '../../theme.json';
 import {connect} from 'react-redux';
@@ -147,6 +148,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               placeholder={item.shortName}
               readOnly={true}
               initialValue={item.value}
+              onChangeText={() =>{}}
             />
           );
         }
@@ -194,8 +196,9 @@ const InterventionView = ({route, interventionDefinition}) => {
               </View>
               <View style={styles.multiSelectContainer}>
                 {item.value.length > 0
-                  ? item.value.map((value) => (
+                  ? item.value.map((value, index) => (
                       <Chip
+                        key={index}
                         title={value.label}
                         buttonStyle={{
                           backgroundColor: colors.grey,
@@ -229,5 +232,10 @@ const InterventionView = ({route, interventionDefinition}) => {
 const mapStateToProps = ({interventionDefinition}) => ({
   interventionDefinition,
 });
+
+InterventionView.propTypes = {
+  route: PropTypes.object.isRequired,
+  interventionDefinition: PropTypes.object.isRequired
+}
 
 export default connect(mapStateToProps)(InterventionView);

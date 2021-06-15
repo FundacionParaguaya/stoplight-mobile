@@ -35,7 +35,8 @@ FamilyTab.propTypes = {
   title: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
   active: PropTypes.bool,
-  full: PropTypes.bool
+  full: PropTypes.bool,
+  interventionSkipped: PropTypes.bool
 }
 
 export default FamilyTab
