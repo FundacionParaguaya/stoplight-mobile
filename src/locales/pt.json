@@ -182,7 +182,7 @@
       "other": "",
       "interventions": "Intervenções",
       "addIntervention": "Adicionar intervenção",
-      "syncErrorIntervention":"Erro de Sincronização",
+      "syncErrorIntervention": "Erro de Sincronização",
       "syncPendingIntervention": "Sincronização de intervenção pendente",
       "syncComplete": "intervenção sincronizada"
     },
@@ -285,11 +285,15 @@
       "of": "de",
       "updates": "atualizações",
       "syncErrProblem": "Parece que temos um problema!",
-      "itemHasError": "%n prioridade tem um erro de sincronização.",
       "itemsHaveError": "%n prioridades têm erros de sincronização.",
       "download": "Baixar dados da pesquisa",
       "retry": "Tentar novamente",
-      "families": "Famílias"
+      "families": "Famílias",
+      "priorityHasError": "%n prioridade tem um erro de sincronização.",
+      "prioritiesHasError": "",
+      "prioritiesHaveError": "%n prioridades têm um erro de sincronização",
+      "interventionsHasError": "%n intervenções têm um erro de sincronização",
+      "interventionHasError": "%n intervenção tem um erro de sincronização"
     },
     "final": {
       "emailSent": "Seu mapa da vida foi enviado com sucesso por e-mail. Não se esqueça de selecionar Salvar e fechar!",

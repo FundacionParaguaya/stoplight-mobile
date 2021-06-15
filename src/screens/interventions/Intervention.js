@@ -175,8 +175,7 @@ const Intervention = ({
     interventionDefinition.questions.forEach((question) => {
       params += `${question.codeName} `;
     });
-
-    console.log('submit', finalAnswers);
+    
     const payload = {
       id: finalAnswers[0].value,
       values: finalAnswers,

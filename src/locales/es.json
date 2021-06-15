@@ -284,10 +284,14 @@
       "updates": "actualizaciones",
       "syncErrProblem": "¡Parece que tenemos un problema!",
       "itemHasError": "%n prioridad tiene un error de sincronización.",
+      "prioritiesHaveError": "%n priorities have a sync error",
       "itemsHaveError": "%n prioridades tienen un error de sincronización.",
       "download": "Descargar datos de las encuesta",
       "retry": "Reintentar",
-      "families": "Familias"
+      "families": "Familias",
+      "priorityHasError": "%n prioridad tiene un error de sincronización.",
+      "interventionsHaveError": "%n intervenciones tienen un error de sincronización.",
+      "interventionsHasError": "%n intervención tiene un error de sincronización."
     },
     "final": {
       "emailSent": "Tu Mapa de Vida ha sido enviado exitosamente vía email. ¡No te olvides de seleccionar Guardar & cerrar!",

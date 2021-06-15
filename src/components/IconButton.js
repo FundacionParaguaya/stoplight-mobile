@@ -1,10 +1,12 @@
+import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import React, { Component } from 'react'
-import { TouchableHighlight, View, Text, Image, StyleSheet } from 'react-native'
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import PropTypes from 'prop-types'
 import colors from '../theme.json'
+import { connect } from 'react-redux'
+import { interventions } from '../redux/reducer'
 
 export class IconButtonComponent extends Component {
   state = {
@@ -25,7 +27,8 @@ export class IconButtonComponent extends Component {
       offline,
       drafts,
       accessible,
-      accessibilityLabel
+      accessibilityLabel,
+      interventions
     } = this.props
     const syncErrors = drafts
       ? drafts.some(draft => draft.status === 'Sync error')
@@ -35,7 +38,7 @@ export class IconButtonComponent extends Component {
       draft => draft.status === 'Pending sync' || draft.status === 'Pending images'
     ).length + offline.outbox.filter(
       item => item.type === 'SUBMIT_PRIORITY'
-    ).length
+    ).length + interventions.filter( i => i.status === 'Pending Status').length
 
     return (
       <TouchableHighlight
@@ -142,6 +145,6 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapStateToProps = ({ offline, drafts }) => ({ offline, drafts })
+const mapStateToProps = ({ offline, drafts, interventions }) => ({ offline, drafts, interventions })
 
 export default connect(mapStateToProps)(IconButtonComponent)
