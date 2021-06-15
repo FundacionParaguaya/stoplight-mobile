@@ -197,7 +197,7 @@
       "sign": "Signature",
       "interventions": "Interventions",
       "addIntervention": "Add an intervention",
-      "syncErrorIntervention":"Sync Error",
+      "syncErrorIntervention": "Sync Error",
       "syncPendingIntervention": "Intervention sync pending",
       "syncComplete": "Intervention synced"
     },
@@ -283,11 +283,13 @@
       "of": "of",
       "updates": "updates",
       "syncErrProblem": "Looks like we have a problem!",
-      "itemHasError": "%n priority has a sync error",
-      "itemsHaveError": "%n priorities have a sync error",
+      "prioritiesHaveError": "%n priorities have a sync error",
       "download": "Download surveys data",
       "retry": "Retry",
-      "families": "Families"
+      "families": "Families",
+      "priorityHasError": "%n priority has a sync error",
+      "interventionHasError": "%n intervention has a sync error",
+      "interventionsHasError": "%n interventions have a sync error"
     },
     "final": {
       "emailSent": "Your Life Map has been successfully sent via email. Don't forget to click on Save & Close!",
