@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Input} from 'react-native-elements';
 import * as _ from 'lodash';
+
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {getErrorLabelForPath, pathHasError} from './utils/form-utils';
 
+import {Input} from 'react-native-elements';
 import colors from '../../theme.json';
 import globalStyles from '../../globalStyles';
 
@@ -16,6 +17,7 @@ const InputWithFormik = ({
   lng,
   label,
   onChange,
+  placeholderColorText
 }) => {
   const [status, setStatus] = useState('blur');
   const {required, questionText} = question || {};
@@ -122,6 +124,7 @@ const InputWithFormik = ({
         placeholder={
           showPlaceholder ? `${placeholder} ${required ? '*' : ''}` : ''
         }
+        placeholderTextColor={placeholderColorText || '#86939e'}
         inputContainerStyle={{
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
@@ -133,8 +136,8 @@ const InputWithFormik = ({
           paddingTop: 2,
         }}
         inputStyle={{
-          ...globalStyles.subline2,
           fontFamily: 'Roboto',
+          ...globalStyles.subline2,
           paddingRight: 30,
           minHeight: 58,
         }}

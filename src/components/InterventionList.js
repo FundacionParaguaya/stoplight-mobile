@@ -227,7 +227,7 @@ const InterventionList = ({
               )}
             </View>
             <View>
-              <Text>
+              <Text style={{ color: colors.lightdark}}>
                 {moment
                   .unix(
                     intervention.interventionDate
@@ -249,7 +249,7 @@ const InterventionList = ({
                   <Icon
                     name="playlist-add"
                     size={23}
-                    color={colors.grey}
+                    color={colors.lightdark}
                     onPress={() => {
                       handleAddIntervention(intervention.id);
                     }}
@@ -262,7 +262,7 @@ const InterventionList = ({
                       <Icon
                         name="expand-less"
                         size={23}
-                        color={colors.grey}
+                        color={ colors.lightdark}
                         onPress={() => {
                           setExpandedIndex(null);
                         }}
@@ -271,7 +271,7 @@ const InterventionList = ({
                       <Icon
                         name="expand-more"
                         size={23}
-                        color={colors.grey}
+                        color={colors.lightdark}
                         onPress={() => setExpandedIndex(index)}
                       />
                     )}
@@ -286,7 +286,7 @@ const InterventionList = ({
                 <ListItem
                   key={index}
                   style={styles.listItem}
-                  onPress={() => {}}>
+                  onPress={() => handleGoIntervention(intervention)}>
                   <View style={{...styles.listItemContainer, paddingLeft: 20}}>
                     <Text style={{...globalStyles.p}}>
                       {intervention.interventionName

@@ -195,10 +195,11 @@
       "noAnswer": "Prefiero no contestar",
       "pictures": "Imágenes",
       "sign": "Firma",
+      "intervention":"Intervención",
       "interventions": "Intervenciones",
       "addIntervention": "Agregar intervención",
       "syncErrorIntervention":"Error de sincronización",
-      "syncPendingIntervention": "Sincronización de intervención pendiente",
+      "syncPendingIntervention": "Sincronización pendiente",
       "syncComplete": "Intervención sincronizada"
     },
     "lifemap": {

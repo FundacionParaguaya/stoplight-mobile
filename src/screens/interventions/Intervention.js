@@ -41,8 +41,8 @@ const Intervention = ({
   const navigation = route.params.navigation;
   const intervention = route.params.intervention;
   const readonly = route.params.readonly;
+  console.log('dr',snapshot)
   const buildInitialValuesForForm = (questions,intervention) => {
-    console.log('i',intervention)
     const initialValue = {};
 
     questions.forEach((question) => {
@@ -340,6 +340,7 @@ const Intervention = ({
                               }
                               label={t('views.family.other')}
                               name={`custom${capitalize(question.codeName)}`}
+                              
                             />
                           );
                         } else {
@@ -435,6 +436,7 @@ const Intervention = ({
                       formik.setFieldValue(question.codeName, e);
                     }}
                     multiline
+                    placeholderColorText={colors.grey}
                   />
                 );
               }
@@ -450,6 +452,7 @@ const Intervention = ({
                   onChange={(e) => {
                     formik.setFieldValue(question.codeName, e);
                   }}
+                  placeholderColorText={colors.grey}
                 />
               );
             })}

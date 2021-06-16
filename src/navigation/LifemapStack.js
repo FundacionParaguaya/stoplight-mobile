@@ -491,7 +491,7 @@ export const FamiliesStack = (propz) => (
         headerTitle: (props) => {
           return(
             <Title
-              title={route && route.params && route.params.familyName ? route.params.familyName: '' }
+              title={route && route.params && route.params.title ? route.params.title: '' }
               accessibilityAssertiveType="none"
             />
           )
@@ -507,7 +507,7 @@ export const FamiliesStack = (propz) => (
         headerTitle: (props) => {
           return (
             <Title
-              title={''}
+              title={route && route.params && route.params.title ? route.params.title: ''}
               accessibilityAssertiveType="none"
             />
           )

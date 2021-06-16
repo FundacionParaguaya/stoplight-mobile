@@ -198,8 +198,9 @@
       "interventions": "Entèvansyon",
       "addIntervention": "Ajoute entèvansyon",
       "syncErrorIntervention": "Senkro Erè",
-      "syncPendingIntervention": "Entèvansyon senk annatant",
-      "syncComplete": "Entèvansyon senkronize"
+      "syncPendingIntervention": "Senkro annatant",
+      "syncComplete": "Entèvansyon senkronize",
+      "intervention": "Entèvansyon"
     },
     "lifemap": {
       "indicatorDefinition": "Definisyon endikatè",

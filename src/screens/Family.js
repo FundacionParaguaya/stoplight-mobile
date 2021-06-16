@@ -125,7 +125,8 @@ export class Family extends Component {
       draft: this.familyLifemap,
       survey:this.survey,
       interventionId: typeof id == 'number' ? id: null,
-      navigation: this.props.navigation
+      navigation: this.props.navigation,
+      title: this.props.t('views.family.addIntervention')
     });
   };
 
@@ -136,6 +137,7 @@ export class Family extends Component {
       survey:this.survey,
       intervention:intervention,
       draft: this.familyLifemap,
+      title:this.props.t('views.family.intervention')
     })
   }
 
