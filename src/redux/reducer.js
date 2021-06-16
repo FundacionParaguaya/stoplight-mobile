@@ -154,7 +154,7 @@ export const projects = (state = [], action) => {
 };
 
 // Intervention Definition
-export const interventionDefinition = (state=[], action) => {
+export const interventionDefinition = (state=null, action) => {
   switch(action.type) {
     case LOAD_INTERVENTION_DEFINITION_COMMIT:
       return action.payload.data.interventionDefinitionByOrg;

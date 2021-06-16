@@ -371,6 +371,7 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
+              interventionSkipped = {interventionDefinition == null}
             />
           )}
 
