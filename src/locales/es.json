@@ -118,6 +118,7 @@
       "projectsCached": "Proyectos",
       "downloadingProjects": "Descargando proyectos ...",
       "familiesCached": "Familias sincronizadas",
+      "interventionDefinitionCached":"Definición de intervencion",
       "downloadingFamilies": "Descargando familias",
       "mapsCached": "Mapas sincronizados",
       "mapsDownloading": "Descargando mapas",
@@ -193,7 +194,13 @@
       "other": "Otro",
       "noAnswer": "Prefiero no contestar",
       "pictures": "Imágenes",
-      "sign": "Firma"
+      "sign": "Firma",
+      "intervention":"Intervención",
+      "interventions": "Intervenciones",
+      "addIntervention": "Agregar intervención",
+      "syncErrorIntervention":"Error de sincronización",
+      "syncPendingIntervention": "Sincronización pendiente",
+      "syncComplete": "Intervención sincronizada"
     },
     "lifemap": {
       "indicatorDefinition": "Definición del indicador",
@@ -278,10 +285,14 @@
       "updates": "actualizaciones",
       "syncErrProblem": "¡Parece que tenemos un problema!",
       "itemHasError": "%n prioridad tiene un error de sincronización.",
+      "prioritiesHaveError": "%n priorities have a sync error",
       "itemsHaveError": "%n prioridades tienen un error de sincronización.",
       "download": "Descargar datos de las encuesta",
       "retry": "Reintentar",
-      "families": "Familias"
+      "families": "Familias",
+      "priorityHasError": "%n prioridad tiene un error de sincronización.",
+      "interventionsHaveError": "%n intervenciones tienen un error de sincronización.",
+      "interventionsHasError": "%n intervención tiene un error de sincronización."
     },
     "final": {
       "emailSent": "Tu Mapa de Vida ha sido enviado exitosamente vía email. ¡No te olvides de seleccionar Guardar & cerrar!",

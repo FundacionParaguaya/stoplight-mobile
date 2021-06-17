@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
+import React, { Component } from 'react';
+
 import FamiliesListItem from '../components/FamiliesListItem';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import PropTypes from 'prop-types';
 import SearchBar from '../components/SearchBar';
-import { url } from '../config';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import colors from '../theme.json';
+import { connect } from 'react-redux';
 import globalStyles from '../globalStyles';
 import { loadFamilies } from '../redux/actions';
-import { setAccessibilityTextForFamilies } from '../screens/utils/accessibilityHelpers';
-import colors from '../theme.json';
+import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
 import { replaceSpecialChars as sanitize } from '../utils';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { setAccessibilityTextForFamilies } from '../screens/utils/accessibilityHelpers';
+import { url } from '../config';
+import { withNamespaces } from 'react-i18next';
 
 export class Families extends Component {
   state = { search: '' };
@@ -44,7 +44,13 @@ export class Families extends Component {
   };
 
   fetchFamilies = () => {
-    this.props.loadFamilies(url[this.props.env], this.props.user.token);
+    let params = '';
+    if(!!this.props.interventionDefinition) {
+      this.props.interventionDefinition.questions.forEach(question => {
+        params += `${question.codeName} `;
+      });
+    };
+    this.props.loadFamilies(url[this.props.env], this.props.user.token, params);
   };
 
   render() {
@@ -182,6 +188,7 @@ const styles = StyleSheet.create({
 
 export const mapStateToProps = ({
   families,
+  interventionDefinition,
   user,
   offline,
   env,
@@ -189,6 +196,7 @@ export const mapStateToProps = ({
   drafts,
 }) => ({
   families,
+  interventionDefinition,
   user,
   offline,
   env,

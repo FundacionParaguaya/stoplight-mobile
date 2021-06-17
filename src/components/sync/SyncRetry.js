@@ -1,15 +1,31 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { StyleSheet, Text, View } from 'react-native'
+
 import Button from '../Button'
-import i18n from '../../i18n'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import PropTypes from 'prop-types'
 import colors from '../../theme.json'
 import globalStyles from '../../globalStyles'
+import i18n from '../../i18n'
+import { withNamespaces } from 'react-i18next'
+
 export class SyncRetry extends Component {
+
+  setMeesage(type,withError) {
+    if(type ==='priority' && withError === 1) {
+      return i18n.t('views.sync.priorityHasError').replace('%n', withError)
+    }else if(type ==='intervention' && withError === 1){
+      return i18n.t('views.sync.interventionHasError').replace('%n', withError)
+    }else if(type ==='intervention' && withError !== 1){
+      return i18n.t('views.sync.interventionsHasError').replace('%n', withError)
+    }else if(type ==='priority' && withError !== 1){
+      return i18n.t('views.sync.prioritiesHaveError').replace('%n', withError)
+    }
+  }
+
+  
   render() {
-    const { withError, retrySubmit } = this.props
+    const { withError, retrySubmit, type } = this.props
     return (
       <View style={[styles.view, styles.borderBottom]}>
         <Text style={globalStyles.h3}>
@@ -30,11 +46,7 @@ export class SyncRetry extends Component {
           />
         </View>
         <Text style={globalStyles.p}>
-          {withError === 1
-            ? i18n.t('views.sync.itemHasError').replace('%n', withError)
-            : i18n
-                .t('views.sync.itemsHaveError')
-                .replace('%n', withError)}
+          {this.setMeesage(type, withError)}
         </Text>
       </View>
     )

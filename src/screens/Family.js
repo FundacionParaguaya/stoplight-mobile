@@ -1,10 +1,5 @@
-import NetInfo from '@react-native-community/netinfo';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
 import {
+  Dimensions,
   FlatList,
   Image,
   Linking,
@@ -13,33 +8,39 @@ import {
   Text,
   TouchableHighlight,
   View,
-  Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {connect} from 'react-redux';
-import uuid from 'uuid/v1';
-
-import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
-import marker from '../../assets/images/marker.png';
-import Button from '../components/Button';
-import FamilyListItem from '../components/FamilyListItem';
-import FamilyTab from '../components/FamilyTab';
-import RoundImage from '../components/RoundImage';
-import {url} from '../config';
-import globalStyles from '../globalStyles';
+import React, {Component} from 'react';
 import {
   createDraft,
   submitDraft,
   submitDraftWithImages,
   submitPriority,
 } from '../redux/actions';
-import {getTotalScreens} from '../screens/lifemap/helpers';
-import colors from '../theme.json';
+
+import Button from '../components/Button';
+import FamilyListItem from '../components/FamilyListItem';
+import FamilyTab from '../components/FamilyTab';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import InterventionList from '../components/InterventionList';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import NetInfo from '@react-native-community/netinfo';
 import OverviewComponent from './lifemap/Overview';
-import {prepareDraftForSubmit} from './utils/helpers';
-import ProjectsPopup from '../components/ProjectsPopup';
 import ProfileImages from '../components/ProfileImages';
+import ProjectsPopup from '../components/ProjectsPopup';
+import PropTypes from 'prop-types';
+import RoundImage from '../components/RoundImage';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
 import {getLocaleForLanguage} from '../utils';
+import {getTotalScreens} from '../screens/lifemap/helpers';
+import globalStyles from '../globalStyles';
+import mapPlaceholderLarge from '../../assets/images/map_placeholder_1000.png';
+import marker from '../../assets/images/marker.png';
+import moment from 'moment';
+import {prepareDraftForSubmit} from './utils/helpers';
+import {url} from '../config';
+import uuid from 'uuid/v1';
+import {withNamespaces} from 'react-i18next';
 
 export class Family extends Component {
   unsubscribeNetChange;
@@ -114,6 +115,32 @@ export class Family extends Component {
       Linking.openURL(url);
     }
   };
+
+  getDraft = () =>
+    this.props.drafts.find((draft) => draft.draftId === this.draftId);
+
+  handleClickOnAddIntervention = (id) => {
+    const { navigation } = this.props;
+    navigation.navigate('Intervention',{
+      draft: this.familyLifemap,
+      survey:this.survey,
+      interventionId: typeof id == 'number' ? id: null,
+      navigation: this.props.navigation,
+      title: this.props.t('views.family.addIntervention')
+    });
+  };
+
+  handleGoIntervention = (intervention) => {
+    const { navigation } = this.props;
+
+    navigation.navigate('InterventionView',{
+      survey:this.survey,
+      intervention:intervention,
+      draft: this.familyLifemap,
+      title:this.props.t('views.family.intervention')
+    })
+  }
+
   handleResumeClick = () => {
     const {navigation} = this.props;
 
@@ -288,7 +315,7 @@ export class Family extends Component {
   };
   render() {
     const {activeTab} = this.state;
-    const {t, navigation} = this.props;
+    const {t, navigation, interventionDefinition} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
     const stoplightSkipped = this.familyLifemap.stoplightSkipped;
     const {width, height} = Dimensions.get('window');
@@ -338,6 +365,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
+            interventionSkipped = {interventionDefinition == null}
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -345,6 +373,15 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
+              interventionSkipped = {interventionDefinition == null}
+            />
+          )}
+
+          {interventionDefinition !== null && (
+            <FamilyTab
+              title={t('views.family.interventions')}
+              onPress={()=> this.setState({activeTab:'Interventions'})}
+              active={activeTab === 'Interventions'}
             />
           )}
         </View>
@@ -643,6 +680,30 @@ export class Family extends Component {
             )}
           </ScrollView>
         ) : null}
+
+      {/* Intervention tab */}
+
+      {activeTab === 'Interventions' ? (
+        <ScrollView id="intervention">
+          <View style={styles.buttonContainer}>
+            <Button
+              style={styles.buttonSmall}
+              text={t('views.family.addIntervention')}
+              handleClick={this.handleClickOnAddIntervention}
+            />
+          </View>
+          <InterventionList 
+            interventionsData = {this.familyLifemap.interventions}
+            handleAddIntervention = {this.handleClickOnAddIntervention}
+            handleGoIntervention = {this.handleGoIntervention}
+            syncInterventions= {this.props.interventions}
+            snapshot={this.familyLifemap && this.familyLifemap.id}
+            lang={this.props.language}
+            
+           />
+        </ScrollView>
+      ):null}
+
       </ScrollView>
     );
   }
@@ -793,6 +854,10 @@ const mapStateToProps = ({
   syncStatus,
   projects,
   priorities,
+  drafts,
+  interventionDefinition,
+  interventions,
+  language
 }) => ({
   surveys,
   env,
@@ -800,6 +865,10 @@ const mapStateToProps = ({
   syncStatus,
   projects,
   priorities,
+  drafts,
+  interventionDefinition,
+  interventions,
+  language
 });
 
 export default withNamespaces()(

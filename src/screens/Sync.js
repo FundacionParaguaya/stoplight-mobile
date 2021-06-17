@@ -1,43 +1,46 @@
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
 import {
   ActivityIndicator,
-  PermissionsAndroid,
   FlatList,
+  PermissionsAndroid,
   ScrollView,
-  Text,
   StyleSheet,
+  Text,
+  TextInput,
   UIManager,
   View,
   findNodeHandle,
-  TextInput,
 } from 'react-native';
-import {connect} from 'react-redux';
+import React, {Component} from 'react';
+import {
+  createDraft,
+  submitDraft,
+  submitDraftWithImages,
+  submitIntervention,
+  submitPriority,
+} from '../redux/actions';
+import {fakeSurvey, prepareDraftForSubmit} from './utils/helpers';
+
+import Button from '../components/Button';
+import DownloadPopup from '../screens/modals/DownloadModal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from '../theme.json';
+import {PhoneNumberUtil} from 'google-libphonenumber';
+import PropTypes from 'prop-types';
+import RNFetchBlob from 'rn-fetch-blob';
 import SyncInProgress from '../components/sync/SyncInProgress';
+import SyncIntervention from '../components/sync/SyncItem';
+import SyncItem from '../components/sync/SyncItem';
 import SyncListItem from '../components/sync/SyncListItem';
 import SyncOffline from '../components/sync/SyncOffline';
 import SyncPriority from '../components/sync/SyncPriority';
 import SyncRetry from '../components/sync/SyncRetry';
 import SyncUpToDate from '../components/sync/SyncUpToDate';
-import {url} from '../config';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
 import globalStyles from '../globalStyles';
-import {
-  submitDraft,
-  createDraft,
-  submitDraftWithImages,
-  submitPriority,
-} from '../redux/actions';
 import {screenSyncScreenContent} from '../screens/utils/accessibilityHelpers';
-import {prepareDraftForSubmit, fakeSurvey} from './utils/helpers';
-import RNFetchBlob from 'rn-fetch-blob';
-import DownloadPopup from '../screens/modals/DownloadModal';
-import {PhoneNumberUtil} from 'google-libphonenumber';
-import Button from '../components/Button';
-
+import {url} from '../config';
 import uuid from 'uuid/v1';
+import {withNamespaces} from 'react-i18next';
 
 // get env
 const nodeEnv = process.env;
@@ -101,6 +104,31 @@ export class Sync extends Component {
     this.retrySubmittingAllPriorities();
   };
 
+  retrySubmitInterventions = () => {
+    const interventionsWithError = this.props.interventions
+      .filter((intervention) => intervention.status == 'Sync Error')
+      .slice();
+
+    interventionsWithError.forEach((i) => {
+      this.props.submitIntervention(
+        url[this.props.env],
+        this.props.user.token,
+        i,
+      );
+    });
+  };
+
+  getFamilyNameIntervention = (snapshot) => {
+    const family = this.props.families.find((family) =>
+      family.snapshotList.find((snap) => snap.id == snapshot),
+    );
+
+    if (family.name) {
+      return family.name;
+    }
+    return '';
+  };
+
   getFamilyName = (snapshotStoplightId) => {
     let indicator;
     let familyName;
@@ -138,12 +166,10 @@ export class Sync extends Component {
       if (!indicator) {
         indicator = snapShotData.indicatorSurveyDataList.find(
           (item) => item.snapshotStoplightId === snapshotStoplightId,
-
-        
         );
         indicator
-        ? (indicator = {...indicator, surveyId: snapShotData.surveyId})
-        : null
+          ? (indicator = {...indicator, surveyId: snapShotData.surveyId})
+          : null;
       }
     });
 
@@ -151,9 +177,9 @@ export class Sync extends Component {
       (survey) => survey.id == indicator.surveyId,
     );
     !surveyIndicator
-      ? surveyIndicator= surveyData.surveyStoplightQuestions.find(
-          (item) => item.codeName == indicator.key
-        )
+      ? (surveyIndicator = surveyData.surveyStoplightQuestions.find(
+          (item) => item.codeName == indicator.key,
+        ))
       : null;
     if (surveyIndicator) {
       return surveyIndicator.questionText;
@@ -335,7 +361,8 @@ export class Sync extends Component {
     this.setState({openDownloadModal: !this.state.openDownloadModal});
   };
   render() {
-    const {drafts, offline, priorities, t} = this.props;
+    const {drafts, offline, priorities, interventions, t} = this.props;
+    console.log('interventions', interventions);
     const lastSync = drafts.reduce(
       (lastSynced, item) =>
         item.syncedAt > lastSynced ? item.syncedAt : lastSynced,
@@ -368,6 +395,21 @@ export class Sync extends Component {
       (priority) =>
         priority.status == 'Pending Status' || priority.status == 'Sync Error',
     );
+
+    const interventionsWithError = interventions.filter(
+      (intervention) => intervention.status === 'Sync Error',
+    );
+
+    const pendingInterventions = interventions.filter(
+      (intervention) => intervention.status === 'Pending Status',
+    );
+
+    const interventionsPendingOrError = interventions.filter(
+      (intervention) =>
+        intervention.status === 'Pending Status' ||
+        intervention.status === 'Sync Error',
+    );
+
     const screenAccessibilityContent = screenSyncScreenContent(
       offline,
       pendingDrafts,
@@ -383,13 +425,8 @@ export class Sync extends Component {
           isOpen={this.state.openDownloadModal}
           onClose={this.toggleDownloadModal}
           title={t('views.modals.finishDownload')}
-          subtitle={
-            
-              t('views.modals.subtitleFinishDownload')
-          }
-          folder={ this.state.existPspFolder
-            ? "Psp"
-            : "Download"}
+          subtitle={t('views.modals.subtitleFinishDownload')}
+          folder={this.state.existPspFolder ? 'Psp' : 'Download'}
         />
         {nodeEnv.NODE_ENV === 'development' && (
           <View
@@ -433,7 +470,9 @@ export class Sync extends Component {
           !pendingDrafts.length &&
           !draftsWithError.length &&
           !prioritiesWithError.length &&
-          !pendingPriorities.length ? (
+          !pendingPriorities.length &&
+          !interventionsWithError.length &&
+          !pendingInterventions.length ? (
             <SyncUpToDate date={lastSync} lng={this.props.lng} />
           ) : null}
 
@@ -492,9 +531,9 @@ export class Sync extends Component {
               data={prioritiesPendingOrError}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
-                <SyncPriority
-                  indicatorName={this.getIndicator(item.snapshotStoplightId)}
-                  familyName={this.getFamilyName(item.snapshotStoplightId)}
+                <SyncItem
+                  name={this.getIndicator(item.snapshotStoplightId)}
+                  subtitle={this.getFamilyName(item.snapshotStoplightId)}
                   status={item.status}
                 />
               )}
@@ -505,12 +544,49 @@ export class Sync extends Component {
           <SyncRetry
             withError={prioritiesWithError.length}
             retrySubmit={this.retrySubmit}
+            type={'priority'}
           />
         ) : null}
         {offline.online && pendingPriorities.length ? (
           <SyncInProgress
             pendingDraftsLength={pendingPriorities.length}
             initial={pendingPriorities.length + prioritiesWithError.length}
+          />
+        ) : null}
+
+        {interventionsPendingOrError.length ? (
+          <React.Fragment>
+            <Text style={[globalStyles.h3Bold, {marginTop: 10}]}>
+              {t('views.family.interventions')}
+            </Text>
+            <FlatList
+              style={{minHeight: 40, marginBottom: 15}}
+              data={interventionsPendingOrError}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <SyncItem
+                  title={item.values[0].value}
+                  subtitle={this.getFamilyNameIntervention(item.snapshot)}
+                  status={item.status}
+                />
+              )}
+            />
+          </React.Fragment>
+        ) : null}
+
+        {offline.online && interventionsWithError.length ? (
+          <SyncRetry
+            withError={interventionsWithError.length}
+            retrySubmit={this.retrySubmitInterventions}
+            type={'intervention'}
+          />
+        ) : null}
+        {offline.online && pendingInterventions.length ? (
+          <SyncInProgress
+            pendingDraftsLength={pendingInterventions.length}
+            initial={
+              pendingInterventions.length + interventionsWithError.length
+            }
           />
         ) : null}
       </ScrollView>
@@ -574,6 +650,7 @@ const mapStateToProps = ({
   families,
   survey,
   language,
+  interventions,
 }) => ({
   drafts,
   offline,
@@ -584,6 +661,7 @@ const mapStateToProps = ({
   families,
   survey,
   language,
+  interventions,
 });
 
 const mapDispatchToProps = {
@@ -591,6 +669,7 @@ const mapDispatchToProps = {
   submitDraft,
   submitDraftWithImages,
   submitPriority,
+  submitIntervention,
 };
 
 export default withNamespaces()(

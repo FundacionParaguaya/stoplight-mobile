@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import * as _ from 'lodash';
+
 import {
   FlatList,
   Image,
@@ -8,17 +9,15 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-
-import * as _ from 'lodash';
-
-import {setListOfLabeles} from '../../screens/utils/accessibilityHelpers';
-import BottomModal from '../BottomModal';
-import globalStyles from '../../globalStyles';
-import colors from '../../theme.json';
-import arrow from '../../../assets/images/selectArrow.png';
-
-import ListItem from '../ListItem';
+import React, {useState} from 'react';
 import {getErrorLabelForPath, pathHasError} from './utils/form-utils';
+
+import BottomModal from '../BottomModal';
+import ListItem from '../ListItem';
+import arrow from '../../../assets/images/selectArrow.png';
+import colors from '../../theme.json';
+import globalStyles from '../../globalStyles';
+import {setListOfLabeles} from '../../screens/utils/accessibilityHelpers';
 
 // import { getErrorLabelForPath, pathHasError } from '../utils/form-utils';
 
@@ -26,6 +25,7 @@ const SelectWithFormik = ({
   value,
   formik,
   name,
+  label,
   readOnly,
   question,
   onChange,
@@ -72,10 +72,10 @@ const SelectWithFormik = ({
                   !error && {
                     color: colors.palegreen,
                   },
-              ]}>{`${questionText}${required && !readOnly ? ' *' : ''}`}</Text>
+              ]}>{`${label ? label : questionText}${required && !readOnly ? ' *' : ''}`}</Text>
           )}
           <Text style={[styles.placeholder, error ? {color: colors.red} : {}]}>
-            {value ? text : `${questionText}${required ? ' *' : ''}`}
+            {value ? text : `${label ? label : questionText}${required ? ' *' : ''}`}
           </Text>
           {!readOnly ? <Image source={arrow} style={styles.arrow} /> : null}
 

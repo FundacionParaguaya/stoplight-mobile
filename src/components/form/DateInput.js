@@ -1,12 +1,12 @@
-import moment from 'moment'
-import PropTypes from 'prop-types'
-import React from 'react'
-import { withNamespaces } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
-import i18n from '../../i18n'
-import colors from '../../theme.json'
 import DatePickerWheel from './DatePickerWheel'
+import PropTypes from 'prop-types'
+import React from 'react'
+import colors from '../../theme.json'
+import i18n from '../../i18n'
+import moment from 'moment'
+import { withNamespaces } from 'react-i18next'
 
 export class DateInputComponent extends React.Component {
   state = {
@@ -39,7 +39,7 @@ export class DateInputComponent extends React.Component {
       (this.props.required && !date) ||
       (this.props.required && !this.props.initialValue) ||
       (!this.props.required && !!date) || (this.props.required && !!date)
-        ? (!moment(`${date}`, 'D MMMM YYYY', true).isValid()) || (!moment(`${date}`).isSameOrBefore(moment(new Date()).format("DD MMMM YYYY")))
+        ? (!moment(`${date}`, 'D MMMM YYYY', true).isValid()) ||  (this.props.validFutureDates ? false  :(!moment(`${date}`).isSameOrBefore(moment(new Date()).format("DD MMMM YYYY"))))
         : false
     if (this.props.setError) {
       if (error) {
@@ -148,7 +148,7 @@ export class DateInputComponent extends React.Component {
             />
           </View>
         </View>
-        {this.state.error ? (
+        {this.state.error && !this.props.formikHandleError ? (
           <Text style={{ ...styles.text, color: colors.red, ...styles.error }}>
             {t('views.family.selectValidDate')}
           </Text>

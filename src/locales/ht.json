@@ -89,7 +89,7 @@
     "projects": "Pwojè yo",
     "project": "Pwojè",
     "createLifemap": "Kòmanse ankèt Stoplight la",
-    "noSurveys":"Pa gen okenn sondaj ki disponib",
+    "noSurveys": "Pa gen okenn sondaj ki disponib",
     "latestDrafts": "Dènye kat lavi",
     "noDrafts": "Pa gen bwouyon pou montre",
     "termsConditions": "Tèm ak Kondisyon",
@@ -118,6 +118,7 @@
       "projectsCached": "Pwojè an mòd kache",
       "downloadingProjects": "Telechajman pwojè...",
       "familiesCached": "Families cached",
+      "interventionDefinitionCached": "Definisyon entèvansyon",
       "downloadingFamilies": "Telechajman fanmi...",
       "mapsCached": "Kat an mòd kache",
       "mapsDownloading": "Telechajman kat yo...",
@@ -193,7 +194,13 @@
       "female": "",
       "male": "",
       "noAnswer": "",
-      "other": ""
+      "other": "",
+      "interventions": "Entèvansyon",
+      "addIntervention": "Ajoute entèvansyon",
+      "syncErrorIntervention": "Senkro Erè",
+      "syncPendingIntervention": "Senkro annatant",
+      "syncComplete": "Entèvansyon senkronize",
+      "intervention": "Entèvansyon"
     },
     "lifemap": {
       "indicatorDefinition": "Definisyon endikatè",
@@ -279,11 +286,15 @@
       "of": "nan",
       "updates": "mizajou",
       "syncErrProblem": "Sanble nou gen yon pwoblèm!",
-      "itemHasError": "%n priyorite ki gen yon erè senkwonizasyon",
       "itemsHaveError": "%n priyorite ki gen yon erè senkwonizasyon",
       "download": "Download surveys data",
       "retry": "Rekòmanse",
-      "families": "Fanmi yo"
+      "families": "Fanmi yo",
+      "priorityHasError": "%n priyorite ki gen yon erè senkwonizasyon",
+      "prioritiesHasError": "",
+      "prioritiesHaveError": "%n priyorite gen yon erè senk",
+      "interventionsHasError": "%n entèvansyon gen yon erè senk",
+      "interventionHasError": "Entèvansyon %n gen yon erè senk"
     },
     "final": {
       "emailSent": "Kat lavi w’ ale nan imèl ou avèk siksè.  Pa bliye klike sou anrejistre epi fèmen!",

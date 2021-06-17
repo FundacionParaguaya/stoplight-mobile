@@ -108,8 +108,8 @@ export const screenSyncScreenContent = (
   } else if (syncRetry) {
     syncBody = `${
       draftsWithError === 1
-        ? i18n.t('views.sync.itemHasError').replace('%n', draftsWithError)
-        : i18n.t('views.sync.itemsHaveError').replace('%n', draftsWithError)
+        ? i18n.t('views.sync.priorityHasError').replace('%n', draftsWithError)
+        : i18n.t('views.sync.prioritiesHaveError').replace('%n', draftsWithError)
     }`
   }
 

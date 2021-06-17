@@ -1,17 +1,19 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import FilesystemStorage from 'redux-persist-filesystem-storage';
-import AsyncStorage from '@react-native-community/async-storage';
 import * as _ from 'lodash';
-import { autoRehydrate, persistStore, getStoredState } from 'redux-persist';
+
+import { SUBMIT_DRAFT, setHydrated } from './actions';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { autoRehydrate, getStoredState, persistStore } from 'redux-persist';
+
+import AsyncStorage from '@react-native-community/async-storage';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import defaultQueue from '@redux-offline/redux-offline/lib/defaults/queue';
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import { rootReducer } from './reducer';
-import { setHydrated, SUBMIT_DRAFT } from './actions';
 import { setLanguage } from '../i18n';
-import thunk from 'redux-thunk';
 import { submitDraftWithImages } from './middleware';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
 let rehydrated = false;
 
@@ -36,6 +38,14 @@ const reduxOfflineConfig = {
       }
       return [...outbox, incomingAction];
     },
+
+    
+   /*  peek(outbox, action, { offline }) {
+      console.log('peek action',action)
+      if(action.type == 'SUBMIT_INTERVENTION'){
+        return false;
+      }
+    } */
   },
   // this fires after store hydration is done
   persistCallback: () => {

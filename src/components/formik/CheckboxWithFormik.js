@@ -15,6 +15,7 @@ const removeByIndex = (array, index) => {
 const CheckboxWithFormik = ({
   question,
   name,
+  label,
   readOnly,
   t,
   formik,
@@ -49,7 +50,7 @@ const CheckboxWithFormik = ({
         style={[
           styles.placeholder,
           error ? {color: colors.red} : {},
-        ]}>{`${questionText}${required && !readOnly ? ' *' : ''}`}</Text>
+        ]}>{`${label ? label : questionText }${required && !readOnly ? ' *' : ''}`}</Text>
       {rawOptions.map((option, i) => (
         <CheckBox
           key={i}

@@ -1,35 +1,37 @@
-import NetInfo from '@react-native-community/netinfo';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { AndroidBackHandler } from 'react-navigation-backhandler';
-import { connect } from 'react-redux';
+import * as _ from 'lodash';
 
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 import { initAudioCaching, initImageCaching } from '../cache';
-import Button from '../components/Button';
-import Decoration from '../components/decoration/Decoration';
-import ProgressBar from '../components/ProgressBar';
-import { url } from '../config';
-import globalStyles from '../globalStyles';
 import {
   loadFamilies,
+  loadInterventionDefinition,
   loadMaps,
-  loadSurveys,
   loadProjectsByOrganization,
+  loadSurveys,
   logout,
   resetSyncState,
   setAppVersion,
   setSyncedState,
   validate
 } from '../redux/actions';
-import * as _ from 'lodash';
-import colors from '../theme.json';
+
+import { AndroidBackHandler } from 'react-navigation-backhandler';
 import Bugsnag from '@bugsnag/react-native';
+import Button from '../components/Button';
+import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Decoration from '../components/decoration/Decoration';
+import DeviceInfo from 'react-native-device-info';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import NetInfo from '@react-native-community/netinfo';
+import ProgressBar from '../components/ProgressBar';
+import PropTypes from 'prop-types';
+import colors from '../theme.json';
+import { connect } from 'react-redux';
+import globalStyles from '../globalStyles';
+import { url } from '../config';
+import { withNamespaces } from 'react-i18next';
 
 export class Loading extends Component {
   state = {
@@ -61,21 +63,39 @@ export class Loading extends Component {
   };
   // NEW STEP 2 - cache the projects
   syncProjects = () => {
-    //if projects are synced skip to caching families
+    //if projects are synced skip to caching intervention definition
     if (this.props.sync.projects) {
-      this.syncFamilies();
+      this.syncInterventionDefinition();
+      //this.syncFamilies();
     } else {
       this.props.loadProjectsByOrganization(url[this.props.env], this.props.user.token, this.props.user.organization.id);
     }
   }
 
-  // STEP 3 - cache the families
+  // NEW STEP 3 - cache the intervention definition
+  syncInterventionDefinition = () => {
+    // if intervention definition is synced skip to caching families
+    if(this.props.sync.interventionDefinition){
+      this.syncFamilies();
+    } else {
+      this.props.loadInterventionDefinition(url[this.props.env],this.props.user.token, this.props.user.organization.id);
+    }
+  }
+
+  // STEP 4 - cache the families
   syncFamilies = () => {
     // if families are synced skip to caching images
     if (this.props.sync.families) {
       this.checkOfflineMaps();
     } else {
-      this.props.loadFamilies(url[this.props.env], this.props.user.token);
+      let params = '';
+      if(!!this.props.interventionDefinition) {
+        this.props.interventionDefinition.questions.forEach(question => {
+          params +=`${question.codeName} `;
+        })
+      }
+      console.log('')
+      this.props.loadFamilies(url[this.props.env], this.props.user.token, params);
     }
   };
 
@@ -111,7 +131,7 @@ export class Loading extends Component {
     });
   };
 
-  // STEP 4 - check and cache the offline maps
+  // STEP 5 - check and cache the offline maps
   checkOfflineMaps = async () => {
     MapboxGL.offlineManager.setTileCountLimit(200000);
     if (
@@ -168,7 +188,7 @@ export class Loading extends Component {
     }
   };
 
-  // STEP 5 - cache the survey indicator images
+  // STEP 6 - cache the survey indicator images
   handleImageCaching = () => {
     if (
       !this.props.downloadMapsAndImages.downloadImages ||
@@ -186,7 +206,7 @@ export class Loading extends Component {
     }
   };
 
-  // STEP 6 - cache the survey indicator audios
+  // STEP 7 - cache the survey indicator audios
 
   handleAudioCaching = () => {
     if (!this.props.downloadMapsAndImages.downloadAudios ||
@@ -260,7 +280,7 @@ export class Loading extends Component {
   }
 
   checkState() {
-    const { families, surveys, projects, images, appVersion, audios } = this.props.sync;
+    const { families, surveys, projects,interventionDefinition, images, appVersion, audios } = this.props.sync;
     if (!this.props.user.token) {
       // if user hasn't logged in, navigate to login
       this.props.navigation.navigate('Login');
@@ -272,7 +292,7 @@ export class Loading extends Component {
     else if (
 
       families &&
-      surveys && projects &&
+      surveys && projects && interventionDefinition  &&
       ((!!images.total &&
         images.total === images.synced) ||
         (!!audios.total &&
@@ -327,8 +347,13 @@ export class Loading extends Component {
       //this.syncFamilies();
       this.syncProjects();
     }
-    // start syncing families once projects are synced
+    // start syncing intervention definition once projects are synced
     if (!prevProps.sync.projects && this.props.sync.projects) {
+      this.syncInterventionDefinition();
+    }
+
+    // start syncing families once intervention definition is synced
+    if (!prevProps.sync.interventionDefinition && this.props.sync.interventionDefinition) {
       this.syncFamilies();
     }
 
@@ -418,10 +443,14 @@ export class Loading extends Component {
     if (!prevProps.sync.projectsError && this.props.sync.projectsError) {
       this.showError('We seem to have a problem downloading your projects.');
     }
+
+    if(!prevProps.sync.interventionDefinitionError && this.props.sync.interventionDefinitionError){
+      this.showError('We seem to have a problem downloading your intervention definition')
+    }
   }
 
   render() {
-    const { sync, families, surveys, projects, t } = this.props;
+    const { sync, families, surveys, projects, interventionDefinition, t } = this.props;
 
     const {
       syncingServerData,
@@ -491,10 +520,30 @@ export class Loading extends Component {
                       }
                     </View>
                   )}
-                  {!sync.projects ? (
+
+                {/*   {!sync.projects ? (
+                    <Text style={styles.colorDark}>{t('views.interventionDefinition')}</Text>
+                  ):null} */}
+
+                  {sync.projects && sync.interventionDefinition && (
+                    <View style={styles.syncingItem}>
+                        {sync.interventionDefinition && interventionDefinition !== null && (<>
+                      <Text style={sync.interventionDefinition ? styles.colorGreen : styles.colorDark}>
+                        {t('views.loading.interventionDefinitionCached')}
+                      </Text>
+                      <Icon
+                        name="check"
+                        color={colors.palegreen}
+                        size={23}
+                      /></>)}
+                    </View>
+                  )}
+
+                
+                  {!sync.interventionDefinition ? (
                     <Text style={styles.colorDark}>{t('views.families')}</Text>
                   ) : null}
-                  {sync.projects && (
+                  {sync.interventionDefinition && (
                     <View style={styles.syncingItem}>
                       <Text
                         style={
@@ -775,6 +824,7 @@ export const mapStateToProps = ({
   offline,
   families,
   projects,
+  interventionDefinition,
   maps,
   hydration,
   downloadMapsAndImages,
@@ -786,6 +836,7 @@ export const mapStateToProps = ({
   offline,
   families,
   projects,
+  interventionDefinition,
   maps,
   hydration,
   downloadMapsAndImages,
@@ -795,6 +846,7 @@ const mapDispatchToProps = {
   loadFamilies,
   loadSurveys,
   loadProjectsByOrganization,
+  loadInterventionDefinition,
   loadMaps,
   logout,
   setAppVersion,

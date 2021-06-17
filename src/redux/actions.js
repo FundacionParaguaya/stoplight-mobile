@@ -1,5 +1,8 @@
 // Login
+
 import { PhoneNumberUtil } from 'google-libphonenumber';
+import { interventionDefinition } from './reducer';
+
 // import { ImageStore } from 'react-native'
 export const SET_LOGIN_STATE = 'SET_LOGIN_STATE';
 export const USER_LOGOUT = 'USER_LOGOUT';
@@ -155,6 +158,82 @@ export const loadProjectsByOrganization = (env, token, orgId) => ({
   }
 })
 
+// Interventions
+
+export const LOAD_INTERVENTION_DEFINITION = 'LOAD_INTERVENTION_DEFINITION';
+export const LOAD_INTERVENTION_DEFINITION_COMMIT = 'LOAD_INTERVENTION_DEFINITION_COMMIT';
+export const LOAD_INTERVENTION_DEFINITION_ROLLBACK = 'LOAD_INTERVENTION_DEFINITION_ROLLBACK';
+export const SUBMIT_INTERVENTION = 'SUBMIT_INTERVENTION';
+export const SUBMIT_INTERVENTION_COMMIT = 'SUBMIT_INTERVENTION_COMMIT';
+export const SUBMIT_INTERVENTION_ROLLBACK = 'SUBMIT_INTERVENTION_ROLLBACK';
+
+export const loadInterventionDefinition = (env, token, orgId) => ({
+  type: LOAD_INTERVENTION_DEFINITION,
+  env,
+  token,
+  meta: {
+    offline:{
+      effect: {
+        url:`${env}/graphql`,
+        method:'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body:JSON.stringify({
+          query:`query interventionDefinitionByOrg( $organization: Long!) { interventionDefinitionByOrg( organization: $organization){ id title active questions { id codeName shortName answerType coreQuestion required options {value text otherOption}} }}`,
+          variables: {
+            organization: orgId
+          }
+        })
+      },
+      commit: { type:LOAD_INTERVENTION_DEFINITION_COMMIT},
+      rollback: { type:LOAD_INTERVENTION_DEFINITION_ROLLBACK},
+    }
+  }
+});
+
+export const submitIntervention = (env, token, payload) => ({
+  type: SUBMIT_INTERVENTION,
+  payload,
+  meta: {
+    offline: {
+      effect: {
+        url:`${env}/graphql`,
+        method: 'POST',
+        headers: {
+          Authorization:`Bearer ${token}`,
+          'content-type': 'application/json;charset=utf8',
+        },
+        body:JSON.stringify({
+          query: `mutation createIntervention($intervention: InterventionDataModelInput) { createIntervention (intervention: $intervention) { id  intervention{id} ${payload.params} } }`,
+          variables: {
+            intervention: {
+              values: payload.values,
+              interventionDefinition: payload.interventionDefinition,
+              snapshot:payload.snapshot,
+              intervention: payload.relatedIntervention
+            }
+        }
+      })
+    },
+    commit: {
+      type:SUBMIT_INTERVENTION_COMMIT,
+      meta: {
+        id:payload.values[0].value,
+        payload
+      }
+    },
+    rollback: {
+      type:SUBMIT_INTERVENTION_ROLLBACK,
+      meta: {
+          id:payload.values[0].value,
+          payload
+      }
+    }
+  }
+  }
+})
+
 // Surveys
 
 export const LOAD_SURVEYS = 'LOAD_SURVEYS';
@@ -191,7 +270,7 @@ export const LOAD_FAMILIES = 'LOAD_FAMILIES';
 export const LOAD_FAMILIES_COMMIT = 'LOAD_FAMILIES_COMMIT';
 export const LOAD_FAMILIES_ROLLBACK = 'LOAD_FAMILIES_ROLLBACK';
 
-export const loadFamilies = (env, token) => ({
+export const loadFamilies = (env, token, params) => ({
   type: LOAD_FAMILIES,
   env,
   token,
@@ -206,7 +285,7 @@ export const loadFamilies = (env, token) => ({
         },
         body: JSON.stringify({
           query:
-            'query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } } } }',
+            `query { familiesNewStructure {familyId name allowRetake code project { title } snapshotList  { id surveyId stoplightSkipped createdAt familyData { familyMembersList { birthCountry birthDate documentNumber documentType email familyId firstName firstParticipant gender id lastName memberIdentifier phoneCode phoneNumber  socioEconomicAnswers { key value multipleValue other}  }  countFamilyMembers latitude longitude country accuracy } economicSurveyDataList { key value multipleValue other } indicatorSurveyDataList { key value snapshotStoplightId } achievements { action indicator roadmap } priorities { action estimatedDate indicator reason } interventions{ interventionName id interventionDate intervention{id}  ${params} } } } }`
         }),
       },
       commit: { type: LOAD_FAMILIES_COMMIT },

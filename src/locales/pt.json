@@ -75,7 +75,7 @@
     "home": "Início",
     "completeStoplight": "Seu Semáforo",
     "createLifemap": "Realize seu Semáforo",
-    "noSurveys":"Não há pesquisas disponíveis",
+    "noSurveys": "Não há pesquisas disponíveis",
     "latestDrafts": "Últimas instantâneas",
     "noDrafts": "Não há rascunhos para mostrar",
     "termsConditions": "Termos & Condições",
@@ -103,6 +103,7 @@
       "projectsCached": "Projetos",
       "downloadingProjects": "Baixando projetos ...",
       "familiesCached": "Famílias sincronizadas",
+      "interventionDefinitionCached": "Definição de intervenção",
       "downloadingFamilies": "Carregando famílias",
       "mapsCached": "Mapas sincronizados",
       "mapsDownloading": "Carregando mapas",
@@ -178,7 +179,13 @@
       "male": "",
       "membersDontMatch": "",
       "noAnswer": "",
-      "other": ""
+      "other": "",
+      "interventions": "Intervenções",
+      "addIntervention": "Adicionar intervenção",
+      "syncErrorIntervention": "Erro de Sincronização",
+      "syncPendingIntervention": "Sincronização pendente",
+      "syncComplete": "intervenção sincronizada",
+      "intervention": "Intervenção"
     },
     "lifemap": {
       "indicatorDefinition": "Definição do indicador",
@@ -279,11 +286,15 @@
       "of": "de",
       "updates": "atualizações",
       "syncErrProblem": "Parece que temos um problema!",
-      "itemHasError": "%n prioridade tem um erro de sincronização.",
       "itemsHaveError": "%n prioridades têm erros de sincronização.",
       "download": "Baixar dados da pesquisa",
       "retry": "Tentar novamente",
-      "families": "Famílias"
+      "families": "Famílias",
+      "priorityHasError": "%n prioridade tem um erro de sincronização.",
+      "prioritiesHasError": "",
+      "prioritiesHaveError": "%n prioridades têm um erro de sincronização",
+      "interventionsHasError": "%n intervenções têm um erro de sincronização",
+      "interventionHasError": "%n intervenção tem um erro de sincronização"
     },
     "final": {
       "emailSent": "Seu mapa da vida foi enviado com sucesso por e-mail. Não se esqueça de selecionar Salvar e fechar!",
