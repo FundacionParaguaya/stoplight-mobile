@@ -251,6 +251,7 @@ const Intervention = ({
                               }
                               label={t('views.family.other')}
                               name={`custom${capitalize(question.codeName)}`}
+                              placeholderColorText={colors.grey}
                             />
                           );
                         } else {
@@ -376,6 +377,7 @@ const Intervention = ({
                               }
                               label={t('views.family.other')}
                               name={`custom${capitalize(question.codeName)}`}
+                              placeholderColorText={colors.grey}
                               
                             />
                           );
@@ -431,6 +433,7 @@ const Intervention = ({
                               }
                               label={t('views.family.other')}
                               name={`custom${capitalize(question.codeName)}`}
+                              placeholderColorText={colors.grey}
                             />
                           );
                         } else {
