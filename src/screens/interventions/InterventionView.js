@@ -59,12 +59,16 @@ const InterventionView = ({route, interventionDefinition}) => {
 
         let valueToAdd = '';
 
+       
+
         if (question.answerType === 'checkbox') {
           let preJoinedArray = element.multipleText.slice();
           if (element.other) {
             preJoinedArray.push(element.other);
           }
           valueToAdd = preJoinedArray.join(',');
+        }else if(question.answerType === 'select') {
+          valueToAdd = element.other ? element.other : element.value;
         } else if (question.answerType == 'radio') {
           valueToAdd = element.other ? element.other : element.value;
         } else if (

@@ -222,6 +222,42 @@ const Intervention = ({
                       }
                       onChange={(e) => {}}
                     />
+                     <OtherOptionInput
+                      key={`custom${capitalize(question.codeName)}`}
+                      question={question}
+                      dep={question.codeName}
+                      fieldOptions={question.options || []}
+                      formik={formik}
+                      target={`custom${capitalize(question.codeName)}`}
+                      cleanUp={() =>
+                        formik.setFieldValue(
+                          `custom${capitalize(question.codeName)}`,
+                          '',
+                        )
+                      }>
+                      {(otherOption, value, formik, question) => {
+                        if (otherOption === value) {
+                          return (
+                            <InputWithFormik
+                              question={question}
+                              key={`custom${capitalize(question.codeName)}`}
+                              type="text"
+                              formik={formik}
+                              onChange={(e) =>
+                                formik.setFieldValue(
+                                  `custom${capitalize(question.codeName)}`,
+                                  e,
+                                )
+                              }
+                              label={t('views.family.other')}
+                              name={`custom${capitalize(question.codeName)}`}
+                            />
+                          );
+                        } else {
+                          return null;
+                        }
+                      }}
+                    </OtherOptionInput>
                   </React.Fragment>
                 );
               }
