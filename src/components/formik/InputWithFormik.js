@@ -17,7 +17,7 @@ const InputWithFormik = ({
   lng,
   label,
   onChange,
-  placeholderColorText
+  placeholderColorText,
 }) => {
   const [status, setStatus] = useState('blur');
   const {required, questionText} = question || {};
@@ -91,13 +91,20 @@ const InputWithFormik = ({
         keyboardType={question.answerType == 'number' ? 'numeric' : null}
         blurOnSubmit
         disabled={readOnly}
-        value={value}
+        value={
+          question.answerType == 'number'
+            ? value
+                .replace(/[,.]/g, '')
+                .replace(
+                  /(\d)(?=(\d{3})+(?!\d))/g,
+                  lng === 'en' ? '$1,' : '$1.',
+                )
+            : value
+        }
         onChangeText={(value) => {
           let finalValue;
           if (question.answerType == 'number') {
-            finalValue = value
-              .replace(/[,.]/g, '')
-              .replace(/(\d)(?=(\d{3})+(?!\d))/g, lng === 'en' ? '$1,' : '$1.');
+            finalValue = value.replace(/[,.]/g, '');
           } else {
             finalValue = value;
           }
