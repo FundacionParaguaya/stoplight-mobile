@@ -6,6 +6,7 @@ import {getErrorLabelForPath, pathHasError} from './utils/form-utils';
 
 import {Input} from 'react-native-elements';
 import colors from '../../theme.json';
+import { getThousandSeparatorByLang } from './utils/lang-utils';
 import globalStyles from '../../globalStyles';
 
 const InputWithFormik = ({
@@ -96,8 +97,7 @@ const InputWithFormik = ({
             ? value
                 .replace(/[,.]/g, '')
                 .replace(
-                  /(\d)(?=(\d{3})+(?!\d))/g,
-                  lng === 'en' ? '$1,' : '$1.',
+                  /(\d)(?=(\d{3})+(?!\d))/g, getThousandSeparatorByLang(lng)
                 )
             : value
         }
