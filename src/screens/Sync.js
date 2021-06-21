@@ -123,7 +123,7 @@ export class Sync extends Component {
       family.snapshotList.find((snap) => snap.id == snapshot),
     );
 
-    if (family.name) {
+    if (!!family && family.name) {
       return family.name;
     }
     return '';

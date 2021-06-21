@@ -365,7 +365,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            interventionSkipped = {interventionDefinition == null}
+            interventionSkipped = {interventionDefinition == null || this.state.fromDashboard}
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -373,11 +373,10 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
-              interventionSkipped = {interventionDefinition == null}
+              interventionSkipped = {interventionDefinition == null || this.state.fromDashboard}
             />
           )}
-
-          {interventionDefinition !== null && (
+          {interventionDefinition !== null && !this.state.fromDashboard && (
             <FamilyTab
               title={t('views.family.interventions')}
               onPress={()=> this.setState({activeTab:'Interventions'})}
