@@ -183,11 +183,13 @@ export const interventions = (state=[], action) => {
       }: intervention);
 
     case SUBMIT_INTERVENTION_ROLLBACK:
-      return state.map(intervention => intervention.id == action.meta.id ? {
-        ...intervention,
-        status: 'Sync Error',
-      }: intervention)
-
+      const intervention =  state.find(intervention => intervention.id === action.meta.id);
+      if(!!intervention) {
+        const previousArray = state.filter(intervention => intervention.id !== action.meta.id);
+        const transformArray = previousArray.concat({ ...intervention,status: 'Sync Error'});
+        return transformArray;
+      }
+    
     default:
       return state;
   }
