@@ -111,7 +111,7 @@ const InterventionView = ({route, interventionDefinition}) => {
             const indicators = interventionData[question.codeName].map((el) => {
               const option = question.options.find((e) => e.value === el);
               return option;
-            }).filter(item => item !== undefined);
+            }).filter(item => !!item);
             item = {
               codeName: question.codeName,
               shortName: question.shortName,
