@@ -58,7 +58,6 @@ const InterventionView = ({route, interventionDefinition}) => {
         );
 
         let valueToAdd = '';
-        console.log('element', element);
         if (question.answerType === 'checkbox') {
           let valueArray = element.multipleText.slice();
           let preJoinedArray = valueArray.map((el) => {
