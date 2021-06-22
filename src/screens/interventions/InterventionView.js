@@ -75,7 +75,7 @@ const InterventionView = ({route, interventionDefinition}) => {
           const option = question.options.find(
             (op) => op.value == element.value,
           );
-          valueToAdd = element.other ? element.other : option.text;
+          valueToAdd = element.other ? element.other : option ? option.text : '';
         } else if (question.answerType == 'radio') {
           valueToAdd = element.other ? element.other : element.value;
         } else if (
