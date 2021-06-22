@@ -44,17 +44,23 @@ import {
   SWITCH_LANGUAGE,
   TOGGLE_API_VERSION_MODAL,
   UPDATE_DRAFT,
-  USER_LOGOUT
+  USER_LOGOUT,
 } from './actions';
 
-import { combineReducers } from 'redux';
-import { getDeviceLanguage } from '../utils';
+import {combineReducers} from 'redux';
+import {getDeviceLanguage} from '../utils';
 
 const defaultLanguage = getDeviceLanguage();
 //Login
 
 export const user = (
-  state = { token: null, status: null, username: null, role: null, interactive_help: null },
+  state = {
+    token: null,
+    status: null,
+    username: null,
+    role: null,
+    interactive_help: null,
+  },
   action,
 ) => {
   switch (action.type) {
@@ -64,7 +70,7 @@ export const user = (
         token: action.token,
         username: action.username,
         role: action.role,
-        organization: action.organization
+        organization: action.organization,
       };
     case USER_LOGOUT:
       return {
@@ -73,12 +79,12 @@ export const user = (
         username: null,
         role: null,
         interactive_help: null,
-        organization: null
+        organization: null,
       };
     case SET_VALIDATE:
       return {
         ...state,
-        interactive_help: action.interactive_help
+        interactive_help: action.interactive_help,
       };
     default:
       return state;
@@ -98,7 +104,7 @@ export const env = (state = 'production', action) => {
 
 //Download Maps or images
 export const downloadMapsAndImages = (
-  state = { downloadMaps: true, downloadImages: true, downLoadAudios: true },
+  state = {downloadMaps: true, downloadImages: true, downLoadAudios: true},
   action,
 ) => {
   switch (action.type) {
@@ -111,7 +117,7 @@ export const downloadMapsAndImages = (
 
 //Dimensions
 export const dimensions = (
-  state = { width: null, height: null, scale: null },
+  state = {width: null, height: null, scale: null},
   action,
 ) => {
   switch (action.type) {
@@ -154,8 +160,8 @@ export const projects = (state = [], action) => {
 };
 
 // Intervention Definition
-export const interventionDefinition = (state=null, action) => {
-  switch(action.type) {
+export const interventionDefinition = (state = null, action) => {
+  switch (action.type) {
     case LOAD_INTERVENTION_DEFINITION_COMMIT:
       return action.payload.data.interventionDefinitionByOrg;
     default:
@@ -165,35 +171,61 @@ export const interventionDefinition = (state=null, action) => {
 
 // Interventions
 
-export const interventions = (state=[], action) => {
-  switch(action.type) {
-    case SUBMIT_INTERVENTION: 
+export const interventions = (state = [], action) => {
+  let intervention;
+  let previousArray;
+  let transformArray;
+  switch (action.type) {
+    case SUBMIT_INTERVENTION:
+      intervention = state.find(
+        (intervention) => intervention.id === action.payload.id,
+      );
+      if (!!intervention) {
+        previousArray = state.filter(
+          (intervention) => intervention.id !== action.payload.id,
+        );
+        transformArray = previousArray.concat({
+          ...action.payload,
+          status: 'Pending Status',
+        });
+        return transformArray;
+      }
       return [
         ...state,
         {
           ...action.payload,
-          status: 'Pending Status'
-        }
-      ]
+          status: 'Pending Status',
+        },
+      ];
     case SUBMIT_INTERVENTION_COMMIT:
-      return state.map(intervention => intervention.id == action.meta.id ? {
-        ...intervention,
-        status: 'Synced',
-        syncedAt: Date.now()
-      }: intervention);
+      return state.map((intervention) =>
+        intervention.id == action.meta.id
+          ? {
+              ...intervention,
+              status: 'Synced',
+              syncedAt: Date.now(),
+            }
+          : intervention,
+      );
 
     case SUBMIT_INTERVENTION_ROLLBACK:
-      const intervention =  state.find(intervention => intervention.id === action.meta.id);
-      if(!!intervention) {
-        const previousArray = state.filter(intervention => intervention.id !== action.meta.id);
-        const transformArray = previousArray.concat({ ...intervention,status: 'Sync Error'});
+      intervention = state.find(
+        (intervention) => intervention.id === action.meta.id,
+      );
+      if (!!intervention) {
+        previousArray = state.filter(
+          (intervention) => intervention.id !== action.meta.id,
+        );
+        transformArray = previousArray.concat({
+          ...intervention,
+          status: 'Sync Error',
+        });
         return transformArray;
       }
-    
     default:
       return state;
   }
-}
+};
 
 //Families
 export const families = (state = [], action) => {
@@ -225,11 +257,11 @@ export const syncStatus = (state = [], action) => {
         'SUBMIT_DRAFT_COMMIT -- Removing id to synced: ',
         action.meta.id,
       );
-      return state.filter(draftId => draftId !== action.meta.id);
+      return state.filter((draftId) => draftId !== action.meta.id);
     }
     case LOAD_IMAGES_ROLLBACK: {
       console.log('LOAD_IMAGES_ROLLBACK -- Removing id to synced: ', action.id);
-      return state.filter(draftId => draftId !== action.id);
+      return state.filter((draftId) => draftId !== action.id);
     }
     default:
       return state;
@@ -244,40 +276,44 @@ export const priorities = (state = [], action) => {
         ...state,
         {
           ...action.payload,
-          status: 'Pending Status'
-        }
-      ]
+          status: 'Pending Status',
+        },
+      ];
     case SUBMIT_PRIORITY:
-      return state.map(priority =>
+      return state.map((priority) =>
         priority.snapshotStoplightId === action.payload.snapshotStoplightId
           ? {
-            ...priority,
-            status: 'Pending Status',
-          }
-          : priority);
+              ...priority,
+              status: 'Pending Status',
+            }
+          : priority,
+      );
 
     case SUBMIT_PRIORITY_COMMIT:
-      return state.map(priority =>
+      return state.map((priority) =>
         priority.snapshotStoplightId == action.meta.id
           ? {
-            ...priority,
-            status: 'Synced',
-            syncedAt: Date.now()
-          } : priority);
+              ...priority,
+              status: 'Synced',
+              syncedAt: Date.now(),
+            }
+          : priority,
+      );
 
     case SUBMIT_PRIORITY_ROLLBACK:
-      return state.map(priority =>
+      return state.map((priority) =>
         priority.snapshotStoplightId == action.meta.id
           ? {
-            ...priority,
-            status: 'Sync Error',
-          } : priority);
-
+              ...priority,
+              status: 'Sync Error',
+            }
+          : priority,
+      );
 
     default:
       return state;
   }
-}
+};
 
 //Drafts
 export const drafts = (state = [], action) => {
@@ -286,7 +322,7 @@ export const drafts = (state = [], action) => {
       return [...state, action.payload];
 
     case UPDATE_DRAFT:
-      return state.map(draft => {
+      return state.map((draft) => {
         // if this is the draft we are editing
         if (draft.draftId === action.payload.draftId) {
           return action.payload;
@@ -296,14 +332,14 @@ export const drafts = (state = [], action) => {
       });
 
     case ADD_SURVEY_DATA:
-      return state.map(draft => {
+      return state.map((draft) => {
         // if this is the draft we are editing
         if (draft.draftId === action.id) {
           const draftCategory = draft[action.category];
           if (Array.isArray(draftCategory)) {
             // if category is an Array
             const item = draftCategory.filter(
-              item => item.key === Object.keys(action.payload)[0],
+              (item) => item.key === Object.keys(action.payload)[0],
             )[0];
             if (Object.keys(action.payload).length === 2) {
               if (item) {
@@ -368,130 +404,129 @@ export const drafts = (state = [], action) => {
       });
 
     case SUBMIT_DRAFT:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Pending sync',
-          }
+              ...draft,
+              status: 'Pending sync',
+            }
           : draft,
       );
 
     case SET_DRAFT_PENDING:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Pending sync',
-          }
+              ...draft,
+              status: 'Pending sync',
+            }
           : draft,
       );
 
     case SUBMIT_DRAFT_COMMIT:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.meta.id
           ? {
-            ...draft,
-            status: 'Synced',
-            syncedAt: Date.now(),
-          }
+              ...draft,
+              status: 'Synced',
+              syncedAt: Date.now(),
+            }
           : draft,
       );
 
     case MANUAL_SUBMIT_DRAFT_COMMIT:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            snapshotId: action.snapshotId,
-            status: action.hasPictures ? 'Pending images' : 'Synced',
-            syncedAt: Date.now(),
-          }
+              ...draft,
+              snapshotId: action.snapshotId,
+              status: action.hasPictures ? 'Pending images' : 'Synced',
+              syncedAt: Date.now(),
+            }
           : draft,
       );
 
-
     case MANUAL_SUBMIT_PICTURES_COMMIT:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Synced',
-            syncedAt: Date.now(),
-          }
+              ...draft,
+              status: 'Synced',
+              syncedAt: Date.now(),
+            }
           : draft,
       );
 
     case SUBMIT_ERROR_DRAFT:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Sync error',
-          }
+              ...draft,
+              status: 'Sync error',
+            }
           : draft,
       );
 
     case SUBMIT_ERROR_IMAGES:
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Sync images error',
-          }
+              ...draft,
+              status: 'Sync images error',
+            }
           : draft,
       );
 
     case SUBMIT_DRAFT_ROLLBACK: {
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.meta.id
           ? {
-            ...draft,
-            status: 'Sync error',
-            errors: action.payload.response.errors,
-          }
+              ...draft,
+              status: 'Sync error',
+              errors: action.payload.response.errors,
+            }
           : draft,
       );
     }
     case LOAD_IMAGES: {
       console.log('LOAD_IMAGES set to Pending sync');
 
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Pending sync',
-          }
+              ...draft,
+              status: 'Pending sync',
+            }
           : draft,
       );
     }
 
     case LOAD_IMAGES_COMMIT: {
       console.log('--LOAD_IMAGES_COMMIT set to Pending sync');
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Pending sync',
-          }
+              ...draft,
+              status: 'Pending sync',
+            }
           : draft,
       );
     }
     case LOAD_IMAGES_ROLLBACK: {
       console.log('--LOAD_IMAGES_ROLLBACK set to Pending sync');
 
-      return state.map(draft =>
+      return state.map((draft) =>
         draft.draftId === action.id
           ? {
-            ...draft,
-            status: 'Sync error',
-          }
+              ...draft,
+              status: 'Sync error',
+            }
           : draft,
       );
     }
 
     case DELETE_DRAFT:
-      return state.filter(draft => draft.draftId !== action.id);
+      return state.filter((draft) => draft.draftId !== action.id);
     default:
       return state;
   }
@@ -528,8 +563,8 @@ export const sync = (
     familiesError: false,
     projects: false,
     projectsError: false,
-    interventionDefinition:false,
-    interventionDefinitionError:false,
+    interventionDefinition: false,
+    interventionDefinitionError: false,
     images: {
       total: 0,
       synced: 0,
@@ -537,7 +572,7 @@ export const sync = (
     audios: {
       total: null,
       synced: null,
-    }
+    },
   },
   action,
 ) => {
@@ -581,8 +616,8 @@ export const sync = (
     case LOAD_INTERVENTION_DEFINITION_ROLLBACK:
       return {
         ...state,
-        interventionDefinitionError:true
-      }
+        interventionDefinitionError: true,
+      };
     case LOAD_MAPS_ROLLBACK:
       return {
         ...state,
@@ -598,8 +633,8 @@ export const sync = (
         familiesError: false,
         projects: false,
         projectsError: false,
-        interventionDefinition:false,
-        interventionDefinitionError:false,
+        interventionDefinition: false,
+        interventionDefinitionError: false,
         images: {
           total: 0,
           synced: 0,
@@ -607,7 +642,7 @@ export const sync = (
         audios: {
           total: null,
           synced: null,
-        }
+        },
       };
     default:
       return state;
@@ -689,19 +724,19 @@ export const rootReducer = (state, action) => {
       sync: {
         ...state.sync,
         projects: true,
-      }
-    }
+      },
+    };
   }
 
   // note that intervention definition is synced in the store
-  if(action.type === LOAD_INTERVENTION_DEFINITION_COMMIT) {
+  if (action.type === LOAD_INTERVENTION_DEFINITION_COMMIT) {
     state = {
       ...state,
-      sync:{
+      sync: {
         ...state.sync,
         interventionDefinition: true,
-      }
-    }
+      },
+    };
   }
   // if there are no images to cache, make it so the loading screen can continue
   if (action.type === SET_SYNCED_ITEM_TOTAL && !action.amount) {
@@ -719,7 +754,7 @@ export const rootReducer = (state, action) => {
 
   // create detailed Bugsnag report on sync error
   if (action.type === SUBMIT_DRAFT_ROLLBACK) {
-    const { families, surveys, ...currentState } = state;
+    const {families, surveys, ...currentState} = state;
     families;
     surveys;
 
@@ -727,7 +762,9 @@ export const rootReducer = (state, action) => {
       state.surveys &&
       action.meta.sanitizedSnapshot &&
       action.meta.sanitizedSnapshot.surveyId &&
-      state.surveys.find(s => s.id === action.meta.sanitizedSnapshot.surveyId);
+      state.surveys.find(
+        (s) => s.id === action.meta.sanitizedSnapshot.surveyId,
+      );
   }
   return appReducer(state, action);
 };
