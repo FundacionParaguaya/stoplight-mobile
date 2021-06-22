@@ -291,8 +291,8 @@
       "retry": "Reintentar",
       "families": "Familias",
       "priorityHasError": "%n prioridad tiene un error de sincronización.",
-      "interventionsHaveError": "%n intervenciones tienen un error de sincronización.",
-      "interventionsHasError": "%n intervención tiene un error de sincronización."
+      "interventionsHasError": "%n intervenciones tienen un error de sincronización.",
+      "interventionHasError": "%n intervención tiene un error de sincronización."
     },
     "final": {
       "emailSent": "Tu Mapa de Vida ha sido enviado exitosamente vía email. ¡No te olvides de seleccionar Guardar & cerrar!",
