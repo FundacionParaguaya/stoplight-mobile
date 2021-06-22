@@ -76,7 +76,11 @@ const InterventionView = ({route, interventionDefinition}) => {
           );
           valueToAdd = element.other ? element.other : option ? option.text : '';
         } else if (question.answerType == 'radio') {
-          valueToAdd = element.other ? element.other : element.value;
+          console.log('element',element)
+          const option = question.options.find(
+            (op) => op.value == element.value,
+          );
+          valueToAdd = element.other ? element.other : option ? option.text : '';
         } else if (
           question.answerType === 'multiselect' &&
           question.codeName === 'stoplightIndicator' &&
