@@ -1,21 +1,22 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { connect } from 'react-redux';
 
+import Audio from '../../components/Audio';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconButton from '../../components/IconButton';
+import Orientation from 'react-native-orientation-locker';
 import Popup from '../../components/Popup';
+import PropTypes from 'prop-types';
+import RNFetchBlob from 'rn-fetch-blob'
 import SliderComponent from '../../components/Slider';
 import StickyFooter from '../../components/StickyFooter';
-import { updateDraft } from '../../redux/actions';
-import colors from '../../theme.json';
-import { getTotalEconomicScreens } from './helpers';
 import {calculateProgressBar} from '../utils/helpers';
+import colors from '../../theme.json';
+import { connect } from 'react-redux';
+import { getTotalEconomicScreens } from './helpers';
 import globalStyles from '../../globalStyles';
-import RNFetchBlob from 'rn-fetch-blob'
-import Audio from '../../components/Audio';
+import { updateDraft } from '../../redux/actions';
+import { withNamespaces } from 'react-i18next';
 
 let dirs = RNFetchBlob.fs.dirs
 
@@ -177,6 +178,7 @@ export class Question extends Component {
   };
 
   async componentDidMount() {
+    Orientation.lockToLandscape(); //this will lock the view to Portrait
     const draft = this.getDraft();
 
     this.props.updateDraft({
@@ -191,6 +193,10 @@ export class Question extends Component {
     this.props.navigation.setParams({
       onPressBack: this.onPressBack
     });
+  }
+
+  componentWillUnmount() {
+    Orientation.unlockAllOrientations();
   }
 
   shouldComponentUpdate() {
