@@ -58,19 +58,29 @@ const InterventionView = ({route, interventionDefinition}) => {
         );
 
         let valueToAdd = '';
-
-       
-
         if (question.answerType === 'checkbox') {
-          let preJoinedArray = element.multipleText.slice();
+          let valueArray = element.multipleText.slice();
+          let preJoinedArray = valueArray.map((el) => {
+            const option = question.options.find((op) => op.value == el);
+            if (!!option) {
+              return option.text;
+            }
+          });
           if (element.other) {
             preJoinedArray.push(element.other);
           }
           valueToAdd = preJoinedArray.join(',');
-        }else if(question.answerType === 'select') {
-          valueToAdd = element.other ? element.other : element.value;
+        } else if (question.answerType === 'select') {
+          const option = question.options.find(
+            (op) => op.value == element.value,
+          );
+          valueToAdd = element.other ? element.other : option ? option.text : '';
         } else if (question.answerType == 'radio') {
-          valueToAdd = element.other ? element.other : element.value;
+          console.log('element',element)
+          const option = question.options.find(
+            (op) => op.value == element.value,
+          );
+          valueToAdd = element.other ? element.other : option ? option.text : '';
         } else if (
           question.answerType === 'multiselect' &&
           question.codeName === 'stoplightIndicator' &&
@@ -108,10 +118,12 @@ const InterventionView = ({route, interventionDefinition}) => {
             question.codeName === 'stoplightIndicator' &&
             !interventionData['generalIntervention']
           ) {
-            const indicators = interventionData[question.codeName].map((el) => {
-              const option = question.options.find((e) => e.value === el);
-              return option;
-            });
+            const indicators = interventionData[question.codeName]
+              .map((el) => {
+                const option = question.options.find((e) => e.value === el);
+                return option;
+              })
+              .filter((item) => !!item);
             item = {
               codeName: question.codeName,
               shortName: question.shortName,
@@ -152,7 +164,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               placeholder={item.shortName}
               readOnly={true}
               initialValue={item.value}
-              onChangeText={() =>{}}
+              onChangeText={() => {}}
             />
           );
         }
@@ -239,7 +251,7 @@ const mapStateToProps = ({interventionDefinition}) => ({
 
 InterventionView.propTypes = {
   route: PropTypes.object.isRequired,
-  interventionDefinition: PropTypes.object.isRequired
-}
+  interventionDefinition: PropTypes.object.isRequired,
+};
 
 export default connect(mapStateToProps)(InterventionView);

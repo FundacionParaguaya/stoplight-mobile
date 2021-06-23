@@ -25,7 +25,7 @@ class FamilyTab extends Component {
         onPress={this.props.onPress}
         underlayColor={colors.white}
       >
-        <Text style={globalStyles.h3}>{this.props.title}</Text>
+        <Text numberOfLines={1} style={globalStyles.h3}>{this.props.title}</Text>
       </TouchableHighlight>
     )
   }

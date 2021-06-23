@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.palegrey,
     borderBottomWidth: 1,
+    paddingVertical: 10,
   },
   listItemContainer: {
     alignItems: 'baseline',
@@ -204,21 +205,23 @@ const InterventionList = ({
               </Text>
 
               {intervention.status && intervention.status != 'Synced' && (
-                <Text
-                  style={{
-                    ...styles.label,
-                    backgroundColor: getColor(intervention.status),
-                    color:
-                      intervention.status === 'Pending Status'
-                        ? colors.black
-                        : colors.white,
-                  }}>
-                  {setStatusTitle(intervention.status)}
-                </Text>
+                <View style={{...styles.container}}>
+                  <Text
+                    style={{
+                      ...styles.label,
+                      backgroundColor: getColor(intervention.status),
+                      color:
+                        intervention.status === 'Pending Status'
+                          ? colors.black
+                          : colors.white,
+                    }}>
+                    {setStatusTitle(intervention.status)}
+                  </Text>
+                </View>
               )}
 
               {intervention.status == 'Synced' && (
-                <View style={{...styles.container, marginTop: 10}}>
+                <View style={{...styles.container}}>
                   <Icon name="check" size={20} color={colors.green} />
                   <Text id="completed" style={{color: colors.green}}>
                     {t('views.family.syncComplete')}
@@ -227,7 +230,7 @@ const InterventionList = ({
               )}
             </View>
             <View>
-              <Text style={{ color: colors.lightdark}}>
+              <Text style={{color: colors.lightdark}}>
                 {moment
                   .unix(
                     intervention.interventionDate
@@ -262,7 +265,7 @@ const InterventionList = ({
                       <Icon
                         name="expand-less"
                         size={23}
-                        color={ colors.lightdark}
+                        color={colors.lightdark}
                         onPress={() => {
                           setExpandedIndex(null);
                         }}
@@ -293,21 +296,29 @@ const InterventionList = ({
                         ? intervention.interventionName
                         : intervention.id}
                     </Text>
-                    {intervention.status === 'Sync Error' && (
-                      <Text style={styles.errorLabel}>
-                        {t('views.family.syncErrorIntervention')}
-                      </Text>
-                    )}
-                    {intervention.status === 'Pending Status' && (
-                      <Text style={styles.pendingLabel}>
-                        {t('views.family.syncPendingIntervention')}
-                      </Text>
+                    {intervention.status && intervention.status != 'Synced' && (
+                      <View style={{...styles.container}}>
+                        <Text
+                          style={{
+                            ...styles.label,
+                            backgroundColor: getColor(intervention.status),
+                            color:
+                              intervention.status === 'Pending Status'
+                                ? colors.black
+                                : colors.white,
+                          }}>
+                          {setStatusTitle(intervention.status)}
+                        </Text>
+                      </View>
                     )}
 
-                    {intervention.status === 'Synced' && (
-                      <Text style={styles.completeLabel}>
-                        {t('views.family.syncComplete')}
-                      </Text>
+                    {intervention.status == 'Synced' && (
+                      <View style={{...styles.container}}>
+                        <Icon name="check" size={20} color={colors.green} />
+                        <Text id="completed" style={{color: colors.green}}>
+                          {t('views.family.syncComplete')}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 </ListItem>
