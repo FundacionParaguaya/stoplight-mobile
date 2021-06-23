@@ -45,6 +45,12 @@ const styles = StyleSheet.create({
 const InterventionView = ({route, interventionDefinition}) => {
   const [values, setValues] = useState([]);
 
+  const getOptionValue = (element, question) => {
+    const option = question.options.find((op) => op.value == element.value);
+    valueToAdd = element.other ? element.other : option ? option.text : '';
+    return valueToAdd;
+  };
+
   useEffect(() => {
     let interventionData = route.params.intervention;
 
@@ -70,17 +76,11 @@ const InterventionView = ({route, interventionDefinition}) => {
             preJoinedArray.push(element.other);
           }
           valueToAdd = preJoinedArray.join(',');
-        } else if (question.answerType === 'select') {
-          const option = question.options.find(
-            (op) => op.value == element.value,
-          );
-          valueToAdd = element.other ? element.other : option ? option.text : '';
-        } else if (question.answerType == 'radio') {
-          console.log('element',element)
-          const option = question.options.find(
-            (op) => op.value == element.value,
-          );
-          valueToAdd = element.other ? element.other : option ? option.text : '';
+        } else if (
+          question.answerType === 'select' ||
+          question.answerType == 'radio'
+        ) {
+          valueToAdd = getOptionValue(element, question);
         } else if (
           question.answerType === 'multiselect' &&
           question.codeName === 'stoplightIndicator' &&
