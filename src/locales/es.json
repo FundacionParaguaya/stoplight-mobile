@@ -198,9 +198,9 @@
       "intervention":"Intervención",
       "interventions": "Intervenciones",
       "addIntervention": "Agregar intervención",
-      "syncErrorIntervention":"Error de sincronización",
-      "syncPendingIntervention": "Sincronización pendiente",
-      "syncComplete": "Intervención sincronizada"
+      "syncErrorIntervention":"Error ",
+      "syncPendingIntervention": "Pendiente",
+      "syncComplete": "Sincronizada"
     },
     "lifemap": {
       "indicatorDefinition": "Definición del indicador",

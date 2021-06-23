@@ -197,9 +197,9 @@
       "other": "",
       "interventions": "Entèvansyon",
       "addIntervention": "Ajoute entèvansyon",
-      "syncErrorIntervention": "Senkro Erè",
-      "syncPendingIntervention": "Senkro annatant",
-      "syncComplete": "Entèvansyon senkronize",
+      "syncErrorIntervention": "Erè",
+      "syncPendingIntervention": "Annatandan",
+      "syncComplete": "Senkronize",
       "intervention": "Entèvansyon"
     },
     "lifemap": {

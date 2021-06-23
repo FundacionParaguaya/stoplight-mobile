@@ -195,12 +195,12 @@
       "noAnswer": "I prefer not to answer",
       "pictures": "Pictures",
       "sign": "Signature",
-      "intervention":"Intervention",
+      "intervention": "Intervention",
       "interventions": "Interventions",
       "addIntervention": "Add an intervention",
-      "syncErrorIntervention": "Sync Error",
-      "syncPendingIntervention": "Sync pending",
-      "syncComplete": "Intervention synced"
+      "syncErrorIntervention": "Error",
+      "syncPendingIntervention": "Pending",
+      "syncComplete": "Synced"
     },
     "lifemap": {
       "indicatorDefinition": "Indicator Definition",

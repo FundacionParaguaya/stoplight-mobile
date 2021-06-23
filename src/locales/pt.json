@@ -182,9 +182,9 @@
       "other": "",
       "interventions": "Intervenções",
       "addIntervention": "Adicionar intervenção",
-      "syncErrorIntervention": "Erro de Sincronização",
-      "syncPendingIntervention": "Sincronização pendente",
-      "syncComplete": "intervenção sincronizada",
+      "syncErrorIntervention": "Erro",
+      "syncPendingIntervention": "Pendente",
+      "syncComplete": "Sincronizado",
       "intervention": "Intervenção"
     },
     "lifemap": {
