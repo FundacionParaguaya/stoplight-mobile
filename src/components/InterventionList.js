@@ -3,7 +3,7 @@ import 'moment/locale/pt';
 import 'moment/locale/fr';
 
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListItem from '../components/ListItem';
@@ -13,6 +13,7 @@ import {getLocaleForLanguage} from '../utils';
 import globalStyles from '../globalStyles';
 import moment from 'moment';
 import {withNamespaces} from 'react-i18next';
+import connector from '../../assets/images/connector.png'
 
 const styles = StyleSheet.create({
   content: {
@@ -86,6 +87,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.red,
     color: 'white',
   },
+  connector: {
+    position: 'absolute',
+    top:-15
+  }
 });
 
 const InterventionList = ({
@@ -290,6 +295,7 @@ const InterventionList = ({
                   key={index}
                   style={styles.listItem}
                   onPress={() => handleGoIntervention(intervention)}>
+                  <Image source={ connector} style={styles.connector}  />
                   <View style={{...styles.listItemContainer, paddingLeft: 20}}>
                     <Text style={{...globalStyles.p}}>
                       {intervention.interventionName
@@ -322,18 +328,18 @@ const InterventionList = ({
                     )}
                   </View>
                   <View>
-                  <Text style={{color: colors.lightdark}}>
-                {moment
-                  .unix(
-                    intervention.interventionDate
-                      ? intervention.interventionDate
-                      : intervention.values.find(
-                          (e) => e.codeName === 'interventionDate',
-                        ).value,
-                  )
-                  .locale(getLocaleForLanguage(lang))
-                  .format('MMM DD, YYYY')}
-              </Text>
+                    <Text style={{color: colors.lightdark}}>
+                      {moment
+                        .unix(
+                          intervention.interventionDate
+                            ? intervention.interventionDate
+                            : intervention.values.find(
+                                (e) => e.codeName === 'interventionDate',
+                              ).value,
+                        )
+                        .locale(getLocaleForLanguage(lang))
+                        .format('MMM DD, YYYY')}
+                    </Text>
                   </View>
                 </ListItem>
               ))}
