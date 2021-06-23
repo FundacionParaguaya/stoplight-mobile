@@ -321,6 +321,20 @@ const InterventionList = ({
                       </View>
                     )}
                   </View>
+                  <View>
+                  <Text style={{color: colors.lightdark}}>
+                {moment
+                  .unix(
+                    intervention.interventionDate
+                      ? intervention.interventionDate
+                      : intervention.values.find(
+                          (e) => e.codeName === 'interventionDate',
+                        ).value,
+                  )
+                  .locale(getLocaleForLanguage(lang))
+                  .format('MMM DD, YYYY')}
+              </Text>
+                  </View>
                 </ListItem>
               ))}
             </>
