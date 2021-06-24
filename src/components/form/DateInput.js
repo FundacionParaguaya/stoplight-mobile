@@ -96,7 +96,7 @@ export class DateInputComponent extends React.Component {
   }
 
   render() {
-    const { t, readOnly, required } = this.props
+    const { t, readOnly, required, labelStyle } = this.props
     const { date } = this.state
     const months = [
       { text: t('months.january'), value: 'January' },
@@ -117,7 +117,7 @@ export class DateInputComponent extends React.Component {
       <View>
         {readOnly && (
           <Text
-            style={[styles.text, { marginBottom: readOnly ? -15 : 15 }]}
+            style={[styles.text, { marginBottom: readOnly ? -15 : 15 },labelStyle]}
             accessibilityLabel={`${this.props.label} ${
               required && !readOnly
                 ? i18n.t('validation.fieldIsRequiredAccessibilityLabel')
@@ -145,6 +145,7 @@ export class DateInputComponent extends React.Component {
               years={this.years}
               hasError={!!this.state.error}
               required={this.props.required}
+              labelStyle={this.props.labelStyle}
             />
           </View>
         </View>

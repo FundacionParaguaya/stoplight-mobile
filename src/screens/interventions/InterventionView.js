@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.grey,
-    fontWeight: 'normal',
+    fontWeight: 'bold',
   },
   multiSelectContainer: {
     paddingLeft: 15,
@@ -165,6 +165,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               readOnly={true}
               initialValue={item.value}
               onChangeText={() => {}}
+              labelStyle={{fontWeight:'bold'}}
             />
           );
         }
@@ -201,7 +202,7 @@ const InterventionView = ({route, interventionDefinition}) => {
                   style={{
                     color: colors.grey,
                     fontSize: 14,
-                    fontWeight: 'normal',
+                    fontWeight: 'bold',
                     marginLeft: 15,
                     borderBottomColor: colors.black,
                     borderTopLeftRadius: 8,
@@ -237,6 +238,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               initialValue={item.value || null}
               readOnly
               onValidDate={() => {}}
+              labelStyle={{ fontWeight: 'bold' }}
             />
           );
         }

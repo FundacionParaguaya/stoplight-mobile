@@ -169,6 +169,7 @@ class TextInput extends Component {
       multiline,
       autoFocus,
       upperCase,
+      labelStyle
     } = this.props;
     const status = this.props.status || this.state.status;
 
@@ -218,13 +219,14 @@ class TextInput extends Component {
             <View />
           )} */}
           <Input
-            labelStyle={{
+            labelStyle={[{
               color: this.defineTextColor(status),
               fontSize: 14,
               fontWeight: 'normal',
               marginLeft: 15,
               borderBottomColor: colors.black,
-            }}
+              
+            },labelStyle]}
             autoFocus={autoFocus}
             keyboardType={showPlaceholder ? null : this.props.keyboardType}
             autoCapitalize={upperCase ? 'sentences' : 'none'}
@@ -354,6 +356,7 @@ TextInput.propTypes = {
   ]),
   status: PropTypes.oneOf(['blur', 'error', 'active', 'filled']),
   setError: PropTypes.func,
+  labelStyle:PropTypes.object
 };
 
 export default TextInput;
