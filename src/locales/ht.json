@@ -37,7 +37,8 @@
     "closeAndSign": "Anrejistre ankèt la",
     "completeStoplight": "Fini Stoplight la",
     "finish": "Fini",
-    "interventions": "Entèvansyon"
+    "interventions": "Entèvansyon",
+    "priorities": "Priyorite"
   },
   "validation": {
     "fieldIsRequired": "Chan sa a obligatwa",

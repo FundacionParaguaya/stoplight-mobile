@@ -37,7 +37,8 @@
     "closeAndSign": "Save survey",
     "completeStoplight": "Finish Stoplight",
     "finish": "Finish",
-    "interventions": "Interventions"
+    "interventions": "Interventions",
+    "priorities": "Priorities"
   },
   "validation": {
     "fieldIsRequired": "This field is required",

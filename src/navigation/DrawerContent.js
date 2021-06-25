@@ -93,19 +93,30 @@ export class DrawerContent extends Component {
   };
 
   render() {
-    const {lng, user, navigation, dimensions} = this.props;
+    const {
+      lng,
+      user,
+      navigation,
+      dimensions,
+      interventions,
+      drafts,
+      priorities,
+    } = this.props;
     const {
       checkboxesVisible,
       showErrors,
       logingOut,
       drawerContentWidth,
     } = this.state;
-    const unsyncedDrafts = this.props.drafts.filter(
-      (draft) => draft.status !== 'Synced',
+    const unsyncedDrafts = drafts.filter((draft) => draft.status !== 'Synced')
+      .length;
+
+    const unsyncedInterventions = interventions.filter(
+      (intervention) => intervention.status !== 'Synced',
     ).length;
 
-    const unsyncedInterventions = this.props.interventions.filter(
-      (intervention) => intervention.status !== 'Synced',
+    const unsyncedPriorities = priorities.filter(
+      (priority) => priority.status !== 'Synced',
     ).length;
 
     const landscape = !!dimensions && !isPortrait(dimensions);
@@ -271,6 +282,7 @@ export class DrawerContent extends Component {
           navigation={navigation}
           unsyncedInterventions={unsyncedInterventions}
           unsyncedDrafts={unsyncedDrafts}
+          unsyncedPriorities={unsyncedPriorities}
           logUserOut={this.logUserOut}
           showCheckboxes={this.showCheckboxes}
           onPressCheckbox={this.onPressCheckbox}
@@ -294,13 +306,22 @@ DrawerContent.propTypes = {
   sync: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({env, user, drafts, dimensions, sync, interventions}) => ({
+const mapStateToProps = ({
   env,
   user,
   drafts,
   dimensions,
   sync,
-  interventions
+  interventions,
+  priorities,
+}) => ({
+  env,
+  user,
+  drafts,
+  dimensions,
+  sync,
+  interventions,
+  priorities,
 });
 
 const mapDispatchToProps = {

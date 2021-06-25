@@ -37,7 +37,8 @@
     "closeAndSign": "Guardar encuesta",
     "completeStoplight": "Completar Semáforo",
     "finish": "Finalizar",
-    "interventions": "Intervenciones"
+    "interventions": "Intervenciones",
+    "priorities": "Prioridades"
   },
   "validation": {
     "fieldIsRequired": "Este campo es requerido",
