@@ -36,7 +36,8 @@
     "syncAll": "¡Sincroniza todos los Mapas de Vida y actualiza la aplicación!",
     "closeAndSign": "Guardar encuesta",
     "completeStoplight": "Completar Semáforo",
-    "finish": "Finalizar"
+    "finish": "Finalizar",
+    "interventions": "Intervenciones"
   },
   "validation": {
     "fieldIsRequired": "Este campo es requerido",

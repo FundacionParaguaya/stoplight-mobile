@@ -36,7 +36,8 @@
     "goback": "Atrás",
     "exit": "Aair",
     "attention": "Atenção!",
-    "syncAll": "Sincronizar todos os Mapas de Vida e actualizar a aplicação!"
+    "syncAll": "Sincronizar todos os Mapas de Vida e actualizar a aplicação!",
+    "interventions": "Intervenções"
   },
   "validation": {
     "fieldIsRequired": "Este campo é obrigatório",
