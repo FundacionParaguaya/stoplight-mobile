@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.grey,
-    fontWeight: 'normal',
+    fontWeight: 'bold',
   },
   multiSelectContainer: {
-    paddingLeft: 15,
+    paddingLeft: 5,
     paddingRight: 25,
     paddingTop: 20,
     minHeight: 50,
@@ -44,6 +44,34 @@ const styles = StyleSheet.create({
 
 const InterventionView = ({route, interventionDefinition}) => {
   const [values, setValues] = useState([]);
+  const family = route.params.draft;
+  const survey = route.params.survey;
+
+  const getOptionValue = (element, question) => {
+    const option = question.options.find((op) => op.value == element.value);
+    const valueToAdd = element.other
+      ? element.other
+      : option
+      ? option.text
+      : '';
+    return valueToAdd;
+  };
+
+  const getColor = (value) => {
+    switch (value) {
+      case 1:
+        return colors.palered;
+      case 2:
+        return colors.gold;
+      case 3:
+        return colors.palegreen;
+      case 0:
+        return colors.palegrey;
+
+      default:
+        return colors.palegrey;
+    }
+  };
 
   useEffect(() => {
     let interventionData = route.params.intervention;
@@ -70,17 +98,11 @@ const InterventionView = ({route, interventionDefinition}) => {
             preJoinedArray.push(element.other);
           }
           valueToAdd = preJoinedArray.join(',');
-        } else if (question.answerType === 'select') {
-          const option = question.options.find(
-            (op) => op.value == element.value,
-          );
-          valueToAdd = element.other ? element.other : option ? option.text : '';
-        } else if (question.answerType == 'radio') {
-          console.log('element',element)
-          const option = question.options.find(
-            (op) => op.value == element.value,
-          );
-          valueToAdd = element.other ? element.other : option ? option.text : '';
+        } else if (
+          question.answerType === 'select' ||
+          question.answerType == 'radio'
+        ) {
+          valueToAdd = getOptionValue(element, question);
         } else if (
           question.answerType === 'multiselect' &&
           question.codeName === 'stoplightIndicator' &&
@@ -91,8 +113,16 @@ const InterventionView = ({route, interventionDefinition}) => {
             (el) => el.codeName === 'generalIntervention',
           ).value === false
         ) {
+          const indicatorSurveyDataList = family.indicatorSurveyDataList;
           let preJoinedArray = element.multipleText.slice().map((e, index) => {
-            return {value: element.multipleValue[index], label: e};
+            const color = indicatorSurveyDataList.find(
+              (e) => e.key === element.multipleValue[index],
+            ).value;
+            return {
+              value: element.multipleValue[index],
+              label: e,
+              color: color,
+            };
           });
           valueToAdd = preJoinedArray;
         } else {
@@ -118,12 +148,22 @@ const InterventionView = ({route, interventionDefinition}) => {
             question.codeName === 'stoplightIndicator' &&
             !interventionData['generalIntervention']
           ) {
+            console.log('data',interventionData[question.codeName])
+            console.log('survey',survey)
             const indicators = interventionData[question.codeName]
               .map((el) => {
-                const option = question.options.find((e) => e.value === el);
-                return option;
+                const surveyStoplightQuestion = survey.surveyStoplightQuestions.find(indicator => indicator.codeName === el)
+                const indicatorSurveyDataList = family.indicatorSurveyDataList;
+                const color = indicatorSurveyDataList.find((e) => e.key === el)
+                  .value;
+                return {
+                  label: surveyStoplightQuestion.questionText,
+                  value: el,
+                  color: color,
+                };
               })
               .filter((item) => !!item);
+
             item = {
               codeName: question.codeName,
               shortName: question.shortName,
@@ -146,6 +186,8 @@ const InterventionView = ({route, interventionDefinition}) => {
 
     setValues(values);
   }, []);
+
+  console.log('values', values);
   return (
     <ScrollView
       contentContainerStyle={{backgroundColor: colors.white, paddingTop: 20}}>
@@ -165,6 +207,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               readOnly={true}
               initialValue={item.value}
               onChangeText={() => {}}
+              labelStyle={{fontWeight: 'bold'}}
             />
           );
         }
@@ -193,7 +236,7 @@ const InterventionView = ({route, interventionDefinition}) => {
                   borderTopLeftRadius: 8,
                   borderTopRightRadius: 8,
 
-                  paddingLeft: 11,
+                  paddingLeft: 15,
                   paddingTop: 6,
                   paddingBottom: 6,
                 }}>
@@ -201,7 +244,7 @@ const InterventionView = ({route, interventionDefinition}) => {
                   style={{
                     color: colors.grey,
                     fontSize: 14,
-                    fontWeight: 'normal',
+                    fontWeight: 'bold',
                     marginLeft: 15,
                     borderBottomColor: colors.black,
                     borderTopLeftRadius: 8,
@@ -217,7 +260,7 @@ const InterventionView = ({route, interventionDefinition}) => {
                         key={index}
                         title={value.label}
                         buttonStyle={{
-                          backgroundColor: colors.grey,
+                          backgroundColor: getColor(value.color),
                           marginBottom: 5,
                           marginRight: 5,
                         }}
@@ -237,6 +280,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               initialValue={item.value || null}
               readOnly
               onValidDate={() => {}}
+              labelStyle={{fontWeight: 'bold'}}
             />
           );
         }

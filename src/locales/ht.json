@@ -36,7 +36,8 @@
     "syncAll": "Senkwonize kat lavi w’ epi aktyalize aplikasyon an!",
     "closeAndSign": "Anrejistre ankèt la",
     "completeStoplight": "Fini Stoplight la",
-    "finish": "Fini"
+    "finish": "Fini",
+    "interventions": "Entèvansyon"
   },
   "validation": {
     "fieldIsRequired": "Chan sa a obligatwa",
@@ -197,9 +198,9 @@
       "other": "",
       "interventions": "Entèvansyon",
       "addIntervention": "Ajoute entèvansyon",
-      "syncErrorIntervention": "Senkro Erè",
-      "syncPendingIntervention": "Senkro annatant",
-      "syncComplete": "Entèvansyon senkronize",
+      "syncErrorIntervention": "Erè",
+      "syncPendingIntervention": "Annatandan",
+      "syncComplete": "Senkronize",
       "intervention": "Entèvansyon"
     },
     "lifemap": {

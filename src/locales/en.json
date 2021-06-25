@@ -36,7 +36,8 @@
     "syncAll": "Sync all Life Maps & update the application!",
     "closeAndSign": "Save survey",
     "completeStoplight": "Finish Stoplight",
-    "finish": "Finish"
+    "finish": "Finish",
+    "interventions": "Interventions"
   },
   "validation": {
     "fieldIsRequired": "This field is required",
@@ -195,12 +196,12 @@
       "noAnswer": "I prefer not to answer",
       "pictures": "Pictures",
       "sign": "Signature",
-      "intervention":"Intervention",
+      "intervention": "Intervention",
       "interventions": "Interventions",
       "addIntervention": "Add an intervention",
-      "syncErrorIntervention": "Sync Error",
-      "syncPendingIntervention": "Sync pending",
-      "syncComplete": "Intervention synced"
+      "syncErrorIntervention": "Error",
+      "syncPendingIntervention": "Pending",
+      "syncComplete": "Synced"
     },
     "lifemap": {
       "indicatorDefinition": "Indicator Definition",

@@ -104,6 +104,10 @@ export class DrawerContent extends Component {
       (draft) => draft.status !== 'Synced',
     ).length;
 
+    const unsyncedInterventions = this.props.interventions.filter(
+      (intervention) => intervention.status !== 'Synced',
+    ).length;
+
     const landscape = !!dimensions && !isPortrait(dimensions);
     const phone = !!dimensions && !isTablet(dimensions);
 
@@ -158,11 +162,11 @@ export class DrawerContent extends Component {
               accessibilityLabel={'change to Portugues'}
             />
             <Text style={[globalStyles.h3, styles.whiteText]}>
-            {'  '}|{'  '}
+              {'  '}|{'  '}
             </Text>
             <IconButton
               id="ht"
-              onPress={()=> this.changeLanguage('ht')}
+              onPress={() => this.changeLanguage('ht')}
               text="HT"
               textStyle={[
                 globalStyles.h3,
@@ -265,6 +269,7 @@ export class DrawerContent extends Component {
           checkboxesVisible={checkboxesVisible}
           showErrors={showErrors}
           navigation={navigation}
+          unsyncedInterventions={unsyncedInterventions}
           unsyncedDrafts={unsyncedDrafts}
           logUserOut={this.logUserOut}
           showCheckboxes={this.showCheckboxes}
@@ -289,12 +294,13 @@ DrawerContent.propTypes = {
   sync: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = ({env, user, drafts, dimensions, sync}) => ({
+const mapStateToProps = ({env, user, drafts, dimensions, sync, interventions}) => ({
   env,
   user,
   drafts,
   dimensions,
   sync,
+  interventions
 });
 
 const mapDispatchToProps = {

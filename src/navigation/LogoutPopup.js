@@ -20,6 +20,7 @@ import colors from '../theme.json';
 
 
 const initialState = {
+  checkboxInterventions:false,
   checkboxDrafts: false,
   checkboxLifeMaps: false,
   checkboxFamilyInfo: false,
@@ -48,6 +49,7 @@ export default class LogoutPopup extends Component {
       onModalClose,
       logingOut,
       route,
+      unsyncedInterventions
     } = this.props;
 
     const accessiblePopUpText = logoutModalAccessibleText(
@@ -115,7 +117,7 @@ export default class LogoutPopup extends Component {
             {/* Popup text */}
             {!checkboxesVisible ? (
               <View>
-                {unsyncedDrafts ? (
+                {(unsyncedDrafts || unsyncedInterventions ) ? (
                   <View style={{alignItems: 'center'}}>
                     <Text style={globalStyles.h3}>
                       {i18n.t('views.logout.youHaveUnsynchedData')}
@@ -166,6 +168,23 @@ export default class LogoutPopup extends Component {
                     onPress={() => this.checkboxChange('checkboxDrafts')}
                     title={`${i18n.t('general.delete')} ${i18n.t(
                       'general.drafts',
+                    )}`}
+                  />
+                  <CheckBox
+                    iconType="material"
+                    checkedIcon="check-box"
+                    uncheckedIcon="check-box-outline-blank"
+                    checked={this.state.checkboxInterventions}
+                    containerStyle={styles.checkbox}
+                    checkedColor={colors.palered}
+                    textStyle={
+                      showErrors && !this.state.checkboxInterventions
+                        ? styles.error
+                        : styles.checkboxText
+                    }
+                    onPress={() => this.checkboxChange('checkboxInterventions')}
+                    title={`${i18n.t('general.delete')} ${i18n.t(
+                      'general.interventions',
                     )}`}
                   />
                   <CheckBox
@@ -233,10 +252,10 @@ export default class LogoutPopup extends Component {
                     ? i18n.t('general.delete')
                     : i18n.t('general.yes')
                 }
-                borderColor={unsyncedDrafts ? colors.palered : colors.palegreen}
+                borderColor={(unsyncedDrafts || unsyncedInterventions)? colors.palered : colors.palegreen}
                 style={{minWidth: 107, marginRight: 10}}
                 handleClick={
-                  unsyncedDrafts && !checkboxesVisible
+                  (unsyncedDrafts || unsyncedInterventions) && !checkboxesVisible
                     ? showCheckboxes
                     : logUserOut
                 }
