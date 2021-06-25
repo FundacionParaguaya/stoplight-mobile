@@ -37,7 +37,8 @@
     "exit": "Aair",
     "attention": "Atenção!",
     "syncAll": "Sincronizar todos os Mapas de Vida e actualizar a aplicação!",
-    "interventions": "Intervenções"
+    "interventions": "Intervenções",
+    "priorities": "Prioridades"
   },
   "validation": {
     "fieldIsRequired": "Este campo é obrigatório",

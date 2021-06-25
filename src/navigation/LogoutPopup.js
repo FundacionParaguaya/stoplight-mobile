@@ -18,9 +18,9 @@ import i18n from '../i18n';
 import {logoutModalAccessibleText} from '../screens/utils/accessibilityHelpers';
 import colors from '../theme.json';
 
-
 const initialState = {
-  checkboxInterventions:false,
+  checkboxInterventions: false,
+  checkboxPriorities: false,
   checkboxDrafts: false,
   checkboxLifeMaps: false,
   checkboxFamilyInfo: false,
@@ -33,11 +33,11 @@ export default class LogoutPopup extends Component {
     this.props.onPressCheckbox(!this.state[checkbox]);
     this.setState({[checkbox]: !this.state[checkbox]});
   }
-  onModalCloseFunc= () => {
+  onModalCloseFunc = () => {
     //resetting the state and closing the modal
     this.setState(initialState);
     this.props.onModalClose();
-  }
+  };
   render() {
     const {
       isOpen,
@@ -49,7 +49,8 @@ export default class LogoutPopup extends Component {
       onModalClose,
       logingOut,
       route,
-      unsyncedInterventions
+      unsyncedInterventions,
+      unsyncedPriorities,
     } = this.props;
 
     const accessiblePopUpText = logoutModalAccessibleText(
@@ -62,8 +63,7 @@ export default class LogoutPopup extends Component {
         LogoutPopup
         modifiedPopUp
         isOpen={isOpen}
-        onClose={this.onModalCloseFunc}
-        >
+        onClose={this.onModalCloseFunc}>
         <ActivityIndicator
           size="large"
           color={colors.palered}
@@ -71,7 +71,11 @@ export default class LogoutPopup extends Component {
         />
       </Popup>
     ) : (
-      <Popup LogoutPopup modifiedPopUp isOpen={isOpen} onClose={this.onModalCloseFunc}>
+      <Popup
+        LogoutPopup
+        modifiedPopUp
+        isOpen={isOpen}
+        onClose={this.onModalCloseFunc}>
         <View
           accessible={true}
           accessibilityLabel={`${accessiblePopUpText}`}
@@ -89,7 +93,7 @@ export default class LogoutPopup extends Component {
             <Icon onPress={this.onModalCloseFunc} name="close" size={30} />
           </View>
           <View style={styles.modalContainer}>
-            <View style={{alignItems: 'center', justifyContent:'center'}}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               {!checkboxesVisible ? (
                 <Icon
                   name="sentiment-dissatisfied"
@@ -117,7 +121,7 @@ export default class LogoutPopup extends Component {
             {/* Popup text */}
             {!checkboxesVisible ? (
               <View>
-                {(unsyncedDrafts || unsyncedInterventions ) ? (
+                {unsyncedDrafts || unsyncedInterventions ? (
                   <View style={{alignItems: 'center'}}>
                     <Text style={globalStyles.h3}>
                       {i18n.t('views.logout.youHaveUnsynchedData')}
@@ -191,6 +195,23 @@ export default class LogoutPopup extends Component {
                     iconType="material"
                     checkedIcon="check-box"
                     uncheckedIcon="check-box-outline-blank"
+                    checked={this.state.checkboxPriorities}
+                    containerStyle={styles.checkbox}
+                    checkedColor={colors.palered}
+                    textStyle={
+                      showErrors && !this.state.checkboxPriorities
+                        ? styles.error
+                        : styles.checkboxText
+                    }
+                    onPress={() => this.checkboxChange('checkboxPriorities')}
+                    title={`${i18n.t('general.delete')} ${i18n.t(
+                      'general.priorities',
+                    )}`}
+                  />
+                  <CheckBox
+                    iconType="material"
+                    checkedIcon="check-box"
+                    uncheckedIcon="check-box-outline-blank"
                     checked={this.state.checkboxLifeMaps}
                     containerStyle={styles.checkbox}
                     checkedColor={colors.palered}
@@ -252,10 +273,17 @@ export default class LogoutPopup extends Component {
                     ? i18n.t('general.delete')
                     : i18n.t('general.yes')
                 }
-                borderColor={(unsyncedDrafts || unsyncedInterventions)? colors.palered : colors.palegreen}
+                borderColor={
+                  unsyncedDrafts || unsyncedInterventions || unsyncedPriorities
+                    ? colors.palered
+                    : colors.palegreen
+                }
                 style={{minWidth: 107, marginRight: 10}}
                 handleClick={
-                  (unsyncedDrafts || unsyncedInterventions) && !checkboxesVisible
+                  (unsyncedDrafts ||
+                    unsyncedInterventions ||
+                    unsyncedPriorities) &&
+                  !checkboxesVisible
                     ? showCheckboxes
                     : logUserOut
                 }
@@ -286,6 +314,8 @@ LogoutPopup.propTypes = {
   checkboxesVisible: PropTypes.bool.isRequired,
   logingOut: PropTypes.bool.isRequired,
   unsyncedDrafts: PropTypes.number.isRequired,
+  unsyncedInterventions: PropTypes.number.isRequired,
+  unsyncedPriorities: PropTypes.number.isRequired,
   logUserOut: PropTypes.func.isRequired,
   showCheckboxes: PropTypes.func.isRequired,
   onModalClose: PropTypes.func,
@@ -294,13 +324,12 @@ LogoutPopup.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent:'center',
-    alignItems:'center',
-    maxHeight:500,
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxHeight: 500,
   },
   modalContainer: {
-    
-    width:'100%',
+    width: '100%',
     maxWidth: 240,
   },
   title: {
