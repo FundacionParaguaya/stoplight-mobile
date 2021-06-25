@@ -19,8 +19,6 @@ import {logoutModalAccessibleText} from '../screens/utils/accessibilityHelpers';
 import colors from '../theme.json';
 
 const initialState = {
-  checkboxInterventions: false,
-  checkboxPriorities: false,
   checkboxDrafts: false,
   checkboxLifeMaps: false,
   checkboxFamilyInfo: false,
@@ -174,40 +172,7 @@ export default class LogoutPopup extends Component {
                       'general.drafts',
                     )}`}
                   />
-                  <CheckBox
-                    iconType="material"
-                    checkedIcon="check-box"
-                    uncheckedIcon="check-box-outline-blank"
-                    checked={this.state.checkboxInterventions}
-                    containerStyle={styles.checkbox}
-                    checkedColor={colors.palered}
-                    textStyle={
-                      showErrors && !this.state.checkboxInterventions
-                        ? styles.error
-                        : styles.checkboxText
-                    }
-                    onPress={() => this.checkboxChange('checkboxInterventions')}
-                    title={`${i18n.t('general.delete')} ${i18n.t(
-                      'general.interventions',
-                    )}`}
-                  />
-                  <CheckBox
-                    iconType="material"
-                    checkedIcon="check-box"
-                    uncheckedIcon="check-box-outline-blank"
-                    checked={this.state.checkboxPriorities}
-                    containerStyle={styles.checkbox}
-                    checkedColor={colors.palered}
-                    textStyle={
-                      showErrors && !this.state.checkboxPriorities
-                        ? styles.error
-                        : styles.checkboxText
-                    }
-                    onPress={() => this.checkboxChange('checkboxPriorities')}
-                    title={`${i18n.t('general.delete')} ${i18n.t(
-                      'general.priorities',
-                    )}`}
-                  />
+                  
                   <CheckBox
                     iconType="material"
                     checkedIcon="check-box"
