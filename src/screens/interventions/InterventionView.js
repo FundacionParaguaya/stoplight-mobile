@@ -45,30 +45,33 @@ const styles = StyleSheet.create({
 const InterventionView = ({route, interventionDefinition}) => {
   const [values, setValues] = useState([]);
   const family = route.params.draft;
+  const survey = route.params.survey;
 
   const getOptionValue = (element, question) => {
     const option = question.options.find((op) => op.value == element.value);
-    const valueToAdd = element.other ? element.other : option ? option.text : '';
+    const valueToAdd = element.other
+      ? element.other
+      : option
+      ? option.text
+      : '';
     return valueToAdd;
   };
 
-  const getColor = (value) =>  {
+  const getColor = (value) => {
     switch (value) {
       case 1:
-        return colors.palered
+        return colors.palered;
       case 2:
-        return colors.gold
+        return colors.gold;
       case 3:
-        return colors.palegreen
+        return colors.palegreen;
       case 0:
-        return colors.palegrey
+        return colors.palegrey;
 
       default:
-        return colors.palegrey
+        return colors.palegrey;
     }
-  }
-    
-  
+  };
 
   useEffect(() => {
     let interventionData = route.params.intervention;
@@ -112,8 +115,14 @@ const InterventionView = ({route, interventionDefinition}) => {
         ) {
           const indicatorSurveyDataList = family.indicatorSurveyDataList;
           let preJoinedArray = element.multipleText.slice().map((e, index) => {
-            const color = indicatorSurveyDataList.find(e =>e.key === element.multipleValue[index]).value
-            return {value: element.multipleValue[index], label: e,color:color};
+            const color = indicatorSurveyDataList.find(
+              (e) => e.key === element.multipleValue[index],
+            ).value;
+            return {
+              value: element.multipleValue[index],
+              label: e,
+              color: color,
+            };
           });
           valueToAdd = preJoinedArray;
         } else {
@@ -139,19 +148,22 @@ const InterventionView = ({route, interventionDefinition}) => {
             question.codeName === 'stoplightIndicator' &&
             !interventionData['generalIntervention']
           ) {
+            console.log('data',interventionData[question.codeName])
+            console.log('survey',survey)
             const indicators = interventionData[question.codeName]
               .map((el) => {
+                const surveyStoplightQuestion = survey.surveyStoplightQuestions.find(indicator => indicator.codeName === el)
                 const indicatorSurveyDataList = family.indicatorSurveyDataList;
-                const color = indicatorSurveyDataList.find(e =>e.key === el).value;
-                const option = question.options.find((e) => e.value === el);
+                const color = indicatorSurveyDataList.find((e) => e.key === el)
+                  .value;
                 return {
-                  ...option,
-                  color:color
+                  label: surveyStoplightQuestion.questionText,
+                  value: el,
+                  color: color,
                 };
               })
               .filter((item) => !!item);
 
-            console.log('indicators',indicators)
             item = {
               codeName: question.codeName,
               shortName: question.shortName,
@@ -175,7 +187,7 @@ const InterventionView = ({route, interventionDefinition}) => {
     setValues(values);
   }, []);
 
-  console.log('values',values)
+  console.log('values', values);
   return (
     <ScrollView
       contentContainerStyle={{backgroundColor: colors.white, paddingTop: 20}}>
@@ -195,7 +207,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               readOnly={true}
               initialValue={item.value}
               onChangeText={() => {}}
-              labelStyle={{fontWeight:'bold'}}
+              labelStyle={{fontWeight: 'bold'}}
             />
           );
         }
@@ -268,7 +280,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               initialValue={item.value || null}
               readOnly
               onValidDate={() => {}}
-              labelStyle={{ fontWeight: 'bold' }}
+              labelStyle={{fontWeight: 'bold'}}
             />
           );
         }
