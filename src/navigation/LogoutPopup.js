@@ -119,7 +119,7 @@ export default class LogoutPopup extends Component {
             {/* Popup text */}
             {!checkboxesVisible ? (
               <View>
-                {unsyncedDrafts || unsyncedInterventions ? (
+                {(unsyncedDrafts || unsyncedInterventions || unsyncedPriorities ) ? (
                   <View style={{alignItems: 'center'}}>
                     <Text style={globalStyles.h3}>
                       {i18n.t('views.logout.youHaveUnsynchedData')}
@@ -239,7 +239,7 @@ export default class LogoutPopup extends Component {
                     : i18n.t('general.yes')
                 }
                 borderColor={
-                  unsyncedDrafts || unsyncedInterventions || unsyncedPriorities
+                  (unsyncedDrafts || unsyncedInterventions || unsyncedPriorities)
                     ? colors.palered
                     : colors.palegreen
                 }
