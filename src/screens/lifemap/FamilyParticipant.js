@@ -226,7 +226,6 @@ export class FamilyParticipant extends Component {
   ];
 
   phoneValidation = (value) => {
-    console.log('value',value)
     const phoneUtil = PhoneNumberUtil.getInstance();
     try {
       const draft = !this.readOnly ? this.getDraft() : this.readOnlyDraft;
