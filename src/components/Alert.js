@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import PropTypes from 'prop-types';
 import React from 'react';
-import color from 'color';
 import colors from '../theme.json';
 import globalStyles from '../globalStyles';
 
@@ -72,5 +72,13 @@ const Alert = ({message, icon, severity = 'warning', onClose}) => {
     </View>
   );
 };
+
+Alert.propTypes = {
+  message: PropTypes.string,
+  icon: PropTypes.bool,
+  severity:  PropTypes.string,
+  onClose: PropTypes.func
+}
+
 
 export default Alert;

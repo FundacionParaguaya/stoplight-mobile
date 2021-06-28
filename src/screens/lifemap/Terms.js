@@ -1,16 +1,17 @@
-import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
 import {ScrollView, StyleSheet, Text, Vibration, View} from 'react-native';
 
+import Alert from '../../components/Alert'
 import Button from '../../components/Button';
 import Decoration from '../../components/decoration/Decoration';
-import RoundImage from '../../components/RoundImage';
-import globalStyles from '../../globalStyles';
-import colors from '../../theme.json';
 import ExitDraftModal from '../../screens/modals/ExitDraftModal';
-import Alert from '../../components/Alert'
 import NoProdWarning from '../../components/NoProdWarning';
+import PropTypes from 'prop-types';
+import RoundImage from '../../components/RoundImage';
+import colors from '../../theme.json';
+import globalStyles from '../../globalStyles';
+import {withNamespaces} from 'react-i18next';
+
 // this describes which screen comes after which
 const navigationRules = {
   terms: {
@@ -71,7 +72,10 @@ export class Terms extends Component {
             <Decoration variation="terms">
               <RoundImage source="check" />
             </Decoration>
+            <View style={styles.warningContainer}>
             <NoProdWarning />
+            </View>
+            
 
             <Text id="title" style={[globalStyles.h3Bold, styles.heading]}>
               {page === 'terms'
@@ -128,6 +132,9 @@ const styles = StyleSheet.create({
     marginBottom: -2,
     flexDirection: 'row',
   },
+  warningContainer:{
+    marginBottom: 10
+  }
 });
 
 Terms.propTypes = {
