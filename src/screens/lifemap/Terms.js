@@ -9,6 +9,8 @@ import RoundImage from '../../components/RoundImage';
 import globalStyles from '../../globalStyles';
 import colors from '../../theme.json';
 import ExitDraftModal from '../../screens/modals/ExitDraftModal';
+import Alert from '../../components/Alert'
+import NoProdWarning from '../../components/NoProdWarning';
 // this describes which screen comes after which
 const navigationRules = {
   terms: {
@@ -69,6 +71,7 @@ export class Terms extends Component {
             <Decoration variation="terms">
               <RoundImage source="check" />
             </Decoration>
+            <NoProdWarning />
 
             <Text id="title" style={[globalStyles.h3Bold, styles.heading]}>
               {page === 'terms'

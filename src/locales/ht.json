@@ -304,6 +304,9 @@
       "offlineText": "Tanpri aktive koneksyon entènèt ou a pou resevwa kat lavi w’ pa imèl.",
       "yourLifeMaWillBeSentWithSurveySync": "W’ap resevwa kat lavi w’ pa imèl otomatikman sondaj la senkwonize. Klike 'Fèmen' pou fini sondaj la!",
       "yourLifeMaWillBeSentWithWhatSurveySync": "Ou pral jwenn yon mesaj sou Watsap ou otomatikman sondaj la senkwonize.  Si w’ vle resevwa kat lavi w’, tanpri reponn pa \"Wi\"."
+    },
+    "noProdWarning": {
+      "message": "Anviwònman Demonstrasyon, sonje, tout kontni ki antre isit la se piblik epi yo pral efase otomatikman."
     }
   },
   "filterLabels": {

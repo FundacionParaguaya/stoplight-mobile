@@ -5,6 +5,8 @@
   "palered": "rgb(226,102,100)",
   "gold": "rgb(240,203,23)",
   "palegold": "#F4D76B",
+  "warning":"#ff9800",
+  "lightwarning":"rgb(255, 244, 229)",
   "blue": "#77ABE9",
   "primary": "#F3F4F6",
   "dark": "#2F261C",

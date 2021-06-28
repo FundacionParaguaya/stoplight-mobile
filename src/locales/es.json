@@ -302,6 +302,9 @@
       "offlineText": "Por favor, activa tu conexión a Internet para recibir tu Mapa de Vida vía email",
       "yourLifeMaWillBeSentWithSurveySync": "Tu Mapa de Vida será enviado a tu correo cuando tu encuesta esté sincronizada. ¡Selecciona 'Cerrar' para terminar la encuesta!",
       "yourLifeMaWillBeSentWithWhatSurveySync": "Te llegará un mensaje al Whatsapp cuando su encuesta esté sincronizada. Si quieres recibir tu Mapa de Vida, responde al mensaje con \"Si\"."
+    },
+    "noProdWarning": {
+      "message": "Entorno de demostración, recuerde, todo el contenido ingresado aquí es público y se eliminará automáticamente."
     }
   },
   "filterLabels": {
