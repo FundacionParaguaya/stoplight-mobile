@@ -95,7 +95,8 @@ export class FamilyParticipant extends Component {
         familyMembersList.find((el) => el.firstParticipant).email) ||
       '';
 
-    const phoneNumberIsInvalid = !this.phoneValidation(
+    
+    const phoneNumberIsInvalid =  !!firstParticipantPhoneNumber && !this.phoneValidation(
       firstParticipantPhoneNumber,
     );
 
@@ -225,6 +226,7 @@ export class FamilyParticipant extends Component {
   ];
 
   phoneValidation = (value) => {
+    console.log('value',value)
     const phoneUtil = PhoneNumberUtil.getInstance();
     try {
       const draft = !this.readOnly ? this.getDraft() : this.readOnlyDraft;
