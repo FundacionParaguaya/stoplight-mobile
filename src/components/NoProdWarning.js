@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+
 import Alert from './Alert';
 import  { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
