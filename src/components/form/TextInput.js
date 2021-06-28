@@ -192,7 +192,7 @@ class TextInput extends Component {
           style={{
             marginHorizontal: 5,
             marginBottom: -8,
-            marginTop: status == 'blur' ? -22 : 0,
+            //marginTop: status == 'blur' ? -22 : 0,
           }}
           accessible={true}
           accessibilityLabel={`${placeholder} ${
@@ -267,7 +267,7 @@ class TextInput extends Component {
         {status === 'error' && errorMsg && (
           <View
             id="errorWrapper"
-            style={{marginLeft: 30, marginBottom: 12, marginTop: -12}}>
+            style={{marginLeft: 30, marginBottom: 28, marginTop: -12}}>
             <Text style={{color: colors.red}}>{errorMsg}</Text>
           </View>
         )}

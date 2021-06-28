@@ -1,7 +1,6 @@
 import {submitDraft} from './actions';
 
 export const submitDraftWithImages = store => next => action => {
-  console.log(action);
 
   if (action.type === 'LOAD_IMAGES_COMMIT') {
     console.log('LOAD IMAGES COMMIT');
