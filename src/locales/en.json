@@ -300,6 +300,9 @@
       "offlineText": "Please enable your internet connection to receive your Life Map via email.",
       "yourLifeMaWillBeSentWithSurveySync": "Your Life Map will be sent to your email as soon as the survey is synced. Click 'Close' to finish the survey!",
       "yourLifeMaWillBeSentWithWhatSurveySync": "You will get a message in your Whatsapp as soon as the survey is synced. If you want to receive your Life Map, please answer back with \"Yes\"."
+    },
+    "noProdWarning": {
+      "message": "Demonstration environment, remember, all content entered here is public and will be deleted automatically."
     }
   },
   "filterLabels": {

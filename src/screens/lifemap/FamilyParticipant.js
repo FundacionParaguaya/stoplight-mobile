@@ -1,24 +1,25 @@
+import React, {Component} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {calculateProgressBar, generateNewDemoDraft} from '../utils/helpers';
+import {createDraft, updateDraft} from '../../redux/actions';
+import {getTotalScreens, setValidationSchema} from './helpers';
+
+import CallingCodes from './CallingCodes';
+import DateInput from '../../components/form/DateInput';
+import Decoration from '../../components/decoration/Decoration';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import NoProdWarning from '../../components/NoProdWarning';
 import {PhoneNumberUtil} from 'google-libphonenumber';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
-import {StyleSheet, Text} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {connect} from 'react-redux';
-import uuid from 'uuid/v1';
-
-import Decoration from '../../components/decoration/Decoration';
-import DateInput from '../../components/form/DateInput';
 import Select from '../../components/form/Select';
-import TextInput from '../../components/form/TextInput';
 import StickyFooter from '../../components/StickyFooter';
-import globalStyles from '../../globalStyles';
-import {createDraft, updateDraft} from '../../redux/actions';
+import TextInput from '../../components/form/TextInput';
 import colors from '../../theme.json';
-import {generateNewDemoDraft, calculateProgressBar} from '../utils/helpers';
-import CallingCodes from './CallingCodes';
-import {getTotalScreens, setValidationSchema} from './helpers';
+import {connect} from 'react-redux';
+import globalStyles from '../../globalStyles';
+import uuid from 'uuid/v1';
 import validator from 'validator';
+import {withNamespaces} from 'react-i18next';
 
 export class FamilyParticipant extends Component {
   survey = this.props.route.params.survey;
@@ -385,6 +386,7 @@ export class FamilyParticipant extends Component {
         })}>
         <Decoration variation="primaryParticipant">
           <Icon name="face" color={colors.grey} size={61} style={styles.icon} />
+
           {!this.readOnly ? (
             <Text
               readOnly={this.readOnly}
@@ -393,6 +395,9 @@ export class FamilyParticipant extends Component {
             </Text>
           ) : null}
         </Decoration>
+        <View style={styles.warningContainer}>
+          <NoProdWarning />
+        </View>
 
         <TextInput
           id="firstName"
@@ -576,6 +581,10 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingHorizontal: 20,
     color: colors.grey,
+  },
+  warningContainer: {
+    paddingHorizontal: 10,
+    marginBottom: 4,
   },
 });
 

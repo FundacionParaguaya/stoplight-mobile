@@ -1,40 +1,41 @@
-import NetInfo from '@react-native-community/netinfo';
-import PropTypes, { string } from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
-import {StackActions} from '@react-navigation/native';
 import {
   PermissionsAndroid,
+  Platform,
   ScrollView,
   StyleSheet,
-  Platform,
   Text,
-  View, Vibration,
+  Vibration,
+  View,
 } from 'react-native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNPrint from 'react-native-print';
-import {connect} from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
-
-import Button from '../../components/Button';
-import LifemapVisual from '../../components/LifemapVisual';
-import RoundImage from '../../components/RoundImage';
-import {url} from '../../config';
-import globalStyles from '../../globalStyles';
-import {setDraftToPending, updateDraft} from '../../redux/actions';
-import EmailSentModal from '../modals/EmailSentModal';
-import WhatsappSentModal from '../modals/WhatsappSentModal';
-import {prepareDraftForSubmit} from '../utils/helpers';
-import Bugsnag from '@bugsnag/react-native';
-import DownloadModal from '../modals/DownloadModal';
-
+import PropTypes, {string} from 'prop-types';
+import React, {Component} from 'react';
 import {
   buildPDFOptions,
   buildPrintOptions,
   getReportTitle,
 } from '../utils/pdfs';
+import {setDraftToPending, updateDraft} from '../../redux/actions';
 
-const VIBRATION_DURATION = 120
+import Bugsnag from '@bugsnag/react-native';
+import Button from '../../components/Button';
+import DownloadModal from '../modals/DownloadModal';
+import EmailSentModal from '../modals/EmailSentModal';
+import LifemapVisual from '../../components/LifemapVisual';
+import NetInfo from '@react-native-community/netinfo';
+import NoProdWarning from '../../components/NoProdWarning';
+import RNFetchBlob from 'rn-fetch-blob';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNPrint from 'react-native-print';
+import RoundImage from '../../components/RoundImage';
+import {StackActions} from '@react-navigation/native';
+import WhatsappSentModal from '../modals/WhatsappSentModal';
+import {connect} from 'react-redux';
+import globalStyles from '../../globalStyles';
+import {prepareDraftForSubmit} from '../utils/helpers';
+import {url} from '../../config';
+import {withNamespaces} from 'react-i18next';
+
+const VIBRATION_DURATION = 120;
 
 export class Final extends Component {
   unsubscribeNetChange;
@@ -88,8 +89,8 @@ export class Final extends Component {
   };
 
   vibrate = () => {
-    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null
-  }
+    Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null;
+  };
 
   saveDraft = () => {
     this.vibrate();
@@ -320,12 +321,15 @@ export class Final extends Component {
           onClose={this.toggleDownloadModal}
           title={t('views.modals.finishDownload')}
           subtitle={t('views.modals.subtitleFinishDownload')}
-          folder={"Psp"}
+          folder={'Psp'}
         />
         <View
           style={{
             ...globalStyles.container,
           }}>
+          <View style={styles.warningContainer}>
+            <NoProdWarning />
+          </View>
           <Text style={{...globalStyles.h1, ...styles.text}}>
             {t('views.lifemap.great')}
           </Text>
@@ -337,6 +341,7 @@ export class Final extends Component {
             }}>
             {t('views.lifemap.youHaveCompletedTheLifemap')}
           </Text>
+
           <RoundImage source="partner" />
           {!stoplightSkipped && (
             <LifemapVisual
@@ -443,6 +448,9 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     alignSelf: 'center',
+  },
+  warningContainer: {
+    marginBottom: 10,
   },
 });
 
