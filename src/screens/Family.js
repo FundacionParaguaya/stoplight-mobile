@@ -315,7 +315,7 @@ export class Family extends Component {
   };
   render() {
     const {activeTab} = this.state;
-    const {t, navigation, interventionDefinition} = this.props;
+    const {t, navigation, interventionDefinition, user} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
     const stoplightSkipped = this.familyLifemap.stoplightSkipped;
     const {width, height} = Dimensions.get('window');
@@ -365,7 +365,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            interventionSkipped = {interventionDefinition == null || this.state.fromDashboard}
+            interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions }
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -373,10 +373,10 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
-              interventionSkipped = {interventionDefinition == null || this.state.fromDashboard}
+              interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions}
             />
           )}
-          {interventionDefinition !== null && !this.state.fromDashboard && (
+          {interventionDefinition !== null && !this.state.fromDashboard && user.allowInterventions && (
             <FamilyTab
               title={t('views.family.interventions')}
               onPress={()=> this.setState({activeTab:'Interventions'})}

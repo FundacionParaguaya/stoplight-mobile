@@ -85,6 +85,7 @@ export const user = (
       return {
         ...state,
         interactive_help: action.interactive_help,
+        allowInterventions: action.allowInterventions
       };
     default:
       return state;

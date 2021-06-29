@@ -60,7 +60,9 @@ export const validate = (env, token) => (dispatch) => {
       dispatch({
         type: SET_VALIDATE,
         interactive_help: !!data.application &&
-          !!data.application.interactiveHelp
+          !!data.application.interactiveHelp,
+          allowInterventions: !!data.application && 
+          !!data.application.allowInterventions
       })
     })
 }

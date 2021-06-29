@@ -78,7 +78,7 @@ export class Loading extends Component {
     if(this.props.sync.interventionDefinition){
       this.syncFamilies();
     } else {
-      this.props.loadInterventionDefinition(url[this.props.env],this.props.user.token, this.props.user.organization.id);
+        this.props.loadInterventionDefinition(url[this.props.env],this.props.user.token, this.props.user.organization.id);  
     }
   }
 
@@ -525,7 +525,7 @@ export class Loading extends Component {
                     <Text style={styles.colorDark}>{t('views.interventionDefinition')}</Text>
                   ):null} */}
 
-                  {sync.projects && sync.interventionDefinition && (
+                  {sync.projects && sync.interventionDefinition && this.props.user.allowInterventions && (
                     <View style={styles.syncingItem}>
                         {sync.interventionDefinition && interventionDefinition !== null && (<>
                       <Text style={sync.interventionDefinition ? styles.colorGreen : styles.colorDark}>
