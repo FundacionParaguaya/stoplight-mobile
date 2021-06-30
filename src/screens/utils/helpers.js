@@ -61,9 +61,17 @@ export const prepareDraftForSubmit = (draft, survey) => {
   }
 
   // set default latitude and longitude if not set
-  if(result.familyData && ( !result.familyData.longitude && !result.familyData.latitude)){
-    result.familyData.latitude=  survey.surveyConfig.surveyLocation && survey.surveyConfig.surveyLocation.latitude;
-    result.familyData.longitude =  survey.surveyConfig.surveyLocation && survey.surveyConfig.surveyLocation.longitude;
+  if (
+    result.familyData &&
+    !result.familyData.longitude &&
+    !result.familyData.latitude
+  ) {
+    result.familyData.latitude =
+      survey.surveyConfig.surveyLocation &&
+      survey.surveyConfig.surveyLocation.latitude;
+    result.familyData.longitude =
+      survey.surveyConfig.surveyLocation &&
+      survey.surveyConfig.surveyLocation.longitude;
   }
   console.log('prepared', result);
 
@@ -451,9 +459,9 @@ export const fakeSurvey = (draftId, date) => {
       longitude: 23.470804059797786,
       accuracy: 0,
     },
-    progress:{
-      screen:"SocioEconomicQuestion",
-      total:18
+    progress: {
+      screen: 'SocioEconomicQuestion',
+      total: 18,
     },
     whatsappNotification: false,
   };
