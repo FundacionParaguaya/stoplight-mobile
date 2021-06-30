@@ -1,10 +1,12 @@
-import {getTotalScreens} from '../lifemap/helpers';
 import {
   getConditionalQuestions,
   getDraftWithUpdatedQuestionsCascading,
 } from '../utils/conditional_logic';
-import {generateRandomDraftData} from './demo_draft_generator';
+
 import {ImageStore} from 'react-native';
+import {generateRandomDraftData} from './demo_draft_generator';
+import {getTotalScreens} from '../lifemap/helpers';
+
 const LATIN_CHARS = /^[A-Za-z0-9]*$/;
 
 export const checkAndReplaceSpecialChars = (question) => {
@@ -56,6 +58,12 @@ export const prepareDraftForSubmit = (draft, survey) => {
     result.familyData.country =
       survey.surveyConfig.surveyLocation &&
       survey.surveyConfig.surveyLocation.country;
+  }
+
+  // set default latitude and longitude if not set
+  if(result.familyData && ( !result.familyData.longitude && !result.familyData.latitude)){
+    result.familyData.latitude=  survey.surveyConfig.surveyLocation && survey.surveyConfig.surveyLocation.latitude;
+    result.familyData.longitude =  survey.surveyConfig.surveyLocation && survey.surveyConfig.surveyLocation.longitude;
   }
   console.log('prepared', result);
 
