@@ -164,18 +164,20 @@ export class Final extends Component {
       const fileName = getReportTitle(this.draft);
       let filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.pdf`;
       const existLogo = await RNFetchBlob.fs.exists(
-        `${
-          RNFetchBlob.fs.dirs.DocumentDir
-        }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
+        `${RNFetchBlob.fs.dirs.DocumentDir}/${
+          typeof this.props.user.organization.logoUrl === 'string' &&
+          this.props.user.organization.logoUrl.replace(/https?:\/\//, '')
+        }`,
       );
       const pdfOptions = buildPDFOptions(
         this.draft,
         this.survey,
         this.props.lng || 'en',
         this.getProperSourceForOS(
-          `${
-            RNFetchBlob.fs.dirs.DocumentDir
-          }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
+          `${RNFetchBlob.fs.dirs.DocumentDir}/${
+            typeof this.props.user.organization.logoUrl === 'string' &&
+            this.props.user.organization.logoUrl.replace(/https?:\/\//, '')
+          }`,
         ),
         existLogo,
       );
@@ -215,15 +217,18 @@ export class Final extends Component {
 
       this.setState({downloading: false, filePath: pdf.filePath});
     } catch (error) {
+      console.log('exportPDF');
+      console.log(error);
       alert(error);
     }
   }
 
   async print() {
     const existLogo = await RNFetchBlob.fs.exists(
-      `${
-        RNFetchBlob.fs.dirs.DocumentDir
-      }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
+      `${RNFetchBlob.fs.dirs.DocumentDir}/${
+        typeof this.props.user.organization.logoUrl === 'string' &&
+        this.props.user.organization.logoUrl.replace(/https?:\/\//, '')
+      }`,
     );
     this.setState({printing: true});
     const options = buildPrintOptions(
@@ -231,9 +236,10 @@ export class Final extends Component {
       this.survey,
       this.props.lng || 'en',
       this.getProperSourceForOS(
-        `${
-          RNFetchBlob.fs.dirs.DocumentDir
-        }/${this.props.user.organization.logoUrl.replace(/https?:\/\//, '')}`,
+        `${RNFetchBlob.fs.dirs.DocumentDir}/${
+          typeof this.props.user.organization.logoUrl === 'string' &&
+          this.props.user.organization.logoUrl.replace(/https?:\/\//, '')
+        }`,
       ),
       existLogo,
     );
