@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import Audio from '../../components/Audio';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconButton from '../../components/IconButton';
-import Orientation from 'react-native-orientation-locker';
 import Popup from '../../components/Popup';
 import PropTypes from 'prop-types';
 import RNFetchBlob from 'rn-fetch-blob'
@@ -178,7 +177,6 @@ export class Question extends Component {
   };
 
   async componentDidMount() {
-    Orientation.lockToLandscape(); //this will lock the view to Portrait
     const draft = this.getDraft();
 
     this.props.updateDraft({
@@ -195,9 +193,6 @@ export class Question extends Component {
     });
   }
 
-  componentWillUnmount() {
-    Orientation.unlockAllOrientations();
-  }
 
   shouldComponentUpdate() {
     return this.props.navigation.isFocused();
