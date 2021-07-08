@@ -1,10 +1,19 @@
-import {Animated, Dimensions, ScrollView, Vibration, View} from 'react-native';
-import React, {Component} from 'react';
+import {
+  Animated,
+  Dimensions,
+  ScrollView,
+  Text,
+  Vibration,
+  View,
+} from 'react-native';
+import React, {Component, createRef} from 'react';
 
 import PropTypes from 'prop-types';
 import SliderItem from './SliderItem';
+import {Tooltip} from 'react-native-elements';
 import colors from '../theme.json';
 import {isPortrait} from '../responsivenessHelpers';
+import {withNamespaces} from 'react-i18next';
 
 const VIBRATION_DURATION = 120;
 
@@ -17,6 +26,7 @@ const slideColors = {
 export class Slider extends Component {
   _isMounted = false;
   _timer;
+  _tooltipRef = createRef();
 
   state = {
     selectedColor: colors.palegreen,
@@ -25,7 +35,7 @@ export class Slider extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const width = Dimensions.get('window').width;
+    const {width, height} = Dimensions.get('window');
 
     const value = (value) => {
       switch (value) {
@@ -41,6 +51,10 @@ export class Slider extends Component {
     };
 
     this.animate();
+    const visibleTooltip = this.canShowTooltip(this.props.step, width, height);
+    if (visibleTooltip) {
+      this._tooltipRef.current.toggleTooltip();
+    }
 
     if (value(this.props.value)) {
       this._timer = setTimeout(() => {
@@ -72,22 +86,32 @@ export class Slider extends Component {
     Animated.sequence([
       Animated.timing(this.state.anim, {
         toValue: 1,
-        duration: 500,
+        duration: 750,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 0,
-        duration: 500,
+        duration: 750,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 1,
-        duration: 500,
+        duration: 750,
+        useNativeDriver: true,
+      }),
+      Animated.timing(this.state.anim, {
+        toValue: 0,
+        duration: 750,
+        useNativeDriver: true,
+      }),
+      Animated.timing(this.state.anim, {
+        toValue: 1,
+        duration: 750,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 0.5,
-        duration: 500,
+        duration: 1000,
         useNativeDriver: true,
       }),
     ]).start();
@@ -100,11 +124,19 @@ export class Slider extends Component {
     return false;
   };
 
+  canShowTooltip = (step, width, height) => {
+    if (step < 2 && isPortrait({width, height})) {
+      return true;
+    }
+    return false;
+  };
+
   vibrate = () => {
     Vibration ? Vibration.vibrate(VIBRATION_DURATION) : null;
   };
 
   render() {
+    const {tooltipText} = this.props;
     const {width, height} = Dimensions.get('window');
     const spin = this.state.anim.interpolate({
       inputRange: [0, 1],
@@ -112,6 +144,12 @@ export class Slider extends Component {
     });
     return (
       <View>
+        <Tooltip
+          withOverlay={false}
+          withPointer={false}
+          ref={this._tooltipRef}
+          popover={<Text style={{color: 'white'}}>{tooltipText}</Text>}
+        />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -157,6 +195,7 @@ Slider.propTypes = {
   slides: PropTypes.array.isRequired,
   value: PropTypes.number,
   selectAnswer: PropTypes.func.isRequired,
+  step: PropTypes.number,
 };
 
 export default Slider;

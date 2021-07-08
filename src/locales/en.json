@@ -248,7 +248,8 @@
       "myPriorities": "My priorities",
       "myAchievements": "My achievements",
       "lifeMap": "Life Map",
-      "audioHelp": "Audio help"
+      "audioHelp": "Audio help",
+      "tooltip": "Swipe right to see more"
     },
     "modals": {
       "lifeMapWillNotBeSaved": "If you do not enter all details on this page the Life Map will not be saved!",

@@ -248,6 +248,8 @@ export class Question extends Component {
             slides={this.slides}
             value={this.getFieldValue(this.indicator.codeName)}
             selectAnswer={this.selectAnswer}
+            step={this.step}
+            tooltipText={t('views.lifemap.tooltip')}
           />
 
           <View style={styles.skip}>
