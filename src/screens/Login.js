@@ -1,8 +1,3 @@
-import NetInfo from '@react-native-community/netinfo';
-import i18n from 'i18next';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
 import {
   AppState,
   Dimensions,
@@ -11,30 +6,36 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { CheckBox } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { connect } from 'react-redux';
-import RNFetchBlob from 'rn-fetch-blob';
-
-import logo from '../../assets/images/logo.png';
-import Button from '../components/Button';
-import { url } from '../config';
-import globalStyles from '../globalStyles';
+import InternalStorageFullModal, {
+  MINIMUM_REQUIRED_STORAGE_SPACE_500_MB,
+} from './modals/InternalStorageFullModal';
+import React, {Component} from 'react';
 import {
   login,
   setDimensions,
   setDownloadMapsAndImages,
   setEnv,
 } from '../redux/actions';
-import colors from '../theme.json';
-import { getDeviceLanguage } from '../utils';
-import InternalStorageFullModal, {
-  MINIMUM_REQUIRED_STORAGE_SPACE_500_MB,
-} from './modals/InternalStorageFullModal';
 
+import Button from '../components/Button';
+import {CheckBox} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Linking} from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import NotificationModal from '../components/NotificationModal';
+import PropTypes from 'prop-types';
+import RNFetchBlob from 'rn-fetch-blob';
+import VersionCheck from 'react-native-version-check';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
+import {getDeviceLanguage} from '../utils';
+import globalStyles from '../globalStyles';
+import i18n from 'i18next';
+import logo from '../../assets/images/logo.png';
+import {url} from '../config';
+import {withNamespaces} from 'react-i18next';
 
 // get env
 const nodeEnv = process.env;
@@ -53,7 +54,8 @@ export class Login extends Component {
     syncAudios: true,
     appState: AppState.currentState,
     notEnoughStorageSpace: false,
-    showPassword: false
+    showPassword: false,
+    needUpdate: false,
   };
   componentDidMount() {
     this.props.navigation.addListener('didFocus', () => {
@@ -69,23 +71,32 @@ export class Login extends Component {
       this.setDimensions();
 
       // check connection
-      NetInfo.fetch().then(state =>
+      NetInfo.fetch().then((state) =>
         this.setConnectivityState(state.isConnected),
       );
-      this.unsubscribeNetChange = NetInfo.addEventListener(state => {
+      this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
         this.setConnectivityState(state.isConnected);
+      });
+
+      VersionCheck.needUpdate().then((res) => {
+        if (res.isNeeded) {
+          this.setState({needUpdate: true});
+          setTimeout(() => {
+            Linking.openURL(res.storeUrl);
+          }, 4000);
+        }
       });
     }
   }
 
-  setConnectivityState = isConnected => {
+  setConnectivityState = (isConnected) => {
     isConnected
-      ? this.setState({ connection: true, error: '' })
-      : this.setState({ connection: false, error: 'No connection' });
+      ? this.setState({connection: true, error: ''})
+      : this.setState({connection: false, error: 'No connection'});
   };
 
   setDimensions = () => {
-    const { width, height, scale } = this.props.dimensions;
+    const {width, height, scale} = this.props.dimensions;
     const screenDimensions = Dimensions.get('window');
 
     if (
@@ -101,7 +112,7 @@ export class Login extends Component {
     }
   };
 
-  checkDevOption = devProp => {
+  checkDevOption = (devProp) => {
     this.setState({
       [devProp]: !this.state[devProp],
     });
@@ -109,7 +120,7 @@ export class Login extends Component {
 
   onLogin = async () => {
     if (!(await this.isStorageSpaceEnough())) {
-      this.setState({ notEnoughStorageSpace: true });
+      this.setState({notEnoughStorageSpace: true});
       return;
     }
 
@@ -121,7 +132,7 @@ export class Login extends Component {
     this.props.setDownloadMapsAndImages({
       downloadMaps: this.state.syncMaps,
       downloadImages: this.state.syncImages,
-      downloadAudios: this.state.syncAudios
+      downloadAudios: this.state.syncAudios,
     });
     let env = this.state.username.trim() === 'demo' ? 'demo' : 'production';
     let username = this.state.username.trim();
@@ -147,7 +158,7 @@ export class Login extends Component {
         this.setState({
           loading: false,
         });
-        this.setState({ error: 'Wrong username or password' });
+        this.setState({error: 'Wrong username or password'});
       } else if (
         this.props.user.role !== 'ROLE_SURVEY_USER' &&
         this.props.user.role !== 'ROLE_SURVEY_TAKER' &&
@@ -156,7 +167,7 @@ export class Login extends Component {
         this.setState({
           loading: false,
         });
-        this.setState({ error: 'Wrong username or password' });
+        this.setState({error: 'Wrong username or password'});
       } else {
         this.setState({
           loading: false,
@@ -166,8 +177,8 @@ export class Login extends Component {
     });
   };
 
-  handleAppStateChange = nextAppState =>
-    this.setState({ appState: nextAppState });
+  handleAppStateChange = (nextAppState) =>
+    this.setState({appState: nextAppState});
 
   isStorageSpaceEnough = async () => {
     const freeSpace = await RNFetchBlob.fs.df();
@@ -177,9 +188,10 @@ export class Login extends Component {
     );
   };
 
-  retryLogIn = () => this.setState({ notEnoughStorageSpace: false });
+  retryLogIn = () => this.setState({notEnoughStorageSpace: false});
 
-  handleShowPassword = () => this.setState({ showPassword: !this.state.showPassword });
+  handleShowPassword = () =>
+    this.setState({showPassword: !this.state.showPassword});
 
   componentWillUnmount() {
     if (this.unsubscribeNetChange) {
@@ -189,17 +201,24 @@ export class Login extends Component {
   }
 
   render() {
-    const { t } = this.props;
+    const {t} = this.props;
+    const {needUpdate} = this.state;
 
     return (
-      <View key={this.state.appState} style={globalStyles.container}>
-        <ScrollView style={globalStyles.content}>
-          {this.state.notEnoughStorageSpace && !this.state.error ? (
-            <InternalStorageFullModal
-              retryLogIn={this.retryLogIn}
-              isOpen={!!this.state.notEnoughStorageSpace}
-            />
-          ) : (
+      <React.Fragment>
+        <NotificationModal
+          isOpen={needUpdate}
+          label={t('general.attention')}
+          subLabel={t('general.updateApp')}
+        />
+        <View key={this.state.appState} style={globalStyles.container}>
+          <ScrollView style={globalStyles.content}>
+            {this.state.notEnoughStorageSpace && !this.state.error ? (
+              <InternalStorageFullModal
+                retryLogIn={this.retryLogIn}
+                isOpen={!!this.state.notEnoughStorageSpace}
+              />
+            ) : (
               <View>
                 <Image style={styles.logo} source={logo} />
                 <Text style={globalStyles.h1}>{t('views.login.welcome')}</Text>
@@ -211,6 +230,7 @@ export class Login extends Component {
                   }}>
                   {t('views.login.letsGetStarted')}
                 </Text>
+
                 <View
                   style={{
                     width: '100%',
@@ -218,7 +238,9 @@ export class Login extends Component {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                   }}>
-                  <Text style={globalStyles.h5}>{t('views.login.username')}</Text>
+                  <Text style={globalStyles.h5}>
+                    {t('views.login.username')}
+                  </Text>
                 </View>
                 <TextInput
                   id="username"
@@ -226,9 +248,11 @@ export class Login extends Component {
                   autoCapitalize="none"
                   style={{
                     ...styles.input,
-                    borderColor: this.state.error ? colors.red : colors.palegreen,
+                    borderColor: this.state.error
+                      ? colors.red
+                      : colors.palegreen,
                   }}
-                  onChangeText={username => this.setState({ username })}
+                  onChangeText={(username) => this.setState({username})}
                 />
                 <View
                   style={{
@@ -237,13 +261,18 @@ export class Login extends Component {
                     marginLeft: 'auto',
                     marginRight: 'auto',
                   }}>
-                  <Text style={globalStyles.h5}>{t('views.login.password')}</Text>
+                  <Text style={globalStyles.h5}>
+                    {t('views.login.password')}
+                  </Text>
                 </View>
-                <View style={{
-                  ...styles.passwordContainer,
-                  borderColor: this.state.error ? colors.red : colors.palegreen,
-                  marginBottom: this.state.error ? 0 : 25,
-                }}>
+                <View
+                  style={{
+                    ...styles.passwordContainer,
+                    borderColor: this.state.error
+                      ? colors.red
+                      : colors.palegreen,
+                    marginBottom: this.state.error ? 0 : 25,
+                  }}>
                   <TextInput
                     id="password"
                     testID="password-input"
@@ -252,10 +281,10 @@ export class Login extends Component {
                     style={{
                       ...styles.inputPassword,
                     }}
-                    onChangeText={password => this.setState({ password })}
+                    onChangeText={(password) => this.setState({password})}
                   />
                   <Icon
-                    name={this.state.showPassword ? "eye" : "eye-off"}
+                    name={this.state.showPassword ? 'eye' : 'eye-off'}
                     size={21}
                     style={styles.icon}
                     color={colors.lightdark}
@@ -266,12 +295,12 @@ export class Login extends Component {
                 {this.state.error ? (
                   <Text
                     id="error-message"
-                    style={{ ...globalStyles.tag, ...styles.error }}>
+                    style={{...globalStyles.tag, ...styles.error}}>
                     {this.state.error}
                   </Text>
                 ) : (
-                    <View />
-                  )}
+                  <View />
+                )}
                 {this.state.error2 ? (
                   <Text
                     id="error-message"
@@ -283,8 +312,8 @@ export class Login extends Component {
                     {this.state.error2}
                   </Text>
                 ) : (
-                    <View />
-                  )}
+                  <View />
+                )}
                 {this.state.loading ? (
                   <Button
                     style={{
@@ -300,23 +329,27 @@ export class Login extends Component {
                     colored
                   />
                 ) : (
-                    <Button
-                      style={{
-                        maxWidth: 400,
-                        width: '100%',
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                      }}
-                      id="login-button"
-                      testID="login-button"
-                      handleClick={() => this.onLogin()}
-                      text={t('views.login.buttonText')}
-                      colored
-                      disabled={this.state.error === 'No connection' ? true : false}
-                    />
-                  )}
+                  <Button
+                    style={{
+                      maxWidth: 400,
+                      width: '100%',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                    id="login-button"
+                    testID="login-button"
+                    handleClick={() => this.onLogin()}
+                    text={t('views.login.buttonText')}
+                    colored
+                    disabled={
+                      this.state.error === 'No connection' || needUpdate
+                        ? true
+                        : false
+                    }
+                  />
+                )}
                 {nodeEnv.NODE_ENV === 'development' && (
-                  <View style={{ marginTop: 20 }}>
+                  <View style={{marginTop: 20}}>
                     <Text>Dev options</Text>
                     <CheckBox
                       containerStyle={styles.checkbox}
@@ -343,8 +376,9 @@ export class Login extends Component {
                 )}
               </View>
             )}
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </React.Fragment>
     );
   }
 }
@@ -400,7 +434,6 @@ const styles = StyleSheet.create({
   icon: {
     marginBottom: 4,
     marginRight: 10,
-
   },
   checkbox: {
     marginLeft: 0,
@@ -409,9 +442,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   checkboxText: {
-    fontWeight: 'normal'
+    fontWeight: 'normal',
   },
-  logo: { width: 42, height: 42, marginBottom: 8 },
+  logo: {width: 42, height: 42, marginBottom: 8},
   error: {
     color: colors.red,
     lineHeight: 15,
@@ -423,7 +456,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ env, user, dimensions }) => ({
+const mapStateToProps = ({env, user, dimensions}) => ({
   env,
   user,
   dimensions,
@@ -437,8 +470,5 @@ const mapDispatchToProps = {
 };
 
 export default withNamespaces()(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(Login),
+  connect(mapStateToProps, mapDispatchToProps)(Login),
 );

@@ -36,7 +36,8 @@
     "goback": "Atrás",
     "exit": "Aair",
     "attention": "Atenção!",
-    "syncAll": "Sincronizar todos os Mapas de Vida e actualizar a aplicação!",
+    "syncAll": "Esta versão já está desatualizada, sincronize todas as pesquisas e atualize o aplicativo com a versão mais recente!",
+    "updateApp": "Esta versão já está desatualizada, acesse a playstore e baixe a última versão!",
     "interventions": "Intervenções",
     "priorities": "Prioridades"
   },
