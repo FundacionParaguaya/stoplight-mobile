@@ -8,9 +8,9 @@ import {
   TouchableHighlight,
   UIManager,
   View,
-  findNodeHandle
+  findNodeHandle,
 } from 'react-native';
-import PropTypes, { node } from 'prop-types';
+import PropTypes, {node} from 'prop-types';
 import React, {Component} from 'react';
 import {
   manualSubmitDraft,
@@ -62,7 +62,7 @@ export class Dashboard extends Component {
     yellow: 0,
     red: 0,
     isOnline: false,
-    needUpdate:false
+    needUpdate: false,
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
@@ -234,19 +234,11 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    VersionCheck.needUpdate()
-  .then(async res => {
-    //console.log(res.isNeeded);    // true
-    console.log(res)
-    if (res.isNeeded) {
-      this.setState({needUpdate:true})
-      setTimeout(() => {
-        Linking.openURL(res.storeUrl)
-      },4000)
-    }
-  });
-
-   
+    VersionCheck.needUpdate().then(async (res) => {
+      if (res.isNeeded) {
+        this.setState({needUpdate: true});
+      }
+    });
 
     if (!this.props.user.token) {
       this.props.navigation.navigate('Login');
@@ -377,7 +369,7 @@ export class Dashboard extends Component {
       openDownloadModal,
       selectedDraftId,
       selectedImagesId,
-      needUpdate
+      needUpdate,
     } = this.state;
     const allDraftFamilies = drafts.filter(
       (d) =>
@@ -394,7 +386,8 @@ export class Dashboard extends Component {
           <NotificationModal
             isOpen={needUpdate}
             label={t('general.attention')}
-            subLabel={t('general.syncAll')} />
+            subLabel={t('general.syncAll')}
+          />
           <DownloadPopup
             isOpen={openDownloadModal}
             onClose={this.toggleDownloadModal}
