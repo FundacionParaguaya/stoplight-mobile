@@ -22,7 +22,7 @@ import {
 import Button from '../components/Button';
 import {CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Linking } from 'react-native';
+import {Linking} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import NotificationModal from '../components/NotificationModal';
 import PropTypes from 'prop-types';
@@ -67,8 +67,8 @@ export class Login extends Component {
       if (res.isNeeded) {
         this.setState({needUpdate: true});
         setTimeout(() => {
-          Linking.openURL(res.storeUrl)
-        },4000)
+          Linking.openURL(res.storeUrl);
+        }, 4000);
       }
     });
 
@@ -342,7 +342,9 @@ export class Login extends Component {
                     text={t('views.login.buttonText')}
                     colored
                     disabled={
-                      this.state.error === 'No connection' ? true : false
+                      this.state.error === 'No connection' || needUpdate
+                        ? true
+                        : false
                     }
                   />
                 )}
