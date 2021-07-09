@@ -1,46 +1,48 @@
-import NetInfo from '@react-native-community/netinfo';
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {withNamespaces} from 'react-i18next';
 import {
   FlatList,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TouchableHighlight,
   UIManager,
   View,
-  findNodeHandle,
+  findNodeHandle
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {AndroidBackHandler} from 'react-navigation-backhandler';
-import {connect} from 'react-redux';
+import PropTypes, { node } from 'prop-types';
+import React, {Component} from 'react';
+import {
+  manualSubmitDraft,
+  manualSubmitDraftCommit,
+  manualSubmitPicturesCommit,
+  markVersionCheked,
+  submitDraftError,
+  submitImagesError,
+  submitPictures,
+  toggleAPIVersionModal,
+  updateSnapshotImages,
+} from '../redux/actions';
+import {supported_API_version, url} from '../config';
 
-import arrow from '../../assets/images/selectArrow.png';
+import {AndroidBackHandler} from 'react-navigation-backhandler';
 import BottomModal from '../components/BottomModal';
 import Button from '../components/Button';
 import Decoration from '../components/decoration/Decoration';
+import DownloadPopup from '../screens/modals/DownloadModal';
 import DraftListItem from '../components/DraftListItem';
 import FilterListItem from '../components/FilterListItem';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import NetInfo from '@react-native-community/netinfo';
 import NotificationModal from '../components/NotificationModal';
 import RoundImage from '../components/RoundImage';
-import {supported_API_version, url} from '../config';
-import globalStyles from '../globalStyles';
-import {
-  markVersionCheked,
-  toggleAPIVersionModal,
-  manualSubmitDraft,
-  submitDraftError,
-  submitImagesError,
-  manualSubmitDraftCommit,
-  submitPictures,
-  manualSubmitPicturesCommit,
-  updateSnapshotImages,
-} from '../redux/actions';
+import VersionCheck from 'react-native-version-check';
+import arrow from '../../assets/images/selectArrow.png';
 import colors from '../theme.json';
-import DownloadPopup from '../screens/modals/DownloadModal';
+import {connect} from 'react-redux';
+import globalStyles from '../globalStyles';
 import {prepareDraftForSubmit} from './utils/helpers';
+import {withNamespaces} from 'react-i18next';
 
 const TestFairy = require('react-native-testfairy');
 // get env
@@ -60,6 +62,7 @@ export class Dashboard extends Component {
     yellow: 0,
     red: 0,
     isOnline: false,
+    needUpdate:false
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
@@ -231,6 +234,19 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
+    VersionCheck.needUpdate()
+  .then(async res => {
+    //console.log(res.isNeeded);    // true
+    console.log(res)
+    if (res.isNeeded) {
+      this.setState({needUpdate:true})
+      setTimeout(() => {
+        Linking.openURL(res.storeUrl)
+      },4000)
+    }
+  });
+
+   
 
     if (!this.props.user.token) {
       this.props.navigation.navigate('Login');
@@ -361,6 +377,7 @@ export class Dashboard extends Component {
       openDownloadModal,
       selectedDraftId,
       selectedImagesId,
+      needUpdate
     } = this.state;
     const allDraftFamilies = drafts.filter(
       (d) =>
@@ -375,10 +392,9 @@ export class Dashboard extends Component {
       <AndroidBackHandler onBackPress={() => true}>
         <View style={globalStyles.ViewMainContainer}>
           <NotificationModal
-            isOpen={this.props.apiVersion.showModal}
-            onClose={this.onNotificationClose}
+            isOpen={needUpdate}
             label={t('general.attention')}
-            subLabel={t('general.syncAll')}></NotificationModal>
+            subLabel={t('general.syncAll')} />
           <DownloadPopup
             isOpen={openDownloadModal}
             onClose={this.toggleDownloadModal}

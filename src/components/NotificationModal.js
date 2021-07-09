@@ -7,19 +7,20 @@ import colors from '../theme.json'
 
 class NotificationModal extends Component {
   render() {
-    const { label, subLabel } = this.props
+    const { label, subLabel, onClose } = this.props
 
     return this.props.isOpen ? (
       <View style={styles.wrapper}>
-        <Icon
+        {onClose &&  <Icon
           style={styles.closeButton}
           color={'#fff'}
-          onPress={this.props.onClose}
+          onPress={onClose}
           name="close"
           size={24}
           accessible={true}
           accessibilityLabel={'Close'}
-        />
+        /> }
+       
         {label && <Text style={styles.label}>{label}</Text>}
         {subLabel && (
           <Text style={[styles.label, styles.sublabel]}>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
 
 NotificationModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   label: PropTypes.string,
   subLabel: PropTypes.string
 }
