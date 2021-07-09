@@ -55,6 +55,7 @@
     "react-native-testfairy": "^2.29.0",
     "react-native-track-player": "^1.2.3",
     "react-native-vector-icons": "^7.0.0",
+    "react-native-version-check": "^3.4.2",
     "react-navigation-backhandler": "^2.0.0",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
