@@ -63,15 +63,6 @@ export class Login extends Component {
       i18n.changeLanguage(lng);
     });
 
-    VersionCheck.needUpdate().then((res) => {
-      if (res.isNeeded) {
-        this.setState({needUpdate: true});
-        setTimeout(() => {
-          Linking.openURL(res.storeUrl);
-        }, 4000);
-      }
-    });
-
     // if use has logged in navigate to Loading
     if (this.props.user.token) {
       this.props.navigation.navigate('Loading');
@@ -85,6 +76,15 @@ export class Login extends Component {
       );
       this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
         this.setConnectivityState(state.isConnected);
+      });
+
+      VersionCheck.needUpdate().then((res) => {
+        if (res.isNeeded) {
+          this.setState({needUpdate: true});
+          setTimeout(() => {
+            Linking.openURL(res.storeUrl);
+          }, 4000);
+        }
       });
     }
   }
