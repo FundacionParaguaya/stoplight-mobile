@@ -251,7 +251,8 @@
       "myPriorities": "Pryorite m’",
       "myAchievements": "Reyalizasyon m’",
       "lifeMap": "Kat lavi",
-      "audioHelp": "èd odyo"
+      "audioHelp": "èd odyo",
+      "tooltip": "Glise adwat pou wè plis"
     },
     "modals": {
       "lifeMapWillNotBeSaved": "Si w’ pa antre tout detay sou paj sa kat lavi a pap anrejistre!",

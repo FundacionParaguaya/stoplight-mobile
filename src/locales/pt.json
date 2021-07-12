@@ -236,7 +236,8 @@
       "lifeMap": "Mapa de Vida",
       "audioHelp": "Ajuda Áudio",
       "congratulations": "",
-      "youCreatedALifeMap": ""
+      "youCreatedALifeMap": "",
+      "tooltip": "Deslize para a direita para ver mais"
     },
     "modals": {
       "lifeMapWillNotBeSaved": "Se você não inserir todos os detalhes nesta página, o Mapa da Vida não será salvo!",

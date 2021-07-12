@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Audio from '../../components/Audio';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconButton from '../../components/IconButton';
+import Orientation from 'react-native-orientation-locker';
 import Popup from '../../components/Popup';
 import PropTypes from 'prop-types';
 import RNFetchBlob from 'rn-fetch-blob'
@@ -135,6 +136,9 @@ export class Question extends Component {
         answer !== 0) ||
       skippedQuestions.length === 0
     ) {
+      if(Orientation.isLocked()){
+        Orientation.unlockAllOrientations();
+      }; 
       return this.props.navigation.replace('Overview', {
         resumeDraft: false,
         draftId: this.draftId,
@@ -163,6 +167,9 @@ export class Question extends Component {
         survey: this.survey,
       });
     } else {
+      if(Orientation.isLocked()){
+        Orientation.unlockAllOrientations();
+      }; 
       this.props.navigation.navigate('BeginLifemap', {
         draftId: this.draftId,
         survey: this.survey,
@@ -173,6 +180,17 @@ export class Question extends Component {
   toggleDefinitionWindow = (stateWindow) => {
     this.setState({
       showDefinition: stateWindow,
+    });
+  };
+
+  handleRotateScreen = async () => {
+    Orientation.getOrientation((orientation)=> {
+      const formattedOrientation = orientation.split('-')[0];
+      if(formattedOrientation == 'LANDSCAPE'){
+        Orientation.lockToPortrait();
+      }else if(formattedOrientation === 'PORTRAIT'){
+        Orientation.lockToLandscape();
+      }
     });
   };
 
@@ -248,6 +266,9 @@ export class Question extends Component {
             slides={this.slides}
             value={this.getFieldValue(this.indicator.codeName)}
             selectAnswer={this.selectAnswer}
+            step={this.step}
+            allowInteractiveHelp={!!this.props.user.interactive_help}
+            tooltipText={t('views.lifemap.tooltip')}
           />
 
           <View style={styles.skip}>
@@ -296,6 +317,20 @@ export class Question extends Component {
                   onPress={() => this.selectAnswer(0)}
                 />
               )}
+
+          <Icon
+            name={'screen-rotation'}
+            onPress={this.handleRotateScreen}
+            size={24}
+            style={{
+              color: colors.palegreen,
+              position: 'absolute',
+              top: 10,
+              right: 18
+            }}
+          />
+
+
           </View>
         </StickyFooter>
       </View>

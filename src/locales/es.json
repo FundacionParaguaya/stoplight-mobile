@@ -249,7 +249,8 @@
       "myPriorities": "Mis Prioridades",
       "myAchievements": "Mis Logros",
       "lifeMap": "Mapa de Vida",
-      "audioHelp": "Audio ayuda"
+      "audioHelp": "Audio ayuda",
+      "tooltip": "Desliza hacia la derecha para ver más"
     },
     "modals": {
       "lifeMapWillNotBeSaved": "Si no ingresa todos los detalles en esta página, ¡el Mapa de Vida no se guardará!",
