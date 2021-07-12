@@ -51,6 +51,7 @@ export class Slider extends Component {
     };
 
     this.animate();
+      
     const visibleTooltip = this.canShowTooltip(this.props.step, width, height);
     if (visibleTooltip) {
       this._tooltipRef.current.toggleTooltip();
@@ -86,39 +87,39 @@ export class Slider extends Component {
     Animated.sequence([
       Animated.timing(this.state.anim, {
         toValue: 1,
-        duration: 750,
+        duration: 500,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 0,
-        duration: 750,
+        duration: 500,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 1,
-        duration: 750,
+        duration: 500,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 0,
-        duration: 750,
+        duration: 500,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 1,
-        duration: 750,
+        duration: 500,
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
         toValue: 0.5,
-        duration: 1000,
+        duration: 500,
         useNativeDriver: true,
       }),
     ]).start();
   };
 
   canShake = (index, width, height) => {
-    if (index === 1 && isPortrait({width, height})) {
+    if (this.props.step < 2 && index === 1 && isPortrait({width, height})) {
       return true;
     }
     return false;

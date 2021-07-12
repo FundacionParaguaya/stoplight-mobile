@@ -1,15 +1,17 @@
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import React, {Component} from 'react';
+
+import Button from '../../components/Button';
+import Orientation from 'react-native-orientation-locker';
+import Popup from '../../components/Popup';
 import PropTypes from 'prop-types';
 import {StackActions} from '@react-navigation/native';
-import {connect} from 'react-redux';
-import {Text, StyleSheet, View, Platform} from 'react-native';
-import {deleteDraft} from '../../redux/actions';
-import Popup from '../../components/Popup';
-import Button from '../../components/Button';
-import i18n from '../../i18n';
-import globalStyles from '../../globalStyles';
 import colors from '../../theme.json';
+import {connect} from 'react-redux';
+import {deleteDraft} from '../../redux/actions';
 import {exitModalAccessibleText} from '../../screens/utils/accessibilityHelpers';
+import globalStyles from '../../globalStyles';
+import i18n from '../../i18n';
 
 export class ExitDraftModal extends Component {
   handleClickOnYes = () => {
@@ -19,6 +21,12 @@ export class ExitDraftModal extends Component {
 
     const draftId = params.draftId;
     const deleteDraftOnExit = params.deleteDraftOnExit;
+
+    const isLocked = Orientation.isLocked();
+
+    if (isLocked) {
+      Orientation.unlockAllOrientations();
+    }
 
     // delete draft on exit  it's not demo else delete it
     if (draftId && deleteDraftOnExit) {
