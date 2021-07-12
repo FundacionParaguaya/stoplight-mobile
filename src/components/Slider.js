@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import SliderItem from './SliderItem';
 import {Tooltip} from 'react-native-elements';
 import colors from '../theme.json';
-import {isPortrait} from '../responsivenessHelpers';
-import {withNamespaces} from 'react-i18next';
+import { isPortrait } from '../responsivenessHelpers';
 
 const VIBRATION_DURATION = 120;
 
@@ -54,7 +53,10 @@ export class Slider extends Component {
       
     const visibleTooltip = this.canShowTooltip(this.props.step, width, height);
     if (visibleTooltip) {
-      this._tooltipRef.current.toggleTooltip();
+      setTimeout(()=> {
+        this._tooltipRef.current.toggleTooltip();
+      },100)
+      
     }
 
     if (value(this.props.value)) {
@@ -149,6 +151,7 @@ export class Slider extends Component {
           withOverlay={false}
           withPointer={false}
           ref={this._tooltipRef}
+          height={50}
           popover={<Text style={{color: 'white'}}>{tooltipText}</Text>}
         />
         <ScrollView
