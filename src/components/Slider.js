@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import SliderItem from './SliderItem';
 import {Tooltip} from 'react-native-elements';
 import colors from '../theme.json';
-import { isPortrait } from '../responsivenessHelpers';
+import {isPortrait} from '../responsivenessHelpers';
 
 const VIBRATION_DURATION = 120;
 
@@ -50,13 +50,12 @@ export class Slider extends Component {
     };
 
     this.animate();
-      
+
     const visibleTooltip = this.canShowTooltip(this.props.step, width, height);
     if (visibleTooltip) {
-      setTimeout(()=> {
+      setTimeout(() => {
         this._tooltipRef.current.toggleTooltip();
-      },100)
-      
+      }, 100);
     }
 
     if (value(this.props.value)) {
@@ -128,7 +127,11 @@ export class Slider extends Component {
   };
 
   canShowTooltip = (step, width, height) => {
-    if (step < 2 && isPortrait({width, height})) {
+    if (
+      this.props.allowInteractiveHelp &&
+      step < 2 &&
+      isPortrait({width, height})
+    ) {
       return true;
     }
     return false;

@@ -267,6 +267,7 @@ export class Question extends Component {
             value={this.getFieldValue(this.indicator.codeName)}
             selectAnswer={this.selectAnswer}
             step={this.step}
+            allowInteractiveHelp={!!this.props.user.interactive_help}
             tooltipText={t('views.lifemap.tooltip')}
           />
 
