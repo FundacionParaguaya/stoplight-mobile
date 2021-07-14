@@ -146,7 +146,7 @@ export class Slider extends Component {
     const {width, height} = Dimensions.get('window');
     const spin = this.state.anim.interpolate({
       inputRange: [0, 1],
-      outputRange: ['-2deg', '2deg'],
+      outputRange: ['0deg', '2deg'],
     });
     return (
       <View>
@@ -177,13 +177,13 @@ export class Slider extends Component {
             <Animated.View
               key={i}
               style={[
-                {
+                {  
                   width: '33%',
                   backgroundColor: colors[slideColors[slide.value]],
                 },
                 this.canShake(i, width, height) && {
                   transform: [{rotate: spin}],
-                },
+               }
               ]}>
               <SliderItem
                 slide={slide}
