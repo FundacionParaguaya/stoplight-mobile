@@ -112,7 +112,7 @@ export class Slider extends Component {
         useNativeDriver: true,
       }),
       Animated.timing(this.state.anim, {
-        toValue: 0.5,
+        toValue: 0,
         duration: 500,
         useNativeDriver: true,
       }),
