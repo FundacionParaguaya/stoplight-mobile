@@ -213,7 +213,9 @@ export const submitIntervention = (env, token, payload) => ({
               values: payload.values,
               interventionDefinition: payload.interventionDefinition,
               snapshot:payload.snapshot,
-              intervention: payload.relatedIntervention
+              intervention: payload.relatedIntervention,
+              family: payload.family.familyId,
+              familyName: payload.family.familyName
             }
         }
       })
