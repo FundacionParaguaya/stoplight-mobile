@@ -126,7 +126,9 @@ export class Family extends Component {
       survey:this.survey,
       interventionId: typeof id == 'number' ? id: null,
       navigation: this.props.navigation,
-      title: this.props.t('views.family.addIntervention')
+      title: this.props.t('views.family.addIntervention'),
+      familyId: this.props.route.params.familyId,
+      familyName: this.props.route.params.familyName,
     });
   };
 
