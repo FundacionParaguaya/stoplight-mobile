@@ -45,6 +45,13 @@ def flipper_post_install(installer)
 end
 
 target 'PovertyStoplightApp' do
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
   # Pods for PovertyStoplightApp
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -92,21 +99,14 @@ target 'PovertyStoplightApp' do
 
   use_native_modules!
 
+   # you should disable the next line.
+  use_flipper!()
+
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  add_flipper_pods!
   post_install do |installer|
-    flipper_post_install(installer)
-  end
-end
-
-target 'PovertyStoplightApp-tvOS' do
-  # Pods for PovertyStoplightApp-tvOS
-
-  target 'PovertyStoplightApp-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+    react_native_post_install(installer)
   end
 end
