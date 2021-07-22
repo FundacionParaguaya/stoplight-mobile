@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import CommunityIcon from 'react-native-vector-icons/FontAwesome'
 import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
   Text,
   TouchableHighlight,
-  StyleSheet,
-  Platform,
-  View,
-  ActivityIndicator
+  View
 } from 'react-native'
+import React, { Component } from 'react'
+
+import CommunityIcon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import PropTypes from 'prop-types'
 import colors from '../theme.json'
 
 class Button extends Component {
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     borderRadius: 2,
-    height: 48,
+    minHeight: 48,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

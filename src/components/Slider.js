@@ -154,7 +154,7 @@ export class Slider extends Component {
           withOverlay={false}
           withPointer={false}
           ref={this._tooltipRef}
-          height={50}
+          height={80}
           popover={<Text style={{color: 'white'}}>{tooltipText}</Text>}
         />
         <ScrollView
