@@ -358,6 +358,8 @@ export class Family extends Component {
           .locale(getLocaleForLanguage(this.props.lng))
           .format('MMM DD, YYYY');
 
+    const interventionSkipped = interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions ||  !this.survey;
+
     return (
       <ScrollView
         style={globalStyles.background}
@@ -367,7 +369,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions }
+            interventionSkipped = {interventionSkipped  }
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -375,10 +377,10 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
-              interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions}
+              interventionSkipped = {interventionSkipped}
             />
           )}
-          {interventionDefinition !== null && !this.state.fromDashboard && user.allowInterventions && (
+          {interventionDefinition !== null && !this.state.fromDashboard && user.allowInterventions && !!this.survey && (
             <FamilyTab
               title={t('views.family.interventions')}
               onPress={()=> this.setState({activeTab:'Interventions'})}
