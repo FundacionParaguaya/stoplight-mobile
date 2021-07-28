@@ -133,6 +133,8 @@ export class Loading extends Component {
 
   // STEP 5 - check and cache the offline maps
   checkOfflineMaps = async () => {
+    console.log('checkOfflineMaps',!this.props.downloadMapsAndImages.downloadMaps ||
+    (this.state.maps.length && this.state.maps.every(map => map.status == 100) || this.props.sync.maps));
     MapboxGL.offlineManager.setTileCountLimit(200000);
     if (
       !this.props.downloadMapsAndImages.downloadMaps ||
@@ -144,6 +146,7 @@ export class Loading extends Component {
       });
       return this.handleImageCaching();
     } else {
+      console.log('downloading offline maps');
       this.props.loadMaps(url[this.props.env], this.props.user.token);
       this.setState({
         downloadingMap: true,
@@ -190,6 +193,11 @@ export class Loading extends Component {
 
   // STEP 6 - cache the survey indicator images
   handleImageCaching = () => {
+    console.log('handleImageCaching',!this.props.downloadMapsAndImages.downloadImages ||
+    (!!this.props.sync.images.total &&
+      this.props.sync.images.total === this.props.sync.images.synced) ||
+      this.props.surveys .length == 0);
+    console.log('!this.state.cachingImages',!this.state.cachingImages);
     if (
       !this.props.downloadMapsAndImages.downloadImages ||
       (!!this.props.sync.images.total &&
@@ -314,6 +322,7 @@ export class Loading extends Component {
   }
 
   componentDidMount() {
+    console.log('state',this.state);
     this.props.validate(url[this.props.env], this.props.user.token);
     this.props.user && Bugsnag.setUser(this.props.user.username, this.props.user.token, this.props.user.role);
     this.checkState();
