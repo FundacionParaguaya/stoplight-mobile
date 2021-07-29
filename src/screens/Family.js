@@ -120,11 +120,11 @@ export class Family extends Component {
     this.props.drafts.find((draft) => draft.draftId === this.draftId);
 
   handleClickOnAddIntervention = (id) => {
-    const { navigation } = this.props;
-    navigation.navigate('Intervention',{
+    const {navigation} = this.props;
+    navigation.navigate('Intervention', {
       draft: this.familyLifemap,
-      survey:this.survey,
-      interventionId: typeof id == 'number' ? id: null,
+      survey: this.survey,
+      interventionId: typeof id == 'number' ? id : null,
       navigation: this.props.navigation,
       title: this.props.t('views.family.addIntervention'),
       familyId: this.props.route.params.familyId,
@@ -133,15 +133,15 @@ export class Family extends Component {
   };
 
   handleGoIntervention = (intervention) => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
-    navigation.navigate('InterventionView',{
-      survey:this.survey,
-      intervention:intervention,
+    navigation.navigate('InterventionView', {
+      survey: this.survey,
+      intervention: intervention,
       draft: this.familyLifemap,
-      title:this.props.t('views.family.intervention')
-    })
-  }
+      title: this.props.t('views.family.intervention'),
+    });
+  };
 
   handleResumeClick = () => {
     const {navigation} = this.props;
@@ -358,6 +358,12 @@ export class Family extends Component {
           .locale(getLocaleForLanguage(this.props.lng))
           .format('MMM DD, YYYY');
 
+    const interventionSkipped =
+      interventionDefinition == null ||
+      this.state.fromDashboard ||
+      !user.allowInterventions ||
+      !this.survey;
+
     return (
       <ScrollView
         style={globalStyles.background}
@@ -367,7 +373,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions }
+            interventionSkipped={interventionSkipped}
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -375,16 +381,18 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
-              interventionSkipped = {interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions}
+              interventionSkipped={interventionSkipped}
             />
           )}
-          {interventionDefinition !== null && !this.state.fromDashboard && user.allowInterventions && (
-            <FamilyTab
-              title={t('views.family.interventions')}
-              onPress={()=> this.setState({activeTab:'Interventions'})}
-              active={activeTab === 'Interventions'}
-            />
-          )}
+          {interventionDefinition !== null &&
+            !this.state.fromDashboard &&
+            user.allowInterventions && !!this.survey && (
+              <FamilyTab
+                title={t('views.family.interventions')}
+                onPress={() => this.setState({activeTab: 'Interventions'})}
+                active={activeTab === 'Interventions'}
+              />
+            )}
         </View>
 
         {/* Details tab */}
@@ -682,29 +690,27 @@ export class Family extends Component {
           </ScrollView>
         ) : null}
 
-      {/* Intervention tab */}
+        {/* Intervention tab */}
 
-      {activeTab === 'Interventions' ? (
-        <ScrollView id="intervention">
-          <View style={styles.buttonContainer}>
-            <Button
-              style={styles.buttonSmall}
-              text={t('views.family.addIntervention')}
-              handleClick={this.handleClickOnAddIntervention}
+        {activeTab === 'Interventions' ? (
+          <ScrollView id="intervention">
+            <View style={styles.buttonContainer}>
+              <Button
+                style={styles.buttonSmall}
+                text={t('views.family.addIntervention')}
+                handleClick={this.handleClickOnAddIntervention}
+              />
+            </View>
+            <InterventionList
+              interventionsData={this.familyLifemap.interventions}
+              handleAddIntervention={this.handleClickOnAddIntervention}
+              handleGoIntervention={this.handleGoIntervention}
+              syncInterventions={this.props.interventions}
+              snapshot={this.familyLifemap && this.familyLifemap.id}
+              lang={this.props.language}
             />
-          </View>
-          <InterventionList 
-            interventionsData = {this.familyLifemap.interventions}
-            handleAddIntervention = {this.handleClickOnAddIntervention}
-            handleGoIntervention = {this.handleGoIntervention}
-            syncInterventions= {this.props.interventions}
-            snapshot={this.familyLifemap && this.familyLifemap.id}
-            lang={this.props.language}
-            
-           />
-        </ScrollView>
-      ):null}
-
+          </ScrollView>
+        ) : null}
       </ScrollView>
     );
   }
@@ -858,7 +864,7 @@ const mapStateToProps = ({
   drafts,
   interventionDefinition,
   interventions,
-  language
+  language,
 }) => ({
   surveys,
   env,
@@ -869,7 +875,7 @@ const mapStateToProps = ({
   drafts,
   interventionDefinition,
   interventions,
-  language
+  language,
 });
 
 export default withNamespaces()(
