@@ -205,6 +205,7 @@ const InterventionView = ({route, interventionDefinition}) => {
               id={item.codeName}
               placeholder={item.shortName}
               readOnly={true}
+              multiline
               initialValue={item.value}
               onChangeText={() => {}}
               labelStyle={{fontWeight: 'bold'}}
