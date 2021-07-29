@@ -25,16 +25,14 @@ export const filterURLsFromSurveys = surveys => {
 }
 
 export const cacheImages = async imageURLs => {
-  console.log('cacheImages')
+
   async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
       // break loop if offline
       if (!isOnline) {
         break
       }
-      console.log('callback Pre');
       await callback(array[index], index, array)
-      console.log('callback finish');
     }
   }
 
@@ -143,12 +141,9 @@ export const cacheAudios = async audioURLS => {
 
 
 export const initImageCaching = async () => {
-  console.log(' initImageCaching');
   const surveys = getSurveys()
   if(surveys.length) {
-    console.log(' initImageCaching',surveys.length);
     const imageURLs = await filterURLsFromSurveys(surveys)
-    console.log(' initImageCaching',imageURLs);
     cacheImages(imageURLs)
   }
   
