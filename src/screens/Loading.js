@@ -94,7 +94,6 @@ export class Loading extends Component {
           params +=`${question.codeName} `;
         })
       }
-      console.log('')
       this.props.loadFamilies(url[this.props.env], this.props.user.token, params);
     }
   };
@@ -133,8 +132,6 @@ export class Loading extends Component {
 
   // STEP 5 - check and cache the offline maps
   checkOfflineMaps = async () => {
-    console.log('checkOfflineMaps',!this.props.downloadMapsAndImages.downloadMaps ||
-    (this.state.maps.length && this.state.maps.every(map => map.status == 100) || this.props.sync.maps));
     MapboxGL.offlineManager.setTileCountLimit(200000);
     if (
       !this.props.downloadMapsAndImages.downloadMaps ||
@@ -146,7 +143,6 @@ export class Loading extends Component {
       });
       return this.handleImageCaching();
     } else {
-      console.log('downloading offline maps');
       this.props.loadMaps(url[this.props.env], this.props.user.token);
       this.setState({
         downloadingMap: true,
@@ -193,20 +189,16 @@ export class Loading extends Component {
 
   // STEP 6 - cache the survey indicator images
   handleImageCaching = () => {
-    console.log('handleImageCaching',!this.props.downloadMapsAndImages.downloadImages ||
-    (!!this.props.sync.images.total &&
-      this.props.sync.images.total === this.props.sync.images.synced) ||
-      this.props.surveys .length == 0);
-    console.log('!this.state.cachingImages',!this.state.cachingImages);
     if (
       !this.props.downloadMapsAndImages.downloadImages ||
       (!!this.props.sync.images.total &&
-        this.props.sync.images.total === this.props.sync.images.synced) ||
-        this.props.surveys .length == 0
+        this.props.sync.images.total === this.props.sync.images.synced) || this.props.surveys.length == 0
     ) {
+
       this.handleAudioCaching();
       //this.props.navigation.navigate('DrawerStack');
     } else if (!this.state.cachingImages) {
+
       this.setState({
         cachingImages: true,
       });
@@ -221,7 +213,7 @@ export class Loading extends Component {
       ((this.props.sync.audios.total != null) &&
         this.props.sync.audios.total === this.props.sync.audios.synced) || this.props.surveys.length == 0
     ) {
-      this.props.navigation.navigate('DrawerStack')
+      this.props.navigation.replace('DrawerStack')
     } else if (!this.state.cachingAudios) {
       this.setState({
         cachingAudios: true,
@@ -275,6 +267,7 @@ export class Loading extends Component {
     }
   };
   initMapDownload() {
+   
     const { maps } = this.state;
     if (maps.length && maps.some((map) => map.status !== 100)) {
       this.downloadOfflineMapPack(maps.find((map) => map.status !== 100));
@@ -291,10 +284,10 @@ export class Loading extends Component {
     const { families, surveys, projects,interventionDefinition, images, appVersion, audios } = this.props.sync;
     if (!this.props.user.token) {
       // if user hasn't logged in, navigate to login
-      this.props.navigation.navigate('Login');
+      this.props.navigation.replace('Login');
     }
     else if (this.props.user.username == 'amanda_torres') {
-      this.props.navigation.navigate('DrawerStack');
+      this.props.navigation.replace('DrawerStack');
     }
     
     else if (
@@ -307,7 +300,7 @@ export class Loading extends Component {
           audios.total === audios.synced))
     ) {
       // if everything is synced navigate to Dashboard
-      this.props.navigation.navigate('DrawerStack');
+      this.props.navigation.replace('DrawerStack');
     }
     else {
       // check connection state
@@ -322,7 +315,6 @@ export class Loading extends Component {
   }
 
   componentDidMount() {
-    console.log('state',this.state);
     this.props.validate(url[this.props.env], this.props.user.token);
     this.props.user && Bugsnag.setUser(this.props.user.username, this.props.user.token, this.props.user.role);
     this.checkState();
@@ -410,14 +402,14 @@ export class Loading extends Component {
       this.state.maps.every((map) => map.status === 100) &&
       this.props.downloadMapsAndImages.downloadAudios == false
     ) {
-      this.props.navigation.navigate('DrawerStack');
+      this.props.navigation.replace('DrawerStack');
     }
 
     if (this.state.maps.every((map) => map.status === 100) &&
       this.props.sync.audios.total != null &&
       prevProps.sync.audios.total !== prevProps.sync.audios.synced &&
       this.props.sync.audios.total === this.props.sync.audios.synced && this.props.downloadMapsAndImages.downloadImages == false) {
-      this.props.navigation.navigate('DrawerStack');
+      this.props.navigation.replace('DrawerStack');
     }
 
     if (this.state.maps.every((map) => map.status === 100) &&
@@ -427,7 +419,7 @@ export class Loading extends Component {
       ((prevProps.sync.images.total !== prevProps.sync.images.synced) || ((prevProps.sync.audios.total !== prevProps.sync.audios.synced))) &&
       this.props.sync.images.total === this.props.sync.images.synced && this.props.downloadMapsAndImages.downloadImages && this.props.downloadMapsAndImages.downloadAudios
     ) {
-      this.props.navigation.navigate('DrawerStack');
+      this.props.navigation.replace('DrawerStack');
     }
 
 
@@ -460,7 +452,6 @@ export class Loading extends Component {
 
   render() {
     const { sync, families, surveys, projects, interventionDefinition, t } = this.props;
-
     const {
       syncingServerData,
       cachingImages,
