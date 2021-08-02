@@ -172,14 +172,11 @@ export const initDeleteCachedImages = async () => {
   const surveys = getSurveys();
   if (surveys.length) {
     const imageURLs = await filterURLsFromSurveys(surveys, true);
-    imageURLs.map(url =>
-      RNFetchBlob.fs
-        .unlink(`${dirs.DocumentDir}/${url.replace(/https?:\/\//, '')}`)
-        .then(response => {
-        })
-        .catch(err => {
-        }),
-    );
+    imageURLs.map(async url => {
+      await RNFetchBlob.fs.unlink(
+        `${dirs.DocumentDir}/${url.replace(/https?:\/\//, '')}`,
+      );
+    });
   }
 };
 
@@ -187,13 +184,10 @@ export const initDeleteCachedAudios = async () => {
   const surveys = getSurveys();
   if (surveys.length) {
     const audioURLS = await filterAudioURLsFromSurveys(surveys, true);
-    audioURLS.map(url =>
-      RNFetchBlob.fs
-        .unlink(`${dirs.DocumentDir}/${url.replace(/https?:\/\//, '')}`)
-        .then(response => {
-        })
-        .catch(err => {
-        }),
-    );
+    audioURLS.map(async url => {
+      await RNFetchBlob.fs.unlink(
+        `${dirs.DocumentDir}/${url.replace(/https?:\/\//, '')}`,
+      );
+    });
   }
 };
