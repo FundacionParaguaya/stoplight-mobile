@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
+import {initDeleteCachedAudios, initDeleteCachedImages} from '../cache';
 import {isPortrait, isTablet} from '../responsivenessHelpers';
 import {logout, setHydrated, switchLanguage} from '../redux/actions';
 
@@ -15,6 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DeviceInfo from 'react-native-device-info';
 import IconButton from '../components/IconButton';
 import LogoutPopup from './LogoutPopup';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import PropTypes from 'prop-types';
 import colors from '../theme.json';
 import {connect} from 'react-redux';
@@ -51,6 +53,9 @@ export class DrawerContent extends Component {
     if (!checkboxesVisible || (checkboxesVisible && ckeckedBoxes === 4)) {
       // NativeModules.DeleteModule.deleteCache();
       // Clear the local storage and the redux store ,set hydrated to true to hide splash screen then go to login screen
+      !!this.props.maps.length && this.props.maps.forEach(async map => await MapboxGL.offlineManager.deletePack(map.name)); 
+      initDeleteCachedImages();
+      initDeleteCachedAudios();
       AsyncStorage.clear();
       this.props.logout();
       this.props.setHydrated();
@@ -313,6 +318,7 @@ DrawerContent.propTypes = {
   env: PropTypes.oneOf(['production', 'demo', 'testing', 'development']),
   dimensions: PropTypes.object.isRequired,
   sync: PropTypes.object.isRequired,
+  maps: PropTypes.array
 };
 
 const mapStateToProps = ({
@@ -323,6 +329,7 @@ const mapStateToProps = ({
   sync,
   interventions,
   priorities,
+  maps
 }) => ({
   env,
   user,
@@ -331,6 +338,7 @@ const mapStateToProps = ({
   sync,
   interventions,
   priorities,
+  maps
 });
 
 const mapDispatchToProps = {
