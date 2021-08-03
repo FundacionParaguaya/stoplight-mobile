@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect, useRef} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
@@ -28,6 +28,21 @@ function HomeScreen() {
       <Text>Home Screen</Text>
     </View>
   );
+}
+
+
+export const NavWrapper = ({hydration}) => {
+  const [loading, setLoading] = useState(true);
+  const prevHydratationRef = useRef();
+  const prevHydratation = !!prevHydratationRef && prevHydratationRef.current;
+
+
+  useEffect(() => {
+    if (!prevHydratation && hydration) {
+      SplashScreen.hide();   
+    }   
+  });
+  prevHydratationRef.current = hydration;
 }
 
 export class NavWrapper extends Component {
