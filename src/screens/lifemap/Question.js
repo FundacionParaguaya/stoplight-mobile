@@ -221,7 +221,7 @@ export class Question extends Component {
     // added a popup component to the Question.js instead of adding it to the
     // modals folder because it is really smol and does not do much
 
-    const { t, user } = this.props;
+    const { t, user, dimensions } = this.props;
 
     return (
       <View style={{ flex: 1 }}>
@@ -269,6 +269,7 @@ export class Question extends Component {
             step={this.step}
             allowInteractiveHelp={!!this.props.user.interactive_help}
             tooltipText={t('views.lifemap.tooltip')}
+            dimensions={dimensions}
           />
 
           <View style={styles.skip}>
