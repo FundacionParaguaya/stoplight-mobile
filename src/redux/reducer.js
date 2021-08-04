@@ -72,7 +72,7 @@ export const user = (
         role: action.role,
         organization: action.organization,
       };
-    case USER_LOGOUT:
+   /*  case USER_LOGOUT:
       return {
         status: null,
         token: null,
@@ -80,7 +80,7 @@ export const user = (
         role: null,
         interactive_help: null,
         organization: null,
-      };
+      }; */
     case SET_VALIDATE:
       return {
         ...state,
@@ -695,6 +695,8 @@ const appReducer = combineReducers({
   apiVersion,
 });
 
+const initialState = appReducer({}, {})
+
 export const rootReducer = (state, action) => {
   // note that surveys are synced in the store
   if (action.type === LOAD_SURVEYS_COMMIT) {
@@ -706,6 +708,12 @@ export const rootReducer = (state, action) => {
       },
     };
   }
+
+  if(action.type === USER_LOGOUT) {
+    // inicialize the state with the default values
+    state= initialState
+  };
+
 
   // note that families are synced in the store
   if (action.type === LOAD_FAMILIES_COMMIT) {
