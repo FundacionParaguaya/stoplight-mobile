@@ -1,26 +1,32 @@
-import React, {Component} from 'react';
 import {
-  ScrollView,
   Image,
-  Text,
-  StyleSheet,
-  View,
-  Platform,
   NativeModules,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
+import React, {Component} from 'react';
+import {initDeleteCachedAudios, initDeleteCachedImages} from '../cache';
+import {isPortrait, isTablet} from '../responsivenessHelpers';
+import {logout, setHydrated, switchLanguage} from '../redux/actions';
+
+import AsyncStorage from '@react-native-community/async-storage';
 import DeviceInfo from 'react-native-device-info';
-import {withNamespaces} from 'react-i18next';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import globalStyles from '../globalStyles';
 import IconButton from '../components/IconButton';
-import i18n from '../i18n';
-import colors from '../theme.json';
-import {switchLanguage, logout} from '../redux/actions';
 import LogoutPopup from './LogoutPopup';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import PropTypes from 'prop-types';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
 import dashboardIcon from '../../assets/images/icon_dashboard.png';
 import familyNavIcon from '../../assets/images/icon_family_nav.png';
-import {isPortrait, isTablet} from '../responsivenessHelpers';
+import globalStyles from '../globalStyles';
+import i18n from '../i18n';
+import {withNamespaces} from 'react-i18next';
+
+//import {fsPersistor} from '../redux/store';
 
 // Component that renders the drawer menu content. DrawerItems are the links to
 // the given views.
@@ -35,17 +41,25 @@ export class DrawerContent extends Component {
     drawerContentWidth: 304,
   };
 
-  changeLanguage = (lng) => {
+  changeLanguage = lng => {
     i18n.changeLanguage(lng); // change the currently uses i18n language
     this.props.switchLanguage(lng); // set the redux language for next app use
     this.props.navigation.closeDrawer(); // close drawer
   };
-  logUserOut = () => {
+  logUserOut = async () => {
     const {checkboxesVisible, ckeckedBoxes} = this.state;
 
     // allow the user to logout only if he checks all boxes
     if (!checkboxesVisible || (checkboxesVisible && ckeckedBoxes === 4)) {
-      NativeModules.DeleteModule.deleteCache();
+      // NativeModules.DeleteModule.deleteCache();
+      // Clear the local storage and the redux store ,set hydrated to true to hide splash screen then go to login screen
+      !!this.props.maps.length && this.props.maps.forEach(async map => await MapboxGL.offlineManager.deletePack(map.name)); 
+      initDeleteCachedImages();
+      initDeleteCachedAudios();
+      AsyncStorage.clear();
+      this.props.logout();
+      this.props.setHydrated();
+      this.props.navigation.replace('Login');
     } else {
       this.setState({
         showErrors: true,
@@ -57,13 +71,13 @@ export class DrawerContent extends Component {
       checkboxesVisible: true,
     });
   };
-  onPressCheckbox = (state) => {
+  onPressCheckbox = state => {
     const {ckeckedBoxes} = this.state;
     this.setState({
       ckeckedBoxes: state ? ckeckedBoxes + 1 : ckeckedBoxes - 1,
     });
   };
-  navigateToScreen = (screen) => {
+  navigateToScreen = screen => {
     // navigation comes from react-navigation, nav comes from redux
     const {navigation} = this.props;
 
@@ -72,7 +86,7 @@ export class DrawerContent extends Component {
     navigation.navigate(screen);
   };
 
-  onLayout = (e) => {
+  onLayout = e => {
     this.setState({
       drawerContentWidth: e.nativeEvent.layout.width,
     });
@@ -108,15 +122,15 @@ export class DrawerContent extends Component {
       logingOut,
       drawerContentWidth,
     } = this.state;
-    const unsyncedDrafts = drafts.filter((draft) => draft.status !== 'Synced')
+    const unsyncedDrafts = drafts.filter(draft => draft.status !== 'Synced')
       .length;
 
     const unsyncedInterventions = interventions.filter(
-      (intervention) => intervention.status !== 'Synced',
+      intervention => intervention.status !== 'Synced',
     ).length;
 
     const unsyncedPriorities = priorities.filter(
-      (priority) => priority.status !== 'Synced',
+      priority => priority.status !== 'Synced',
     ).length;
 
     const landscape = !!dimensions && !isPortrait(dimensions);
@@ -304,6 +318,7 @@ DrawerContent.propTypes = {
   env: PropTypes.oneOf(['production', 'demo', 'testing', 'development']),
   dimensions: PropTypes.object.isRequired,
   sync: PropTypes.object.isRequired,
+  maps: PropTypes.array
 };
 
 const mapStateToProps = ({
@@ -314,6 +329,7 @@ const mapStateToProps = ({
   sync,
   interventions,
   priorities,
+  maps
 }) => ({
   env,
   user,
@@ -322,11 +338,13 @@ const mapStateToProps = ({
   sync,
   interventions,
   priorities,
+  maps
 });
 
 const mapDispatchToProps = {
   switchLanguage,
   logout,
+  setHydrated,
 };
 
 export default withNamespaces()(
