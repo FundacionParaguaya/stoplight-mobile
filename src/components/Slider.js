@@ -34,7 +34,7 @@ export class Slider extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const {width, height} = Dimensions.get('window');
+    const {width, height} = this.props.dimensions;
 
     const value = (value) => {
       switch (value) {
@@ -142,8 +142,8 @@ export class Slider extends Component {
   };
 
   render() {
-    const {tooltipText} = this.props;
-    const {width, height} = Dimensions.get('window');
+    const {tooltipText, dimensions} = this.props;
+    const {width, height} = dimensions;
     const spin = this.state.anim.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '2deg'],
