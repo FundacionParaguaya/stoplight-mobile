@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: 20
+        paddingVertical: 20,
     },
     listItem: {
-        height: 100,
+        minHeight: 80,
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,

@@ -505,7 +505,7 @@ export class Sync extends Component {
               {t('views.sync.families')}
             </Text>
             <FlatList
-              style={{marginBottom: 30, minHeight: 40}}
+              style={{minHeight: 80,  marginBottom: 25}}
               data={list}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -527,7 +527,7 @@ export class Sync extends Component {
               {t('views.lifemap.priorities')}
             </Text>
             <FlatList
-              style={{minHeight: 40, marginBottom: 15}}
+              style={{minHeight: 80,  marginBottom: 10}}
               data={prioritiesPendingOrError}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -560,7 +560,7 @@ export class Sync extends Component {
               {t('views.family.interventions')}
             </Text>
             <FlatList
-              style={{minHeight: 40, marginBottom: 15}}
+              style={{minHeight: 80,  marginBottom: 10}}
               data={interventionsPendingOrError}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (

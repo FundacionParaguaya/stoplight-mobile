@@ -1,14 +1,14 @@
-import moment from 'moment';
-import PropTypes from 'prop-types';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
-import {getLocaleForLanguage} from '../utils';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import ListItem from './ListItem';
+import PropTypes from 'prop-types';
+import colors from '../theme.json';
+import {getLocaleForLanguage} from '../utils';
 import globalStyles from '../globalStyles';
 import i18n from '../i18n';
-import colors from '../theme.json';
-import ListItem from './ListItem';
+import moment from 'moment';
 
 class DraftListItem extends Component {
   getColor = (status) => {
@@ -98,7 +98,7 @@ class DraftListItem extends Component {
         style={{...styles.listItem, ...styles.borderBottom}}
         onPress={this.handleClick}
         disabled={this.props.user.role == 'ROLE_SURVEY_TAKER' ? true : false}>
-        <View>
+        <View style={{maxWidth:'80%'}}>
           <Text
             id="dateCreated"
             style={globalStyles.tag}
@@ -191,7 +191,7 @@ DraftListItem.propTypes = {
 
 const styles = StyleSheet.create({
   listItem: {
-    height: 115,
+    minHeight: 40,
     paddingVertical: 25,
     paddingLeft:25,
     paddingRight:10,

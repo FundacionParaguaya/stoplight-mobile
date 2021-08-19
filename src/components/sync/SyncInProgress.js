@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import {ProgressBar} from '@react-native-community/progress-bar-android'
-import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
+import { StyleSheet, Text, View } from 'react-native'
 
+import {ProgressBar} from '@react-native-community/progress-bar-android'
+import PropTypes from 'prop-types'
 import colors from '../../theme.json'
 import globalStyles from '../../globalStyles'
 import i18n from '../../i18n'
+import { withNamespaces } from 'react-i18next'
 
 export class SyncInProgress extends Component {
   initalNumOfDraftsPending = this.props.initial
@@ -42,7 +42,9 @@ SyncInProgress.propTypes = {
 const styles = StyleSheet.create({
   view: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    minHeight:80,
+    paddingVertical: 25,
   }
 })
 
