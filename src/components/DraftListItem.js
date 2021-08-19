@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
   listItem: {
     minHeight: 40,
     paddingVertical: 25,
-    paddingLeft:25,
-    paddingRight:10,
+    paddingLeft: 25,
+    paddingRight: 10,
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   label: {
     borderRadius: 5,
-    alignSelf:'flex-start',
+    alignSelf: 'flex-start',
     height: 25,
     paddingLeft: 5,
     paddingRight: 5,
@@ -220,8 +220,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonsContainer: {
-
-    height: 115,
     paddingBottom: 12,
     alignItems: 'center',
     flexDirection: 'row',
@@ -232,7 +230,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     paddingLeft: 20,
     paddingRight: 15,
-    paddingVertical: 40,
   },
 });
 
