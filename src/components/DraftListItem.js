@@ -11,7 +11,7 @@ import i18n from '../i18n';
 import moment from 'moment';
 
 class DraftListItem extends Component {
-  getColor = (status) => {
+  getColor = status => {
     switch (status) {
       case 'Draft':
         return colors.darkgrey;
@@ -30,7 +30,7 @@ class DraftListItem extends Component {
     }
   };
 
-  setStatusTitle = (status) => {
+  setStatusTitle = status => {
     switch (status) {
       case 'Draft':
         return i18n.t('draftStatus.draft');
@@ -49,7 +49,7 @@ class DraftListItem extends Component {
     }
   };
 
-  capitalize = (s) => {
+  capitalize = s => {
     if (typeof s !== 'string') return '';
     const string = s.split('.').join('');
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -59,10 +59,10 @@ class DraftListItem extends Component {
     this.props.handleClick(this.props.item);
   };
 
-  readyToSyncDraft = (item) =>
+  readyToSyncDraft = item =>
     item.status === 'Pending sync' || item.status === 'Sync error';
 
-  readyToSyncImages = (item) =>
+  readyToSyncImages = item =>
     item.status === 'Pending images' || item.status === 'Sync images error';
 
   render() {
@@ -98,7 +98,7 @@ class DraftListItem extends Component {
         style={{...styles.listItem, ...styles.borderBottom}}
         onPress={this.handleClick}
         disabled={this.props.user.role == 'ROLE_SURVEY_TAKER' ? true : false}>
-        <View style={{maxWidth:'80%'}}>
+        <View style={{maxWidth: '80%'}}>
           <Text
             id="dateCreated"
             style={globalStyles.tag}
@@ -124,19 +124,27 @@ class DraftListItem extends Component {
               </Text>
             )}
             {item.status !== 'Synced' ? (
-              <Text
-                id="status"
-                style={{
-                  ...styles.label,
-                  backgroundColor: this.getColor(item.status),
-                  color:
-                    item.status === 'Pending sync' ||
-                    item.status === 'Pending images'
-                      ? colors.black
-                      : colors.white,
-                }}>
-                {this.setStatusTitle(item.status)}
-              </Text>
+              <View
+              style={{
+                ...styles.label,
+                backgroundColor: this.getColor(item.status),
+            
+              }}
+              >
+                <Text
+                  id="status"
+                  style={{
+                    
+                   
+                    color:
+                      item.status === 'Pending sync' ||
+                      item.status === 'Pending images'
+                        ? colors.black
+                        : colors.white,
+                  }}>
+                  {this.setStatusTitle(item.status)}
+                </Text>
+              </View>
             ) : (
               <View style={{...styles.container, marginTop: 10}}>
                 <Icon name="check" size={20} color={colors.green} />
@@ -153,8 +161,7 @@ class DraftListItem extends Component {
               name="file-upload"
               size={25}
               style={styles.iconContainer}
-              onPress={() => handleSyncDraft(item) 
-              }
+              onPress={() => handleSyncDraft(item)}
               disabled={disableSyncDraft}
               color={disableSyncDraft ? colors.lightgrey : colors.lightdark}
             />
@@ -206,13 +213,16 @@ const styles = StyleSheet.create({
   },
   label: {
     borderRadius: 5,
-    alignSelf: 'flex-start',
-    height: 25,
+    //alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 25,
     paddingLeft: 5,
     paddingRight: 5,
-    textAlign: 'center',
     marginTop: 5,
     marginRight: 5,
+    minWidth: 120,
   },
   container: {
     flex: 1,
@@ -225,7 +235,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-end',
-    minWidth:30
+    minWidth: 30,
   },
   iconContainer: {
     paddingLeft: 20,
