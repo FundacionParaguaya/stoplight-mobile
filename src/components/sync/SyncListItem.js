@@ -1,17 +1,13 @@
-
-
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import moment from 'moment'
-import { Text, StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+
 import ListItem from '../../components/ListItem'
-
+import PropTypes from 'prop-types'
 import colors from '../../theme.json'
-import globalStyles from '../../globalStyles'
 import { getLocaleForLanguage } from '../../utils'
-
+import globalStyles from '../../globalStyles'
 import i18n from '../../i18n'
-
+import moment from 'moment'
 
 class SyncListItem extends Component {
 
@@ -147,11 +143,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20
   },
   listItem: {
-    height: 80,
+    minHeight: 80,
     alignItems: 'center',
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingVertical: 25,
   },
   container: { flexDirection: 'row', alignItems: 'center' },
   borderBottom: {
