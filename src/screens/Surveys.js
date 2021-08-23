@@ -1,22 +1,26 @@
-import React, {Component} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
   UIManager,
+  View,
   findNodeHandle,
 } from 'react-native';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import globalStyles from '../globalStyles';
-import RoundImage from '../components/RoundImage';
-import LifemapListItem from '../components/LifemapListItem';
+import React, {Component} from 'react';
+
 import Decoration from '../components/decoration/Decoration';
-import colors from '../theme.json';
+import LifemapListItem from '../components/LifemapListItem';
 import ProjectsPopup from '../components/ProjectsPopup';
+import PropTypes from 'prop-types';
+import RoundImage from '../components/RoundImage';
+import colors from '../theme.json';
+import {connect} from 'react-redux';
+import {createDraft} from '../redux/actions';
+import {getTotalScreens} from '../screens/lifemap/helpers';
+import globalStyles from '../globalStyles';
+import uuid from 'uuid/v1';
+import {withNamespaces} from 'react-i18next';
 
 export class Surveys extends Component {
   acessibleComponent = React.createRef();
@@ -24,24 +28,28 @@ export class Surveys extends Component {
     openProjectModal: false,
     selectedSurvey: null,
   };
+  // if not undefined, it means is a retake flow
+  familyLifeMap = this.props.route.params && this.props.route.params.familyLifeMap
+    ? this.props.route.params.familyLifeMap
+    : null;
+  surveyId =  this.props.route.params && !!this.props.route.params.survey
+    ? this.props.route.params.survey.id
+    : null;
 
   componentDidMount() {
     // focuses component on render for device to begin talking
     if (UIManager.AccessibilityEventTypes) {
-      setTimeout(() => {
-        UIManager.sendAccessibilityEvent(
-          findNodeHandle(this.acessibleComponent.current),
-          UIManager.AccessibilityEventTypes.typeViewFocused,
-        );
-      }, 1);
+      UIManager.sendAccessibilityEvent(
+        findNodeHandle(this.acessibleComponent.current),
+        UIManager.AccessibilityEventTypes.typeViewFocused,
+      );
     }
   }
 
-  handleClickOnSurvey = (survey) => {
+  handleClickOnSurvey = survey => {
     if (
       !!this.props.projects &&
-      this.props.projects.filter((project) => project.active === true).length >
-        0
+      this.props.projects.filter(project => project.active === true).length > 0
     ) {
       this.setState({openProjectModal: true, selectedSurvey: survey});
     } else {
@@ -54,14 +62,66 @@ export class Surveys extends Component {
   };
 
   loadSurveyById = (survey, project) => {
-    this.setState(
-      {openProjectModal: false},
-      this.props.navigation.navigate('Terms', {
-        page: 'terms',
-        survey,
-        project,
-      }),
-    );
+
+    if (this.familyLifeMap) {
+      const draftId = uuid();
+
+      const regularDraft = {
+        project: project,
+        draftId,
+        stoplightSkipped: false,
+        sign: '',
+        pictures: [],
+        sendEmail: false,
+        created: Date.now(),
+        status: 'Draft',
+        surveyId: survey.id,
+        surveyVersionId: survey.surveyVersionId,
+        economicSurveyDataList: [],
+        indicatorSurveyDataList: [],
+        priorities: [],
+        achievements: [],
+        progress: {
+          screen: 'Terms',
+          total: getTotalScreens(survey),
+        },
+        familyData: {
+          familyId: this.familyLifeMap.familyId,
+          countFamilyMembers: this.familyLifeMap.familyMembersList.length,
+          familyMembersList: this.familyLifeMap.familyMembersList.map(
+            member => {
+              return {
+                ...member,
+                documentType: survey.id === this.surveyId ? member.documentType : '',
+                documentNumber: survey.id === this.surveyId ? member.documentNumber : '',
+                socioEconomicAnswers: [],
+              };
+            },
+          ),
+        },
+      };
+
+      // create the new draft in redux
+      this.props.createDraft(regularDraft);
+
+      this.setState({openProjectModal: false}, () =>
+        this.props.navigation.navigate('Terms', {
+          page: 'terms',
+          survey: survey,
+          draftId,
+          project,
+        }),
+      );
+    } else {
+      this.setState(
+        {openProjectModal: false},
+        this.props.navigation.navigate('Terms', {
+          page: 'terms',
+          survey,
+          project,
+        }),
+      );
+    }
   };
 
   render() {
@@ -79,7 +139,7 @@ export class Surveys extends Component {
           onClose={this.toggleProjectModal}
           projects={
             !!this.props.projects &&
-            this.props.projects.filter((project) => project.active === true)
+            this.props.projects.filter(project => project.active === true)
           }
         />
         <Decoration variation="lifemap">
@@ -132,7 +192,9 @@ const mapStateToProps = ({surveys, projects}) => ({
   projects,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  createDraft,
+};
 
 export default withNamespaces()(
   connect(mapStateToProps, mapDispatchToProps)(Surveys),
