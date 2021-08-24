@@ -293,7 +293,10 @@ export class Dashboard extends Component {
             } else return data.json();
           })
           .then(data => {
-            this.setState({selectedDraftId: null});
+            // Add delay to set available to send a new draft again
+            setTimeout(() => {
+              this.setState({selectedDraftId: null});
+            }, 1000);
             this.props.manualSubmitDraftCommit(
               draft.draftId,
               data.data.addSnapshot.snapshotId,
