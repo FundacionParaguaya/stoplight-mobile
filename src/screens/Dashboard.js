@@ -233,7 +233,6 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     VersionCheck.needUpdate().then(async res => {
       if (res && res.isNeeded) {
         this.setState({needUpdate: true});
@@ -253,9 +252,8 @@ export class Dashboard extends Component {
       });
 
       setTimeout(() => {
-        console.log('habilitado');
         this.setState({ disabledSendDraft:false });
-      },3000)
+      },2000)
 
       this.checkAPIVersion();
 

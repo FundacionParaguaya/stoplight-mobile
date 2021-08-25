@@ -122,6 +122,7 @@ class DraftListItem extends Component {
                 <Text
                   id="status"
                   style={{
+                    
                     color: colors.white,
                   }}>
                   {i18n.t('draftStatus.dataSaved')}
