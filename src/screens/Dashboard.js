@@ -63,6 +63,7 @@ export class Dashboard extends Component {
     red: 0,
     isOnline: false,
     needUpdate: false,
+    disabledSendDraft:true
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
@@ -232,6 +233,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
+    console.log('componentDidMount');
     VersionCheck.needUpdate().then(async res => {
       if (res && res.isNeeded) {
         this.setState({needUpdate: true});
@@ -249,6 +251,11 @@ export class Dashboard extends Component {
       this.unsubscribeNetChange = NetInfo.addEventListener(state => {
         this.setState({isOnline: state.isConnected});
       });
+
+      setTimeout(() => {
+        console.log('habilitado');
+        this.setState({ disabledSendDraft:false });
+      },3000)
 
       this.checkAPIVersion();
 
@@ -294,9 +301,8 @@ export class Dashboard extends Component {
           })
           .then(data => {
             // Add delay to set available to send a new draft again
-            setTimeout(() => {
-              this.setState({selectedDraftId: null});
-            }, 1000);
+            this.setState({selectedDraftId: null});
+
             this.props.manualSubmitDraftCommit(
               draft.draftId,
               data.data.addSnapshot.snapshotId,
@@ -601,6 +607,7 @@ export class Dashboard extends Component {
                       handleSyncImages={this.handleSyncImages}
                       selectedImagesId={selectedImagesId}
                       isConnected={this.state.isOnline}
+                      disabled={this.state.disabledSendDraft}
                     />
                   )}
                 />
