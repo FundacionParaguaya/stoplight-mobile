@@ -66,7 +66,7 @@ export class Dashboard extends Component {
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
-  navigateToPendingSync = (draft) => {
+  navigateToPendingSync = draft => {
     const {firstName, lastName} = draft.familyData.familyMembersList[0];
 
     this.props.navigation.navigate('Families', {
@@ -76,18 +76,16 @@ export class Dashboard extends Component {
         familyLifemap: draft,
         draftId: draft.draftId,
         isDraft: false,
-        survey: this.props.surveys.find(
-          (survey) => survey.id === draft.surveyId,
-        ),
+        survey: this.props.surveys.find(survey => survey.id === draft.surveyId),
         activeTab: 'Details',
         fromDashboard: true,
       },
     });
   };
 
-  navigateToDraft = (draft) => {
+  navigateToDraft = draft => {
     const survey = this.props.surveys.find(
-      (survey) => survey.id === draft.surveyId,
+      survey => survey.id === draft.surveyId,
     );
     if (
       draft.progress.screen === 'Question' ||
@@ -117,7 +115,7 @@ export class Dashboard extends Component {
       });
     }
   };
-  navigateToSynced = (item) => {
+  navigateToSynced = item => {
     const {firstName, lastName} = item.familyData.familyMembersList[0];
     this.props.navigation.navigate('Families', {
       screen: 'Family',
@@ -126,14 +124,14 @@ export class Dashboard extends Component {
         familyLifemap: item,
         draftId: item.draftId,
         isDraft: !item,
-        survey: this.props.surveys.find((survey) =>
+        survey: this.props.surveys.find(survey =>
           item ? survey.id === item.surveyId : null,
         ),
         fromDashboard: true,
       },
     });
   };
-  handleClickOnListItem = (item) => {
+  handleClickOnListItem = item => {
     switch (item.status) {
       case 'Pending sync':
         this.navigateToPendingSync(item);
@@ -169,7 +167,7 @@ export class Dashboard extends Component {
   selectFilter = (filter, label) => {
     if (filter) {
       let propsCopy = [...this.props.drafts];
-      let filteredDrafts = propsCopy.filter((e) => {
+      let filteredDrafts = propsCopy.filter(e => {
         if (e.status === filter) {
           return e;
         }
@@ -198,7 +196,7 @@ export class Dashboard extends Component {
       (timestamp && new Date() - new Date(timestamp) > 24 * 60 * 60 * 1000)
     ) {
       // check simply if user is online
-      NetInfo.fetch().then((state) => {
+      NetInfo.fetch().then(state => {
         if (state.isConnected) {
           // check the API version status compared
           // to the supported version in config
@@ -216,26 +214,26 @@ export class Dashboard extends Component {
               },
             }),
           })
-            .then((response) => {
+            .then(response => {
               if (response.status === 200) {
                 return response.json();
               }
             })
-            .then((json) => {
+            .then(json => {
               this.props.markVersionCheked(new Date());
               if (json.data.apiVersionStatus.status !== 'up-to-date') {
                 this.props.toggleAPIVersionModal(true);
               }
             })
-            .catch((e) => e);
+            .catch(e => e);
         }
       });
     }
   }
 
   componentDidMount() {
-    VersionCheck.needUpdate().then(async (res) => {
-      if (res.isNeeded) {
+    VersionCheck.needUpdate().then(async res => {
+      if (res && res.isNeeded) {
         this.setState({needUpdate: true});
       }
     });
@@ -248,30 +246,28 @@ export class Dashboard extends Component {
         : null;
 
       // // monitor for connection changes
-      this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
+      this.unsubscribeNetChange = NetInfo.addEventListener(state => {
         this.setState({isOnline: state.isConnected});
       });
 
       this.checkAPIVersion();
 
       if (UIManager.AccessibilityEventTypes) {
-        setTimeout(() => {
-          UIManager.sendAccessibilityEvent(
-            findNodeHandle(this.acessibleComponent.current),
-            UIManager.AccessibilityEventTypes.typeViewFocused,
-          );
-        }, 1);
+        UIManager.sendAccessibilityEvent(
+          findNodeHandle(this.acessibleComponent.current),
+          UIManager.AccessibilityEventTypes.typeViewFocused,
+        );
       }
     }
   }
 
-  handleSyncDraft = (item) => {
+  handleSyncDraft = item => {
     try {
       let draft = JSON.parse(JSON.stringify(item));
 
       this.setState({selectedDraftId: draft.draftId});
 
-      let survey = this.props.surveys.find((survey) =>
+      let survey = this.props.surveys.find(survey =>
         item ? survey.id === item.surveyId : null,
       );
       try {
@@ -291,12 +287,12 @@ export class Dashboard extends Component {
             draft,
             hasPictures,
           )
-          .then((data) => {
+          .then(data => {
             if (data.status !== 200) {
               throw new Error();
             } else return data.json();
           })
-          .then((data) => {
+          .then(data => {
             this.setState({selectedDraftId: null});
             this.props.manualSubmitDraftCommit(
               draft.draftId,
@@ -304,7 +300,7 @@ export class Dashboard extends Component {
               hasPictures,
             );
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             this.props.submitDraftError(draft.draftId);
             this.setState({selectedDraftId: null});
@@ -319,7 +315,7 @@ export class Dashboard extends Component {
     }
   };
 
-  handleSyncImages = (item) => {
+  handleSyncImages = item => {
     this.setState({selectedImagesId: item.draftId});
 
     try {
@@ -329,10 +325,10 @@ export class Dashboard extends Component {
           this.props.user.token,
           item.pictures,
         )
-        .then((data) => {
+        .then(data => {
           return data.json();
         })
-        .then((pictures) => {
+        .then(pictures => {
           this.props
             .updateSnapshotImages(
               url[this.props.env],
@@ -340,18 +336,18 @@ export class Dashboard extends Component {
               item.snapshotId,
               pictures,
             )
-            .then((data) => {
+            .then(data => {
               if (data.status !== 200) {
                 this.props.submitImagesError(item.draftId);
 
                 throw new Error();
               } else return data.json();
             })
-            .then((data) => {
+            .then(data => {
               this.setState({selectedImagesId: null});
               this.props.manualSubmitPicturesCommit(item.draftId);
             })
-            .catch((error) => {
+            .catch(error => {
               this.props.submitImagesError(item.draftId);
               this.setState({selectedImagesId: null});
             });
@@ -372,7 +368,7 @@ export class Dashboard extends Component {
       needUpdate,
     } = this.state;
     const allDraftFamilies = drafts.filter(
-      (d) =>
+      d =>
         d.status === 'Draft' ||
         d.status === 'Pending sync' ||
         d.status === 'Pending images',

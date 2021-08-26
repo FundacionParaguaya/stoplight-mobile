@@ -44,7 +44,7 @@ export default LifemapStack = ({navigation}) => (
       name="Surveys"
       component={SurveysView}
       options={({route, navigation}) => ({
-        headerTitle: (props) => <Title title="views.createLifemap" />,
+        headerTitle: props => <Title title="views.createLifemap" />,
         ...generateNavStyles({navigation, route}),
         headerLeft: () => addMenuIcon(navigation),
       })}
@@ -54,7 +54,7 @@ export default LifemapStack = ({navigation}) => (
       component={TermsView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.termsConditions"
@@ -62,7 +62,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -80,7 +80,7 @@ export default LifemapStack = ({navigation}) => (
       component={TermsView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.privacyPolicy"
@@ -88,7 +88,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -106,7 +106,7 @@ export default LifemapStack = ({navigation}) => (
       component={FamilyParticipantView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.primaryParticipant"
@@ -114,7 +114,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -132,7 +132,7 @@ export default LifemapStack = ({navigation}) => (
       component={FamilyMembersNamesView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.familyMembers"
@@ -140,7 +140,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -158,7 +158,7 @@ export default LifemapStack = ({navigation}) => (
       component={LocationView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.location"
@@ -166,7 +166,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -184,7 +184,7 @@ export default LifemapStack = ({navigation}) => (
       component={SocioEconomicQuestionView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Text
               accessibilityLiveRegion="assertive"
@@ -193,7 +193,7 @@ export default LifemapStack = ({navigation}) => (
             </Text>
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -212,7 +212,7 @@ export default LifemapStack = ({navigation}) => (
       component={BeginLifemapView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <CustomHeaderSurvey
               route={route}
@@ -221,7 +221,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -240,7 +240,7 @@ export default LifemapStack = ({navigation}) => (
       component={Picture}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.pictures.uploadPictures"
@@ -248,7 +248,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -266,7 +266,7 @@ export default LifemapStack = ({navigation}) => (
       component={SignIn}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.sign.signHere"
@@ -274,7 +274,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -295,10 +295,10 @@ export default LifemapStack = ({navigation}) => (
         headerHeight: route.params.navigationHeight
           ? route.params.navigationHeight - 20
           : 66,
-        headerTitle: (props) => {
+        headerTitle: props => {
           return <CustomHeaderSurvey navigation={navigation} route={route} />;
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -317,7 +317,7 @@ export default LifemapStack = ({navigation}) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.skippedIndicators"
@@ -326,7 +326,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -346,7 +346,7 @@ export default LifemapStack = ({navigation}) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <CustomHeaderSurvey
               route={route}
@@ -355,7 +355,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -375,7 +375,7 @@ export default LifemapStack = ({navigation}) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.yourLifeMap"
@@ -384,7 +384,7 @@ export default LifemapStack = ({navigation}) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -403,7 +403,7 @@ export default LifemapStack = ({navigation}) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return <Title title="general.thankYou" style={{marginLeft: 20}} />;
         },
       })}
@@ -418,7 +418,7 @@ export default LifemapStack = ({navigation}) => (
   </Stack.Navigator>
 );
 
-export const FamiliesStack = (propz) => (
+export const FamiliesStack = propz => (
   <Stack.Navigator
     screenOptions={{
       headerStyle: {
@@ -434,7 +434,7 @@ export const FamiliesStack = (propz) => (
       component={FamiliesView}
       options={({route, navigation}) => ({
         headerShown: true,
-        headerTitle: (props) => (
+        headerTitle: props => (
           <Title title="views.families" accessibilityAssertiveType="none" />
         ),
         ...generateNavStyles({navigation, route}),
@@ -445,7 +445,7 @@ export const FamiliesStack = (propz) => (
       name="Family"
       component={FamilyView}
       options={({route, navigation}) => ({
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title={
@@ -467,61 +467,71 @@ export const FamiliesStack = (propz) => (
     <Stack.Screen
       name="SelectIndicatorPriority"
       component={SelectIndicatorPriorityView}
-      options = {({ route, navigation }) => ({
-        headerTitle: (props) => {
+      options={({route, navigation}) => ({
+        headerTitle: props => {
           return (
             <Title
-              title={route && route.params && route.params.familyName
-                ? route.params.familyName
-                : ''
+              title={
+                route && route.params && route.params.familyName
+                  ? route.params.familyName
+                  : ''
               }
               accessibilityAssertiveType="none"
             />
-          )
+          );
         },
-        ...generateNavStyles({navigation, route })
+        ...generateNavStyles({navigation, route}),
       })}
-
     />
 
     <Stack.Screen
       name="Intervention"
       component={Intervention}
-      options = {({ route, navigation }) =>({
-        headerTitle: (props) => {
-          return(
+      options={({route, navigation}) => ({
+        headerTitle: props => {
+          return (
             <Title
-              title={route && route.params && route.params.title ? route.params.title: '' }
+              title={
+                route && route.params && route.params.title
+                  ? route.params.title
+                  : ''
+              }
               accessibilityAssertiveType="none"
             />
-          )
+          );
         },
-        ...generateNavStyles({navigation, route})
+        ...generateNavStyles({navigation, route}),
       })}
     />
 
     <Stack.Screen
       name="InterventionView"
       component={InterventionView}
-      options = {({ route, navigation }) => ({
-        headerTitle: (props) => {
+      options={({route, navigation}) => ({
+        headerTitle: props => {
           return (
             <Title
-              title={route && route.params && route.params.title ? route.params.title: ''}
+              title={
+                route && route.params && route.params.title
+                  ? route.params.title
+                  : ''
+              }
               accessibilityAssertiveType="none"
             />
-          )
+          );
         },
-        ...generateNavStyles({navigation, route})
+        ...generateNavStyles({navigation, route}),
       })}
     />
     <Stack.Screen
       name="Surveys"
       component={SurveysView}
       options={({route, navigation}) => ({
-        headerTitle: (props) => <Title title="views.createLifemap" />,
+        headerTitle: props => <Title title="views.createLifemap" />,
+        headerLeft: () => {
+          return !route.params.familyLifeMap && addMenuIcon(navigation);
+        },
         ...generateNavStyles({navigation, route}),
-        headerLeft: () => addMenuIcon(navigation),
       })}
     />
     <Stack.Screen
@@ -529,7 +539,7 @@ export const FamiliesStack = (propz) => (
       component={TermsView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.termsConditions"
@@ -537,7 +547,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -555,7 +565,7 @@ export const FamiliesStack = (propz) => (
       component={TermsView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.privacyPolicy"
@@ -563,7 +573,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -581,7 +591,7 @@ export const FamiliesStack = (propz) => (
       component={FamilyParticipantView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.primaryParticipant"
@@ -589,7 +599,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -607,7 +617,7 @@ export const FamiliesStack = (propz) => (
       component={FamilyMembersNamesView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.familyMembers"
@@ -615,7 +625,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -633,7 +643,7 @@ export const FamiliesStack = (propz) => (
       component={LocationView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.location"
@@ -641,7 +651,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -659,7 +669,7 @@ export const FamiliesStack = (propz) => (
       component={SocioEconomicQuestionView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Text
               accessibilityLiveRegion="assertive"
@@ -668,7 +678,7 @@ export const FamiliesStack = (propz) => (
             </Text>
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -687,7 +697,7 @@ export const FamiliesStack = (propz) => (
       component={BeginLifemapView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <CustomHeaderSurvey
               route={route}
@@ -696,7 +706,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -715,7 +725,7 @@ export const FamiliesStack = (propz) => (
       component={Picture}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.pictures.uploadPictures"
@@ -723,7 +733,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -741,7 +751,7 @@ export const FamiliesStack = (propz) => (
       component={SignIn}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.sign.signHere"
@@ -749,7 +759,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -770,10 +780,10 @@ export const FamiliesStack = (propz) => (
         headerHeight: route.params.navigationHeight
           ? route.params.navigationHeight - 20
           : 66,
-        headerTitle: (props) => {
+        headerTitle: props => {
           return <CustomHeaderSurvey navigation={navigation} route={route} />;
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -792,7 +802,7 @@ export const FamiliesStack = (propz) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.skippedIndicators"
@@ -801,7 +811,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -821,7 +831,7 @@ export const FamiliesStack = (propz) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <CustomHeaderSurvey
               route={route}
@@ -830,7 +840,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -850,7 +860,7 @@ export const FamiliesStack = (propz) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return (
             <Title
               title="views.lifemap.priorities"
@@ -859,7 +869,7 @@ export const FamiliesStack = (propz) => (
             />
           );
         },
-        headerRight: (props) => {
+        headerRight: props => {
           return !route.params || !route.params.family ? (
             <CloseButton
               navigation={navigation}
@@ -878,7 +888,7 @@ export const FamiliesStack = (propz) => (
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
 
-        headerTitle: (props) => {
+        headerTitle: props => {
           return <Title title="general.thankYou" style={{marginLeft: 20}} />;
         },
       })}
@@ -888,7 +898,7 @@ export const FamiliesStack = (propz) => (
       component={FamilyMemberView}
       options={({route, navigation}) => ({
         ...generateNavStyles({navigation, route, shadowHeader: false}),
-        headerTitle: (props) => {
+        headerTitle: props => {
           return <Title title={route.params.title} />;
         },
       })}

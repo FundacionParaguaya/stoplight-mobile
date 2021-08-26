@@ -53,7 +53,7 @@ export class Sync extends Component {
     openDownloadModal: false,
     existPspFolder: false,
   };
-  navigateToDraft = (draft) => {
+  navigateToDraft = draft => {
     if (
       draft.progress.screen !== 'Question' &&
       draft.progress.screen !== 'Skipped' &&
@@ -65,7 +65,7 @@ export class Sync extends Component {
         params: {
           draftId: draft.draftId,
           survey: this.props.surveys.find(
-            (survey) => survey.id === draft.surveyId,
+            survey => survey.id === draft.surveyId,
           ),
           step: draft.progress.step,
           socioEconomics: draft.progress.socioEconomics,
@@ -77,7 +77,7 @@ export class Sync extends Component {
         params: {
           draftId: draft.draftId,
           survey: this.props.surveys.find(
-            (survey) => survey.id === draft.surveyId,
+            survey => survey.id === draft.surveyId,
           ),
           resumeDraft: true,
         },
@@ -86,10 +86,10 @@ export class Sync extends Component {
 
   retrySubmittingAllPriorities = () => {
     const prioritiesWithError = this.props.priorities.filter(
-      (priority) => priority.status == 'Sync Error',
+      priority => priority.status == 'Sync Error',
     );
 
-    prioritiesWithError.forEach((priority) => {
+    prioritiesWithError.forEach(priority => {
       let sanitazedPriority = priority;
       delete sanitazedPriority.status;
       this.props.submitPriority(
@@ -106,10 +106,10 @@ export class Sync extends Component {
 
   retrySubmitInterventions = () => {
     const interventionsWithError = this.props.interventions
-      .filter((intervention) => intervention.status == 'Sync Error')
+      .filter(intervention => intervention.status == 'Sync Error')
       .slice();
 
-    interventionsWithError.forEach((i) => {
+    interventionsWithError.forEach(i => {
       this.props.submitIntervention(
         url[this.props.env],
         this.props.user.token,
@@ -118,9 +118,9 @@ export class Sync extends Component {
     });
   };
 
-  getFamilyNameIntervention = (snapshot) => {
-    const family = this.props.families.find((family) =>
-      family.snapshotList.find((snap) => snap.id == snapshot),
+  getFamilyNameIntervention = snapshot => {
+    const family = this.props.families.find(family =>
+      family.snapshotList.find(snap => snap.id == snapshot),
     );
 
     if (!!family && family.name) {
@@ -129,18 +129,18 @@ export class Sync extends Component {
     return '';
   };
 
-  getFamilyName = (snapshotStoplightId) => {
+  getFamilyName = snapshotStoplightId => {
     let indicator;
     let familyName;
 
-    this.props.families.forEach((family) => {
+    this.props.families.forEach(family => {
       let snapShotData =
         family.snapshotList.length > 0
           ? family.snapshotList[family.snapshotList.length - 1]
           : family.snapshotList[0];
       !indicator
         ? (indicator = snapShotData.indicatorSurveyDataList.find(
-            (item) => item.snapshotStoplightId === snapshotStoplightId,
+            item => item.snapshotStoplightId === snapshotStoplightId,
           ))
         : null;
 
@@ -153,11 +153,11 @@ export class Sync extends Component {
     }
   };
 
-  getIndicator = (snapshotStoplightId) => {
+  getIndicator = snapshotStoplightId => {
     let indicator = null;
     let surveyIndicator = null;
 
-    this.props.families.forEach((family) => {
+    this.props.families.forEach(family => {
       let snapShotData =
         family.snapshotList.length > 0
           ? family.snapshotList[family.snapshotList.length - 1]
@@ -165,7 +165,7 @@ export class Sync extends Component {
 
       if (!indicator) {
         indicator = snapShotData.indicatorSurveyDataList.find(
-          (item) => item.snapshotStoplightId === snapshotStoplightId,
+          item => item.snapshotStoplightId === snapshotStoplightId,
         );
         indicator
           ? (indicator = {...indicator, surveyId: snapShotData.surveyId})
@@ -174,11 +174,11 @@ export class Sync extends Component {
     });
 
     const surveyData = this.props.surveys.find(
-      (survey) => survey.id == indicator.surveyId,
+      survey => survey.id == indicator.surveyId,
     );
     !surveyIndicator
       ? (surveyIndicator = surveyData.surveyStoplightQuestions.find(
-          (item) => item.codeName == indicator.key,
+          item => item.codeName == indicator.key,
         ))
       : null;
     if (surveyIndicator) {
@@ -189,12 +189,10 @@ export class Sync extends Component {
 
   componentDidMount() {
     if (UIManager.AccessibilityEventTypes) {
-      setTimeout(() => {
-        UIManager.sendAccessibilityEvent(
-          findNodeHandle(this.acessibleComponent.current),
-          UIManager.AccessibilityEventTypes.typeViewFocused,
-        );
-      }, 1);
+      UIManager.sendAccessibilityEvent(
+        findNodeHandle(this.acessibleComponent.current),
+        UIManager.AccessibilityEventTypes.typeViewFocused,
+      );
     }
   }
 
@@ -233,11 +231,11 @@ export class Sync extends Component {
       }_${new Date().getTime() / 1000}`;
       let filePath = `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.json`;
       const pendingDraft = this.props.drafts.filter(
-        (draft) =>
+        draft =>
           draft.status == 'Pending sync' || draft.status == 'Pending images',
       );
       const errorStatus = this.props.drafts.filter(
-        (draft) => draft.status == 'Sync error',
+        draft => draft.status == 'Sync error',
       );
 
       const rootDir = RNFetchBlob.fs.dirs.DownloadDir.replace('/Download', '');
@@ -258,8 +256,8 @@ export class Sync extends Component {
       let sanitizedPendingDrafts = [];
       let sanitizedErrorDrafts = [];
 
-      pendingDraft.forEach((draft) => {
-        const survey = this.props.surveys.find((el) => el.id == draft.surveyId);
+      pendingDraft.forEach(draft => {
+        const survey = this.props.surveys.find(el => el.id == draft.surveyId);
         let sanitizedDraft;
         try {
           let formattedDraft = prepareDraftForSubmit(draft, survey);
@@ -276,8 +274,8 @@ export class Sync extends Component {
         sanitizedPendingDrafts.push(sanitizedDraft);
       });
 
-      errorStatus.forEach((draft) => {
-        const survey = this.props.surveys.find((el) => el.id == draft.surveyId);
+      errorStatus.forEach(draft => {
+        const survey = this.props.surveys.find(el => el.id == draft.surveyId);
         let sanitizedDraft;
         try {
           let formattedDraft = prepareDraftForSubmit(draft, survey);
@@ -329,7 +327,7 @@ export class Sync extends Component {
 
     let {economicSurveyDataList} = payload;
 
-    const validEconomicIndicator = (ec) =>
+    const validEconomicIndicator = ec =>
       (ec.value !== null && ec.value !== undefined && ec.value !== '') ||
       (!!ec.multipleValue && ec.multipleValue.length > 0);
 
@@ -337,7 +335,7 @@ export class Sync extends Component {
       validEconomicIndicator,
     );
     sanitizedSnapshot.economicSurveyDataList = economicSurveyDataList;
-    sanitizedSnapshot.familyData.familyMembersList.forEach((member) => {
+    sanitizedSnapshot.familyData.familyMembersList.forEach(member => {
       let {socioEconomicAnswers = []} = member;
       delete member.memberIdentifier;
       delete member.id;
@@ -370,42 +368,42 @@ export class Sync extends Component {
     );
 
     const pendingDrafts = drafts.filter(
-      (draft) =>
+      draft =>
         draft.status == 'Pending sync' || draft.status == 'Pending images',
     );
 
     const draftsWithError = drafts.filter(
-      (draft) => draft.status === 'Sync error',
+      draft => draft.status === 'Sync error',
     );
 
     const list = drafts.filter(
-      (draft) =>
+      draft =>
         draft.status === 'Sync error' ||
         draft.status === 'Pending sync' ||
         draft.status == 'Pending images',
     );
 
     const prioritiesWithError = priorities.filter(
-      (priority) => priority.status == 'Sync Error',
+      priority => priority.status == 'Sync Error',
     );
     const pendingPriorities = priorities.filter(
-      (priority) => priority.status == 'Pending Status',
+      priority => priority.status == 'Pending Status',
     );
     const prioritiesPendingOrError = priorities.filter(
-      (priority) =>
+      priority =>
         priority.status == 'Pending Status' || priority.status == 'Sync Error',
     );
 
     const interventionsWithError = interventions.filter(
-      (intervention) => intervention.status === 'Sync Error',
+      intervention => intervention.status === 'Sync Error',
     );
 
     const pendingInterventions = interventions.filter(
-      (intervention) => intervention.status === 'Pending Status',
+      intervention => intervention.status === 'Pending Status',
     );
 
     const interventionsPendingOrError = interventions.filter(
-      (intervention) =>
+      intervention =>
         intervention.status === 'Pending Status' ||
         intervention.status === 'Sync Error',
     );
@@ -440,7 +438,7 @@ export class Sync extends Component {
               keyboardType="numeric"
               style={styles.input}
               placeholder={'Surveys Count'}
-              onChangeText={(surveysCount) => this.setState({surveysCount})}
+              onChangeText={surveysCount => this.setState({surveysCount})}
               style={{
                 ...styles.input,
                 borderColor: colors.palegreen,
@@ -505,7 +503,7 @@ export class Sync extends Component {
               {t('views.sync.families')}
             </Text>
             <FlatList
-              style={{minHeight: 80,  marginBottom: 25}}
+              style={{minHeight: 80, marginBottom: 25}}
               data={list}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -527,7 +525,7 @@ export class Sync extends Component {
               {t('views.lifemap.priorities')}
             </Text>
             <FlatList
-              style={{minHeight: 80,  marginBottom: 10}}
+              style={{minHeight: 80, marginBottom: 10}}
               data={prioritiesPendingOrError}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (
@@ -560,7 +558,7 @@ export class Sync extends Component {
               {t('views.family.interventions')}
             </Text>
             <FlatList
-              style={{minHeight: 80,  marginBottom: 10}}
+              style={{minHeight: 80, marginBottom: 10}}
               data={interventionsPendingOrError}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item}) => (

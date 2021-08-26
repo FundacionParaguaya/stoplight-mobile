@@ -54,7 +54,7 @@ export class Family extends Component {
     ...new Set(
       this.props.route.params.survey
         ? this.props.route.params.survey.surveyEconomicQuestions.map(
-            (question) => question.topic,
+            question => question.topic,
           )
         : [],
     ),
@@ -82,7 +82,7 @@ export class Family extends Component {
     });
 
     // // monitor for connection changes
-    this.unsubscribeNetChange = NetInfo.addEventListener((state) => {
+    this.unsubscribeNetChange = NetInfo.addEventListener(state => {
       this.setState({isOnline: state.isConnected});
       //Allow to show or hide retrySyn button
       this.setState({showSyncButton: this.availableForSync(state.isConnected)});
@@ -90,7 +90,7 @@ export class Family extends Component {
     });
 
     // check if online first
-    NetInfo.fetch().then((state) => {
+    NetInfo.fetch().then(state => {
       this.setState({isOnline: state.isConnected});
       //this.syncPriorities(state.isConnected)
     });
@@ -101,14 +101,14 @@ export class Family extends Component {
     });
   }
 
-  sendEmail = async (email) => {
+  sendEmail = async email => {
     let url = `mailto:${email}`;
     const canOpen = await Linking.canOpenURL(url);
     if (canOpen) {
       Linking.openURL(url);
     }
   };
-  callPhone = async (phone) => {
+  callPhone = async phone => {
     let url = `tel:${phone}`;
     const canOpen = await Linking.canOpenURL(url);
     if (canOpen) {
@@ -117,14 +117,14 @@ export class Family extends Component {
   };
 
   getDraft = () =>
-    this.props.drafts.find((draft) => draft.draftId === this.draftId);
+    this.props.drafts.find(draft => draft.draftId === this.draftId);
 
-  handleClickOnAddIntervention = (id) => {
-    const { navigation } = this.props;
-    navigation.navigate('Intervention',{
+  handleClickOnAddIntervention = id => {
+    const {navigation} = this.props;
+    navigation.navigate('Intervention', {
       draft: this.familyLifemap,
-      survey:this.survey,
-      interventionId: typeof id == 'number' ? id: null,
+      survey: this.survey,
+      interventionId: typeof id == 'number' ? id : null,
       navigation: this.props.navigation,
       title: this.props.t('views.family.addIntervention'),
       familyId: this.props.route.params.familyId,
@@ -132,16 +132,16 @@ export class Family extends Component {
     });
   };
 
-  handleGoIntervention = (intervention) => {
-    const { navigation } = this.props;
+  handleGoIntervention = intervention => {
+    const {navigation} = this.props;
 
-    navigation.navigate('InterventionView',{
-      survey:this.survey,
-      intervention:intervention,
+    navigation.navigate('InterventionView', {
+      survey: this.survey,
+      intervention: intervention,
       draft: this.familyLifemap,
-      title:this.props.t('views.family.intervention')
-    })
-  }
+      title: this.props.t('views.family.intervention'),
+    });
+  };
 
   handleResumeClick = () => {
     const {navigation} = this.props;
@@ -155,7 +155,7 @@ export class Family extends Component {
   };
 
   survey = this.props.surveys.find(
-    (item) => item.id === this.familyLifemap.surveyId,
+    item => item.id === this.familyLifemap.surveyId,
   );
 
   retrySync = () => {
@@ -174,14 +174,14 @@ export class Family extends Component {
     }
   };
 
-  syncPriorities = (isOnline) => {
+  syncPriorities = isOnline => {
     if (isOnline) {
       const pendingPriorities = this.props.priorities.filter(
-        (priority) =>
+        priority =>
           priority.status == 'Pending Status' ||
           priority.status == 'Sync Error',
       );
-      pendingPriorities.forEach((priority) => {
+      pendingPriorities.forEach(priority => {
         let sanitazedPriority = priority;
         delete sanitazedPriority.status;
         this.props.submitPriority(
@@ -193,7 +193,7 @@ export class Family extends Component {
     }
   };
 
-  availableForSync = (isOnline) => {
+  availableForSync = isOnline => {
     const id = this.familyLifemap.draftId;
     if (
       this.props.syncStatus.indexOf(id) === -1 &&
@@ -251,49 +251,15 @@ export class Family extends Component {
   }
 
   handleClickOnRetake() {
-    if (
-      !!this.props.projects &&
-      this.props.projects.filter((project) => project.active === true).length >
-        0
-    ) {
-      this.setState({openProjectModal: true});
-    } else {
-      this.retakeSurvey(this.survey);
-    }
-  }
-
-  toggleProjectModal = () => {
-    this.setState({openProjectModal: !this.state.openProjectModal});
-  };
-
-  retakeSurvey = (survey, project) => {
-    const draftId = uuid();
-
-    const regularDraft = {
-      project: project,
-      draftId,
-      stoplightSkipped: false,
-      sign: '',
-      pictures: [],
-      sendEmail: false,
-      created: Date.now(),
-      status: 'Draft',
-      surveyId: survey.id,
-      surveyVersionId: survey.surveyVersionId,
-      economicSurveyDataList: [],
-      indicatorSurveyDataList: [],
-      priorities: [],
-      achievements: [],
-      progress: {
-        screen: 'Terms',
-        total: getTotalScreens(survey),
-      },
-      familyData: {
+    this.props.navigation.navigate('Surveys', {
+      screen: 'Surveys',
+      survey: this.survey,
+      familyLifeMap: {
         familyId: this.familyId,
         countFamilyMembers: this.familyLifemap.familyData.familyMembersList
           .length,
         familyMembersList: this.familyLifemap.familyData.familyMembersList.map(
-          (member) => {
+          member => {
             return {
               ...member,
               socioEconomicAnswers: [],
@@ -301,26 +267,18 @@ export class Family extends Component {
           },
         ),
       },
-    };
+    });
+  }
 
-    // create the new draft in redux
-    this.props.createDraft(regularDraft);
-
-    this.setState({openProjectModal: false}, () =>
-      this.props.navigation.navigate('Terms', {
-        page: 'terms',
-        survey: survey,
-        draftId,
-        project,
-      }),
-    );
+  toggleProjectModal = () => {
+    this.setState({openProjectModal: !this.state.openProjectModal});
   };
+
   render() {
     const {activeTab} = this.state;
     const {t, navigation, interventionDefinition, user} = this.props;
     const {familyData, pictures, sign} = this.familyLifemap;
     const stoplightSkipped = this.familyLifemap.stoplightSkipped;
-    const {width, height} = Dimensions.get('window');
 
     const email =
       familyData &&
@@ -358,7 +316,11 @@ export class Family extends Component {
           .locale(getLocaleForLanguage(this.props.lng))
           .format('MMM DD, YYYY');
 
-    const interventionSkipped = interventionDefinition == null || this.state.fromDashboard || !user.allowInterventions ||  !this.survey;
+    const interventionSkipped =
+      interventionDefinition == null ||
+      this.state.fromDashboard ||
+      !user.allowInterventions ||
+      !this.survey;
 
     return (
       <ScrollView
@@ -369,7 +331,7 @@ export class Family extends Component {
             title={t('views.family.details')}
             onPress={() => this.setState({activeTab: 'Details'})}
             active={activeTab === 'Details'}
-            interventionSkipped = {interventionSkipped  }
+            interventionSkipped={interventionSkipped}
             full={stoplightSkipped ? true : false}
           />
           {!stoplightSkipped && (
@@ -377,32 +339,24 @@ export class Family extends Component {
               title={t('views.family.lifemap')}
               onPress={() => this.setState({activeTab: 'LifeMap'})}
               active={activeTab === 'LifeMap'}
-              interventionSkipped = {interventionSkipped}
+              interventionSkipped={interventionSkipped}
             />
           )}
-          {interventionDefinition !== null && !this.state.fromDashboard && user.allowInterventions && !!this.survey && (
-            <FamilyTab
-              title={t('views.family.interventions')}
-              onPress={()=> this.setState({activeTab:'Interventions'})}
-              active={activeTab === 'Interventions'}
-            />
-          )}
+          {interventionDefinition !== null &&
+            !this.state.fromDashboard &&
+            user.allowInterventions &&
+            !!this.survey && (
+              <FamilyTab
+                title={t('views.family.interventions')}
+                onPress={() => this.setState({activeTab: 'Interventions'})}
+                active={activeTab === 'Interventions'}
+              />
+            )}
         </View>
 
         {/* Details tab */}
         {activeTab === 'Details' ? (
           <ScrollView>
-            <ProjectsPopup
-              isOpen={this.state.openProjectModal}
-              afterSelect={this.retakeSurvey}
-              toggleModal={this.toggleProjectModal}
-              selectedSurvey={this.survey}
-              onClose={this.toggleProjectModal}
-              projects={
-                !!this.props.projects &&
-                this.props.projects.filter((project) => project.active === true)
-              }
-            />
             <View>
               {!!familyData.latitude &&
               !!familyData.longitude &&
@@ -684,29 +638,27 @@ export class Family extends Component {
           </ScrollView>
         ) : null}
 
-      {/* Intervention tab */}
+        {/* Intervention tab */}
 
-      {activeTab === 'Interventions' ? (
-        <ScrollView id="intervention">
-          <View style={styles.buttonContainer}>
-            <Button
-              style={styles.buttonSmall}
-              text={t('views.family.addIntervention')}
-              handleClick={this.handleClickOnAddIntervention}
+        {activeTab === 'Interventions' ? (
+          <ScrollView id="intervention">
+            <View style={styles.buttonContainer}>
+              <Button
+                style={styles.buttonSmall}
+                text={t('views.family.addIntervention')}
+                handleClick={this.handleClickOnAddIntervention}
+              />
+            </View>
+            <InterventionList
+              interventionsData={this.familyLifemap.interventions}
+              handleAddIntervention={this.handleClickOnAddIntervention}
+              handleGoIntervention={this.handleGoIntervention}
+              syncInterventions={this.props.interventions}
+              snapshot={this.familyLifemap && this.familyLifemap.id}
+              lang={this.props.language}
             />
-          </View>
-          <InterventionList 
-            interventionsData = {this.familyLifemap.interventions}
-            handleAddIntervention = {this.handleClickOnAddIntervention}
-            handleGoIntervention = {this.handleGoIntervention}
-            syncInterventions= {this.props.interventions}
-            snapshot={this.familyLifemap && this.familyLifemap.id}
-            lang={this.props.language}
-            
-           />
-        </ScrollView>
-      ):null}
-
+          </ScrollView>
+        ) : null}
       </ScrollView>
     );
   }
@@ -860,7 +812,7 @@ const mapStateToProps = ({
   drafts,
   interventionDefinition,
   interventions,
-  language
+  language,
 }) => ({
   surveys,
   env,
@@ -871,7 +823,7 @@ const mapStateToProps = ({
   drafts,
   interventionDefinition,
   interventions,
-  language
+  language,
 });
 
 export default withNamespaces()(

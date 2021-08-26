@@ -79,7 +79,7 @@ export class Login extends Component {
       });
 
       VersionCheck.needUpdate().then((res) => {
-        if (res.isNeeded) {
+        if (res && res.isNeeded) {
           this.setState({needUpdate: true});
           setTimeout(() => {
             Linking.openURL(res.storeUrl);
