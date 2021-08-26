@@ -253,7 +253,7 @@ export class Dashboard extends Component {
 
       setTimeout(() => {
         this.setState({ disabledSendDraft:false });
-      },2000)
+      },1000)
 
       this.checkAPIVersion();
 
