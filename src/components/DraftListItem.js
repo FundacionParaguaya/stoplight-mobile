@@ -74,6 +74,7 @@ class DraftListItem extends Component {
       selectedDraftId,
       selectedImagesId,
       isConnected,
+      disabled,
     } = this.props;
     const itemCreateDateWithLocale = moment(item.created);
     itemCreateDateWithLocale.locale(getLocaleForLanguage(lng));
@@ -113,29 +114,30 @@ class DraftListItem extends Component {
           <View style={styles.container}>
             {(item.status === 'Pending images' ||
               item.status === 'Sync images error') && (
-              <Text
-                id="status"
+              <View
                 style={{
                   ...styles.label,
                   backgroundColor: colors.green,
-                  color: colors.white,
                 }}>
-                {i18n.t('draftStatus.dataSaved')}
-              </Text>
-            )}
-            {item.status !== 'Synced' ? (
-              <View
-              style={{
-                ...styles.label,
-                backgroundColor: this.getColor(item.status),
-            
-              }}
-              >
                 <Text
                   id="status"
                   style={{
                     
-                   
+                    color: colors.white,
+                  }}>
+                  {i18n.t('draftStatus.dataSaved')}
+                </Text>
+              </View>
+            )}
+            {item.status !== 'Synced' ? (
+              <View
+                style={{
+                  ...styles.label,
+                  backgroundColor: this.getColor(item.status),
+                }}>
+                <Text
+                  id="status"
+                  style={{
                     color:
                       item.status === 'Pending sync' ||
                       item.status === 'Pending images'
@@ -162,8 +164,12 @@ class DraftListItem extends Component {
               size={25}
               style={styles.iconContainer}
               onPress={() => handleSyncDraft(item)}
-              disabled={disableSyncDraft}
-              color={disableSyncDraft ? colors.lightgrey : colors.lightdark}
+              disabled={disableSyncDraft || disabled}
+              color={
+                disableSyncDraft || disabled
+                  ? colors.lightgrey
+                  : colors.lightdark
+              }
             />
           )}
           {this.readyToSyncImages(item) && !loading && isConnected && (
@@ -172,8 +178,12 @@ class DraftListItem extends Component {
               size={25}
               style={styles.iconContainer}
               onPress={() => handleSyncImages(item)}
-              disabled={disableSyncImages}
-              color={disableSyncImages ? colors.lightgrey : colors.lightdark}
+              disabled={disableSyncImages || disabled}
+              color={
+                disableSyncImages || disabled
+                  ? colors.lightgrey
+                  : colors.lightdark
+              }
             />
           )}
           {loading && (

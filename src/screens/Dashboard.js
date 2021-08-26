@@ -63,6 +63,7 @@ export class Dashboard extends Component {
     red: 0,
     isOnline: false,
     needUpdate: false,
+    disabledSendDraft:true
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
@@ -250,6 +251,10 @@ export class Dashboard extends Component {
         this.setState({isOnline: state.isConnected});
       });
 
+      setTimeout(() => {
+        this.setState({ disabledSendDraft:false });
+      },1000)
+
       this.checkAPIVersion();
 
       if (UIManager.AccessibilityEventTypes) {
@@ -293,7 +298,9 @@ export class Dashboard extends Component {
             } else return data.json();
           })
           .then(data => {
+            // Add delay to set available to send a new draft again
             this.setState({selectedDraftId: null});
+
             this.props.manualSubmitDraftCommit(
               draft.draftId,
               data.data.addSnapshot.snapshotId,
@@ -598,6 +605,7 @@ export class Dashboard extends Component {
                       handleSyncImages={this.handleSyncImages}
                       selectedImagesId={selectedImagesId}
                       isConnected={this.state.isOnline}
+                      disabled={this.state.disabledSendDraft}
                     />
                   )}
                 />
