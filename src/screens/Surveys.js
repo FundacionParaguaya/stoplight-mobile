@@ -94,6 +94,7 @@ export class Surveys extends Component {
                 ...member,
                 documentType: survey.id === this.surveyId ? member.documentType : '',
                 documentNumber: survey.id === this.surveyId ? member.documentNumber : '',
+                gender: survey.id === this.surveyId ? member.gender : '',
                 socioEconomicAnswers: [],
               };
             },
