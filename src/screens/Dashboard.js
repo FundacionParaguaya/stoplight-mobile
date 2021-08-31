@@ -63,7 +63,7 @@ export class Dashboard extends Component {
     red: 0,
     isOnline: false,
     needUpdate: false,
-    disabledSendDraft:true
+    disabledSendDraft: true,
   };
 
   // Navigate to Overview to see the results of Draft with Pending sync status
@@ -252,8 +252,8 @@ export class Dashboard extends Component {
       });
 
       setTimeout(() => {
-        this.setState({ disabledSendDraft:false });
-      },1000)
+        this.setState({disabledSendDraft: false});
+      }, 1000);
 
       this.checkAPIVersion();
 
@@ -424,7 +424,9 @@ export class Dashboard extends Component {
                     </View>
                     {this.props.user.role !== 'ROLE_SURVEY_TAKER' && (
                       <Text style={{...styles.familiesCount}}>
-                        {countFamilies} {t('views.families')}
+                        {countFamilies === 1
+                          ? `${countFamilies} ${t('general.family')}`
+                          : `${countFamilies} ${t('views.families')}`}
                       </Text>
                     )}
                   </View>
