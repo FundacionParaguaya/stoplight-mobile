@@ -360,7 +360,7 @@ export class Sync extends Component {
   };
   render() {
     const {drafts, offline, priorities, interventions, t} = this.props;
-    console.log('interventions', interventions);
+
     const lastSync = drafts.reduce(
       (lastSynced, item) =>
         item.syncedAt > lastSynced ? item.syncedAt : lastSynced,
