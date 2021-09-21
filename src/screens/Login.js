@@ -30,7 +30,6 @@ import RNFetchBlob from 'rn-fetch-blob';
 import VersionCheck from 'react-native-version-check';
 import colors from '../theme.json';
 import {connect} from 'react-redux';
-import {enableScreens} from 'react-native-screens';
 import {getDeviceLanguage} from '../utils';
 import globalStyles from '../globalStyles';
 import i18n from 'i18next';
@@ -40,8 +39,6 @@ import {withNamespaces} from 'react-i18next';
 
 // get env
 const nodeEnv = process.env;
-
-enableScreens(false)
 
 export class Login extends Component {
   // unsubscribeNetChange;
