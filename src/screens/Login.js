@@ -246,6 +246,7 @@ export class Login extends Component {
                   id="username"
                   testID="username-input"
                   autoCapitalize="none"
+                  autoCompleteType="off"
                   style={{
                     ...styles.input,
                     borderColor: this.state.error
@@ -278,6 +279,7 @@ export class Login extends Component {
                     testID="password-input"
                     secureTextEntry={this.state.showPassword ? false : true}
                     autoCapitalize="none"
+                    autoCompleteType="off"
                     style={{
                       ...styles.inputPassword,
                     }}
